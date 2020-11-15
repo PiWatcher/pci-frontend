@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {Line} from 'react-chartjs-2';
+import './LineGraph.css';
 
 class LineGraph extends Component {
 
-
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
 
         this.state = {
             graphData: {
@@ -13,8 +13,8 @@ class LineGraph extends Component {
      
              datasets: [
                {
-                   label: 'Count',
-                   data: [909, 106, 123, 487, 267, 904, 578, 489, 789],
+                   label: 'Average Counted',
+                   data: [909, 241, 305, 487, 267, 904, 578, 489, 364],
                    backgroundColor:[
                     'rgba(255, 51, 51, 0.6)',
                     'rgba(54, 162, 235, 0.6)',
@@ -24,7 +24,7 @@ class LineGraph extends Component {
                     'rgba(255, 51, 51, 0.6)',
                     'rgba(54, 162, 235, 0.6)',
                     'rgba(54, 162, 235, 0.6)',
-                    'rgba(255, 51, 51, 0.6)'
+                    'rgba(54, 162, 235, 0.6)'
                   ]
                }
              ]
@@ -37,12 +37,11 @@ class LineGraph extends Component {
             <div className="LineGraph">
                 <Line
                     data={this.state.graphData}
-                    width='400'
-                    height='800'
+
                     options={{
                         title:{
                             display: true,
-                            text: 'People Counted',
+                            text: 'People Counted Over Time',
                             fontSize:25
                           },
                         maintainAspectRatio: false

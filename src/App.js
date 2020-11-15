@@ -9,8 +9,10 @@ class App extends Component{
   render () {
       return (
         <div className="App">
-          <CountCard/>
-          <LineGraph/>
+          <div className="count-row">
+            <LineGraph/>
+            <CountCard/>
+          </div>
         </div>
       )
     }

@@ -5,19 +5,19 @@ import React, {Component} from 'react';
 
 class CountCard extends Component{
 
-    constructor() {
-        super()
+  constructor() {
+      super()
 
-        this.state = {
+      this.state = {
             
-            currentCount: 245
+          currentCount: 364
 
-        }
-    }
+      }
+  }
     
   render () {
       return (
-        <div className="count-card">
+        <div className="CountCard">
             <div className="text-container">
                 Current Count: 
                 <div className="num-container">
