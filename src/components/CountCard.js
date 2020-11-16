@@ -3,18 +3,20 @@ import React, {Component} from 'react';
 
 
 
-class CountCard extends Component{
+class CountCard extends Component {
 
-  constructor() {
-      super()
+  // constructor for card component
+  constructor(props) {
+     
+      super(props)
 
+      // sets the state passed down from axios
       this.state = {
-            
-          currentCount: 364
-
+        currentCount: this.props.count
       }
   }
     
+  // renders the card with the passed data
   render () {
       return (
         <div className="CountCard">
