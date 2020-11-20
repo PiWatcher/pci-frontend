@@ -7,19 +7,22 @@ class CountCard extends Component {
 
   // constructor for card component
   constructor(props) {
-      super(props)
-
+      super(props);
+      //this.props = props
+      //console.log(count_from_json[0]) 
       // sets the state passed down from axios
       this.state = {
-        currentCount: 0
+        currentCount: this.get_current_count()
       }
-      let count_json = props
-      this.setCount = this.setCount.bind(this)
-      this.setCount()
+      
+      
+      
       
   }
   
-    
+  get_current_count = () => {
+    return Object.values(Object.values(Object.values(this.props.bldg_data)[0])[3])[3]
+  }
   // renders the card with the passed data
   render () {
       

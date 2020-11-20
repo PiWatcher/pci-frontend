@@ -11,6 +11,7 @@ class LineGraph extends Component {
 
       // sets the data for the graph visual within the state
       this.state = {
+         bldg_room: "",
          graphData: {
             labels: this.props.labels,
     
@@ -32,6 +33,15 @@ class LineGraph extends Component {
             }]   
          }
       };
+      this.get_building()
+   }
+
+   get_building_room = () => {
+      let bldg_name = Object.values(Object.values(Object.values(this.props.bldg_data)[0])[3])[2]
+      let bldg_name = Object.values(Object.values(Object.values(this.props.bldg_data)[0])[3])[2]
+      
+
+      console.log(bldg_name)
    }
 
    // renders the graph with the passed down state

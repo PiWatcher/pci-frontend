@@ -10,14 +10,16 @@ class App extends Component{
   
 
   // Constructor for entire app and state
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      labels: [],
-      rooms: []
+      bldg_data: []
     }
-  }
 
+  // binds this to the getData method so the state is accurate
+  //this.getData = this.getData.bind(this)
+
+  }
   // rescue data if axios fails to connect to the endpoint
   fallBack = [
     {
@@ -25,6 +27,7 @@ class App extends Component{
       "count": 0
     }
   ]
+
 
   // gets data from API after the app is mounted
   componentDidMount() {
@@ -38,28 +41,28 @@ class App extends Component{
         method: 'get',
         url: 'http://localhost:4000/SICCS/'
       }).then(({data}) => data);
-      console.log(data)
-      this.setState({rooms: data})
-      this.setState({labels: ['9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM']})
-      console.log({rooms: data})
+      console.log(data);
+      this.setState({bldg_data: data})
+      console.log({bldg_data: data})
     } catch (err) {
-      this.setState({rooms : this.fallBack})
+      this.setState({bldg_data : this.fallBack})
       console.log(err)
     }
   }
   
   // renders the app and it's components with state passed down to children
   render () {
+      const data_str = JSON.stringify(this.state.bldg_data)
+      if (data_str.length < 20){ return null }
       
       return (
-        
         <div className="App">
           <div className="count-row">            
-            <LineGraph count = {this.state.rooms} labels = {this.state.labels} />
-            <CountCard count = {this.state.rooms} />
+              <LineGraph bldg_data = {this.state.bldg_data} />
+              <CountCard bldg_data = {this.state.bldg_data} />
           </div>
         </div>
-      )
+      );
     }
   }
 
