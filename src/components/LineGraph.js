@@ -11,38 +11,65 @@ class LineGraph extends Component {
 
       // sets the data for the graph visual within the state
       this.state = {
-         bldg_room: "",
+         bldg: this.get_building(),
+         room: this.get_room(),
          graphData: {
-            labels: this.props.labels,
+            labels: this.get_labels(),
     
             datasets: [
             {
                label: 'Average Counted',
-               data: [909, 241, 305, 487, 267, 904, 578, 489, this.props.count],
-               backgroundColor:[
-                  'rgba(255, 51, 51, 0.6)',
-                  'rgba(54, 162, 235, 0.6)',
-                  'rgba(54, 162, 235, 0.6)',
-                  'rgba(54, 162, 235, 0.6)',
-                  'rgba(54, 162, 235, 0.6)',
-                  'rgba(255, 51, 51, 0.6)',
-                  'rgba(54, 162, 235, 0.6)',
-                  'rgba(54, 162, 235, 0.6)',
-                  'rgba(54, 162, 235, 0.6)'
-               ]
+               data: this.get_values(),
+               backgroundColor: this.set_value_colors()
             }]   
          }
+      
       };
-      this.get_building()
+     
+      
    }
 
-   get_building_room = () => {
-      let bldg_name = Object.values(Object.values(Object.values(this.props.bldg_data)[0])[3])[2]
-      let bldg_name = Object.values(Object.values(Object.values(this.props.bldg_data)[0])[3])[2]
+   get_building = () => {
+      let bldg_name = Object.values(Object.values(Object.values(this.props.bldg_data)[0])[3])[2].toString()
       
 
-      console.log(bldg_name)
+      return bldg_name
    }
+
+   get_room = () => {
+      let room_name = Object.values(Object.values(Object.values(this.props.bldg_data)[0])[3])[4].toString()
+      return room_name
+   }
+   
+   get_labels = () => {
+      //console.log(this.state.room)
+      let temp_labels = []
+      let bldg_data = Object.values(this.props.bldg_data)[0]
+      for (var i = 0; i < bldg_data.length; i++)
+         if (Object.values(bldg_data[i])[4] === this.get_room())
+            temp_labels.push(Object.values(bldg_data[i])[0].split(' ')[0])
+      return temp_labels
+     
+   }
+
+   get_values = () => {
+      let temp_values = []
+      let bldg_data = Object.values(this.props.bldg_data)[0]
+      for (var i = 0; i < bldg_data.length; i++)
+         if (Object.values(bldg_data[i])[4] === this.get_room())
+            temp_values.push(Object.values(bldg_data[i])[5])
+      return temp_values
+   }
+
+   set_value_colors = () => {
+      let temp_colors = []
+      let bldg_data = Object.values(this.props.bldg_data)[0]
+      for (var i = 0; i < bldg_data.length; i++)
+         if (Object.values(bldg_data[i])[4] === this.get_room())
+            temp_colors.push('rgba(255, 51, 51, 0.6)')
+      return temp_colors
+   }
+   
 
    // renders the graph with the passed down state
    render(){
@@ -54,7 +81,7 @@ class LineGraph extends Component {
                options={{
                   title:{
                      display: true,
-                     text: 'People Counted Over Time',
+                     text: this.state.bldg + " " + this.state.room,
                      fontSize:25
                     },
                   maintainAspectRatio: false
