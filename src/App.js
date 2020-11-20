@@ -13,6 +13,7 @@ class App extends Component{
   constructor() {
     super();
     this.state = {
+      labels: [],
       rooms: []
     }
   }
@@ -37,7 +38,10 @@ class App extends Component{
         method: 'get',
         url: 'http://localhost:4000/SICCS/'
       }).then(({data}) => data);
+      console.log(data)
       this.setState({rooms: data})
+      this.setState({labels: ['9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM']})
+      console.log({rooms: data})
     } catch (err) {
       this.setState({rooms : this.fallBack})
       console.log(err)
@@ -46,14 +50,14 @@ class App extends Component{
   
   // renders the app and it's components with state passed down to children
   render () {
+      
       return (
+        
         <div className="App">
-          {this.state.rooms.map((room, index) => (
-            <div className="count-row" key={index}>
-              <LineGraph count = {room.count}/>
-              <CountCard count = {room.count}/>
-            </div>
-          ))}
+          <div className="count-row">            
+            <LineGraph count = {this.state.rooms} labels = {this.state.labels} />
+            <CountCard count = {this.state.rooms} />
+          </div>
         </div>
       )
     }
