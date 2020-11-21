@@ -17,10 +17,9 @@ class SearchBar extends Component {
   this.getData()
  }
 
-  getData = () => axios.get('http://localhost:4000/SICCS/')
+  getData = () => axios.get('http://127.0.0.1:5000/api/SICCS')
   .then( (response) => {
     console.log(response.data.data);
-    console.log(Object.values(response.data.data[0])[5]);
     this.setState({campus_data: response.data.data})
   })
   .catch(function (error) {
@@ -31,7 +30,7 @@ class SearchBar extends Component {
     let building_and_room = this.state.query.split(" ");
     for (var i = 0; i < this.state.campus_data.length; i++)
       console.log(this.state.campus_data)
-      console.log(Object.values(this.state.campus_data))
+      //console.log(Object.values(this.state.campus_data))
       /*if (Object.values(this.state.campus_data[i])[2].toUpperCase() === building_and_room[0])
         console.log("bldg found")
         this.setState({
