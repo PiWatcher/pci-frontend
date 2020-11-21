@@ -27,7 +27,7 @@ class SearchBar extends Component {
   });
 
   findRoom = () => {
-    let building_and_room = this.state.query.split(" ");
+    //let building_and_room = this.state.query.split(" ");
     for (var i = 0; i < this.state.campus_data.length; i++)
       console.log(this.state.campus_data)
       //console.log(Object.values(this.state.campus_data))
