@@ -21,7 +21,7 @@ class CountCard extends Component {
   }
   
   get_current_count = () => {
-    return Object.values(Object.values(Object.values(this.props.bldg_data)[0])[3])[3]
+    return Object.values(Object.values(Object.values(this.props.bldg_data)[0])[3])[5]
   }
   // renders the card with the passed data
   render () {

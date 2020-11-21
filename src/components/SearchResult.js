@@ -1,33 +1,15 @@
 import React, {Component} from 'react';
 import './SearchResult.css';
 
-class SearchResult extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      query: ''
-  }
- }
-
-  handleInputChange = () => {
-    this.setState({
-      query: this.search.value
-    })
-  }
-
-  render() {
-    return (
-      <form>
-        <input className="SearchBar"
-          placeholder="Search for..."
-          ref={input => this.search = input}
-          onChange={this.handleInputChange}
-        />
-        <p>{this.state.query}</p>
-        <br></br>
-      </form>
-    )
-  }
+const SearchResult = (props) => {
+  return null
+  if (props.roomData === '') return null
+  const options = props.roomData.map(r => (
+    <li>
+      {r[0]}
+    </li>
+  ))
+  return <ul>{options}</ul>
 }
 
 export default SearchResult
