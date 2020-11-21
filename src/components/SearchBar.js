@@ -10,13 +10,15 @@ class SearchBar extends Component {
       query: '',
       campus_data: [],
       buildingName: '',
-      roomData: null
+      roomData: false,
+      room_names: []
   }
   this.getData = this.getData.bind(this)
   this.findRoom = this.findRoom.bind(this)
   this.getData()
  }
 
+  
   getData = () => axios.get('http://127.0.0.1:5000/api/SICCS')
   .then( (response) => {
     console.log(response.data.data);
@@ -28,17 +30,18 @@ class SearchBar extends Component {
 
   findRoom = () => {
     //let building_and_room = this.state.query.split(" ");
-    for (var i = 0; i < this.state.campus_data.length; i++)
-      console.log(this.state.campus_data)
-      //console.log(Object.values(this.state.campus_data))
-      /*if (Object.values(this.state.campus_data[i])[2].toUpperCase() === building_and_room[0])
-        console.log("bldg found")
-        this.setState({
-          buildingName: building_and_room[0]
-          
-        })*/
+    console.log(this.state.campus_data)
+    console.log("[" +this.state.query.toString().toUpperCase() + "]")
+    console.log("[" +this.state.campus_data[0]['building'].toString() + "]")
+    if (this.state.query.toString().toUpperCase() === this.state.campus_data[0]['building'].toString()) {
+      console.log('success');
+      this.setState({roomData: true})
+      return <SearchResult campusData = {this.state.campus_data} />;
+    
+    }
       
-    console.log("sad")
+    return null  
+    //console.log("sad")
   }
 
   handleInputChange = () => {
@@ -46,15 +49,27 @@ class SearchBar extends Component {
       query: this.search.value
       }, () => {
       if (this.state.query && this.state.query.length > 1) {
-        if (this.state.query.length % 2 === 0) {
-          this.findRoom()
-        }
+       
+          return this.findRoom()
+        
       } 
     })
   }
 
   render() {
     return (
+      this.state.roomData === false ?
+      <form>
+        <input className="SearchBar"
+          placeholder="Search for..."
+          ref={input => this.search = input}
+          onChange={this.handleInputChange}
+        />
+        {/*<SearchResult campusData = {this.state.campus_data}
+         roomData = {this.state.roomData} />*/}
+        <br></br>
+      </form>
+      :
       <form>
         <input className="SearchBar"
           placeholder="Search for..."

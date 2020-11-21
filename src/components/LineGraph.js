@@ -29,47 +29,6 @@ class LineGraph extends Component {
       
    }
 
-   get_building = () => {
-      let bldg_name = Object.values(Object.values(Object.values(this.props.bldg_data)[0])[3])[2].toString()
-      
-
-      return bldg_name
-   }
-
-   get_room = () => {
-      let room_name = Object.values(Object.values(Object.values(this.props.bldg_data)[0])[3])[4].toString()
-      return room_name
-   }
-   
-   get_labels = () => {
-      //console.log(this.state.room)
-      let temp_labels = []
-      let bldg_data = Object.values(this.props.bldg_data)[0]
-      for (var i = 0; i < bldg_data.length; i++)
-         if (Object.values(bldg_data[i])[4] === this.get_room())
-            temp_labels.push(Object.values(bldg_data[i])[0].split(' ')[0])
-      return temp_labels
-     
-   }
-
-   get_values = () => {
-      let temp_values = []
-      let bldg_data = Object.values(this.props.bldg_data)[0]
-      for (var i = 0; i < bldg_data.length; i++)
-         if (Object.values(bldg_data[i])[4] === this.get_room())
-            temp_values.push(Object.values(bldg_data[i])[5])
-      return temp_values
-   }
-
-   set_value_colors = () => {
-      let temp_colors = []
-      let bldg_data = Object.values(this.props.bldg_data)[0]
-      for (var i = 0; i < bldg_data.length; i++)
-         if (Object.values(bldg_data[i])[4] === this.get_room())
-            temp_colors.push('rgba(255, 51, 51, 0.6)')
-      return temp_colors
-   }
-   
 
    // renders the graph with the passed down state
    render(){
