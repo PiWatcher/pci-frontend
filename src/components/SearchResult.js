@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
+import React from 'react';
 import './SearchResult.css';
 
 const SearchResult = (props) => {
-  return null
-  if (props.roomData === '') return null
-  const options = props.roomData.map(r => (
-    <li>
-      {r[0]}
+  const options = props.campusData.map(building => (
+    <li key = {building.id}>
+      {building.building_name}
     </li>
   ))
+
   return <ul>{options}</ul>
+
 }
 
 export default SearchResult
