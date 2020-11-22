@@ -9,18 +9,6 @@ import axios from 'axios';
 class App extends Component{
 
   
-
-  // Constructor for entire app and state
-  constructor(props) {
-    super(props);
-    
-
-  // binds this to the getData method so the state is accurate
-  //this.getData = this.getData.bind(this)
-
-  }
-
-  
   // renders the app and it's components with state passed down to children
   render () {
       return (

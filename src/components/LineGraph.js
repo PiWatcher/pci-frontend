@@ -11,24 +11,33 @@ class LineGraph extends Component {
 
       // sets the data for the graph visual within the state
       this.state = {
-         bldg: this.get_building(),
-         room: this.get_room(),
+         bldg: this.props.building,
+         room: this.props.room,
          graphData: {
-            labels: this.get_labels(),
+            labels: this.props.times,
+            // labels: this.get_labels(),
     
             datasets: [
             {
-               label: 'Average Counted',
-               data: this.get_values(),
-               backgroundColor: this.set_value_colors()
+               label: 'Count over time',
+               data: this.props.counts,
+               // backgroundColor: this.set_value_colors()
             }]   
          }
       
       };
-     
-      
    }
 
+
+   componentDidUpdate(prevProps) {
+
+      if (prevProps !== this.props){
+         this.setState({
+            room: this.props.room
+         })  
+      }
+
+   }
 
    // renders the graph with the passed down state
    render(){

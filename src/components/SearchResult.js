@@ -21,7 +21,7 @@ const SearchResult = (props) => {
   const options = room_list.map(room => (
     
     <li key={room}>
-      <button>{room}</button>
+      <button onClick="console.log({room})">{room}</button>
     </li>
   ))
 

@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import './SearchBar.css';
 import axios from 'axios';
-import SearchResult from './SearchResult';
+import LineGraph from '../components/LineGraph';
+import CountCard from '../components/CountCard';
 
 class SearchBar extends Component {
   constructor(props) {
@@ -9,16 +10,27 @@ class SearchBar extends Component {
     this.state = {
       query: '',
       campus_data: [],
-      buildingName: '',
       roomData: false,
-      room_names: []
+      room_list: [],
+      avail_options: null,
+      current_room: '',
+      room_counts: [],
+      times: []
   }
+
+  // binding functions to current state
   this.getData = this.getData.bind(this)
   this.findRoom = this.findRoom.bind(this)
-  this.getData()
+  this.SearchResult = this.SearchResult.bind(this)
+  this.SelectRoom = this.SelectRoom.bind(this)
  }
 
+ // gets data only after the component is mounted
+ componentDidMount() {
+  this.getData();
+ }
   
+ // axios gets data fro backend
   getData = () => axios.get('http://127.0.0.1:5000/api/SICCS')
   .then( (response) => {
     console.log(response.data.data);
@@ -28,58 +40,135 @@ class SearchBar extends Component {
     console.log(error);
   });
 
+
+// 
   findRoom = () => {
     //let building_and_room = this.state.query.split(" ");
-    console.log(this.state.campus_data)
+    console.log("Data: " + this.state.campus_data)
     console.log("[" +this.state.query.toString().toUpperCase() + "]")
     console.log("[" +this.state.campus_data[0]['building'].toString() + "]")
     if (this.state.query.toString().toUpperCase() === this.state.campus_data[0]['building'].toString()) {
       console.log('success');
-      this.setState({roomData: true})
-      return <SearchResult campusData = {this.state.campus_data} />;
-    
+      this.setState({roomData: true});
+
+      this.SearchResult()
     }
-      
     return null  
     //console.log("sad")
   }
 
+  // checks form input for matching building
   handleInputChange = () => {
     this.setState({
       query: this.search.value
       }, () => {
       if (this.state.query && this.state.query.length > 1) {
-       
+
           return this.findRoom()
         
       } 
     })
   }
 
+  // parses through rooms
+  SearchResult = () => {
+
+    console.log("Campus data: " + this.state.campus_data)
+
+    for (var i = 0; i < this.state.campus_data.length; i++) {
+      var room_name = this.state.campus_data[i]['endpoint']
+      // var name1 = room_name.split('-')[0]
+      // var name2 = room_name.split('-')[1]
+      // name1 = name1.charAt(0).toUpperCase() + name1.slice(1)
+      // room_name = name1 + " " + name2
+      console.log(room_name)
+      if (!this.state.room_list.includes(room_name)) {
+        this.state.room_list.push(room_name)
+        console.log("Room name: " + this.state.room_list)
+      }
+    }
+
+    // buttons
+    this.setState({
+      avail_options: this.state.room_list.map(room => (
+        <li key={room}>
+          <button type="button" onClick={() => this.SelectRoom(room)}>{room}</button>
+        </li>
+         ))
+    });
+  }
+
+  //
+  SelectRoom = (room) => {
+
+  
+    for (var i = 0; i < this.state.campus_data.length; i++) {
+      var room_name = this.state.campus_data[i]['endpoint']
+      console.log(room_name)
+      if (room === room_name) {
+
+        // pushes the count to a list
+        this.state.room_counts.push(this.state.campus_data[i]['count'])
+
+        // formats the date before pushing to the list
+        var date = this.state.campus_data[i]['timestamp']['$date']
+        var parsedDate = new Date(parseInt(date, 10))
+        var dateString = parsedDate.toLocaleTimeString('en-US');
+        this.state.times.push(dateString)
+      }
+    }
+
+    console.log("Room counts: " + this.state.room_counts)
+    console.log("Times: " + this.state.times)
+    
+    this.setState({
+      current_room : room,
+    });
+
+    console.log("Current room: " + this.state.current_room)
+  }
+    
+
   render() {
     return (
+
       this.state.roomData === false ?
-      <form>
-        <input className="SearchBar"
-          placeholder="Search for..."
-          ref={input => this.search = input}
-          onChange={this.handleInputChange}
-        />
-        {/*<SearchResult campusData = {this.state.campus_data}
-         roomData = {this.state.roomData} />*/}
-        <br></br>
-      </form>
+      <div>
+        <form>
+          <input className="SearchBar"
+            placeholder="Search for..."
+            ref={input => this.search = input}
+            onChange={this.handleInputChange}
+          />
+          {/*<SearchResult campusData = {this.state.campus_data}
+          roomData = {this.state.roomData} />*/}
+          <br></br>
+        </form>
+      </div>
+      
       :
-      <form>
-        <input className="SearchBar"
-          placeholder="Search for..."
-          ref={input => this.search = input}
-          onChange={this.handleInputChange}
-        />
-        <SearchResult campusData = {this.state.campus_data}
-         roomData = {this.state.roomData} />
-        <br></br>
-      </form>
+
+      <div>
+        <form>
+          <input className="SearchBar"
+            placeholder="Search for..."
+            ref={input => this.search = input}
+            onChange={this.handleInputChange}
+          />
+          <ul>{this.state.avail_options}</ul>
+          {/* <SearchResult campusData = {this.state.campus_data} /> */}
+          <br></br>
+        </form>
+
+        <div className="count-row">
+        <LineGraph building = {this.state.query} room = {this.state.current_room} 
+          counts = {this.state.room_counts} times = {this.state.times}/>
+
+        <CountCard counts = {this.state.room_counts[this.state.room_counts.length - 1]}/>
+        </div>
+      </div>
+     
+
     )
   }
 }
