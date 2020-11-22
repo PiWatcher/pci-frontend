@@ -33,10 +33,9 @@ class LineGraph extends Component {
 
       if (prevProps !== this.props){
          this.setState({
-            room: this.props.room
+            room: this.props.room,
          })  
       }
-
    }
 
    // renders the graph with the passed down state

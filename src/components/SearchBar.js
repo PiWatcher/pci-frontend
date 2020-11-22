@@ -6,6 +6,7 @@ import CountCard from '../components/CountCard';
 
 class SearchBar extends Component {
   constructor(props) {
+
     super(props);
     this.state = {
       query: '',
@@ -29,6 +30,15 @@ class SearchBar extends Component {
  componentDidMount() {
   this.getData();
  }
+
+ componentDidUpdate(prevProps) {
+
+  if (prevProps !== this.props){
+     this.setState({
+       campus_data: this.props.campus_data
+     })
+  }
+}
   
  // axios gets data fro backend
   getData = () => axios.get('http://127.0.0.1:5000/api/SICCS')
@@ -41,12 +51,12 @@ class SearchBar extends Component {
   });
 
 
-// 
+  // 
   findRoom = () => {
     //let building_and_room = this.state.query.split(" ");
-    console.log("Data: " + this.state.campus_data)
-    console.log("[" +this.state.query.toString().toUpperCase() + "]")
-    console.log("[" +this.state.campus_data[0]['building'].toString() + "]")
+    // console.log("Data: " + this.state.campus_data)
+    // console.log("[" +this.state.query.toString().toUpperCase() + "]")
+    // console.log("[" +this.state.campus_data[0]['building'].toString() + "]")
     if (this.state.query.toString().toUpperCase() === this.state.campus_data[0]['building'].toString()) {
       console.log('success');
       this.setState({roomData: true});
@@ -56,6 +66,7 @@ class SearchBar extends Component {
     return null  
     //console.log("sad")
   }
+
 
   // checks form input for matching building
   handleInputChange = () => {
@@ -73,6 +84,7 @@ class SearchBar extends Component {
   // parses through rooms
   SearchResult = () => {
 
+  
     console.log("Campus data: " + this.state.campus_data)
 
     for (var i = 0; i < this.state.campus_data.length; i++) {
@@ -101,8 +113,20 @@ class SearchBar extends Component {
   //
   SelectRoom = (room) => {
 
-  
+    var len = this.state.times.length
+
+    for (var k = 0; k < len; k++){
+      this.state.times.pop();
+    }
+
+    for (var j = 0; j < len; j++){
+      this.state.room_counts.pop();
+    }
+
     for (var i = 0; i < this.state.campus_data.length; i++) {
+
+      console.log("times:" + this.state.times)
+
       var room_name = this.state.campus_data[i]['endpoint']
       console.log(room_name)
       if (room === room_name) {
@@ -112,8 +136,8 @@ class SearchBar extends Component {
 
         // formats the date before pushing to the list
         var date = this.state.campus_data[i]['timestamp']['$date']
-        var parsedDate = new Date(parseInt(date, 10))
-        var dateString = parsedDate.toLocaleTimeString('en-US');
+        var parsedDate = new Date(date)
+        var dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()} ${parsedDate.getHours()}:${parsedDate.getMinutes()}:${parsedDate.getSeconds()}`
         this.state.times.push(dateString)
       }
     }
@@ -130,8 +154,8 @@ class SearchBar extends Component {
     
 
   render() {
-    return (
 
+    return (
       this.state.roomData === false ?
       <div>
         <form>
@@ -159,13 +183,15 @@ class SearchBar extends Component {
           {/* <SearchResult campusData = {this.state.campus_data} /> */}
           <br></br>
         </form>
-
+        
         <div className="count-row">
         <LineGraph building = {this.state.query} room = {this.state.current_room} 
           counts = {this.state.room_counts} times = {this.state.times}/>
 
         <CountCard counts = {this.state.room_counts[this.state.room_counts.length - 1]}/>
         </div>
+
+        
       </div>
      
 
