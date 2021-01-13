@@ -1,26 +1,44 @@
+
+// styling
 import './App.css';
-import LineGraph from './components/LineGraph';
+
+// page imports
+import React from 'react';
+
+// contexts
+import BuildingContextProvider from './contexts/BuildingContext';
+import RoomContextProvider from './contexts/RoomContext';
+import CountContextProvider from './contexts/CountContext';
+
+// components
 import SearchBar from './components/SearchBar';
+import RoomList from './components/RoomList';
+import LineGraph from './components/LineGraph';
 import CountCard from './components/CountCard';
-import React, {Component} from 'react';
-import axios from 'axios';
 
 
-class App extends Component{
+const App = () => {
 
-  
-  // renders the app and it's components with state passed down to children
-  render () {
       return (
         <div className="App">
-          <div className="count-row">
-              <SearchBar />            
-               {/* <LineGraph bldg_data = {this.state.bldg_data} />
-              <CountCard bldg_data = {this.state.bldg_data} /> */}
-          </div>
+          <BuildingContextProvider>
+            <SearchBar />
+          
+            <RoomContextProvider>
+              <RoomList />
+
+              <CountContextProvider>
+                <div className="count-row">          
+                  <LineGraph />
+                  <CountCard />
+                </div>
+              </CountContextProvider>
+
+            </RoomContextProvider>
+
+          </BuildingContextProvider>
         </div>
       );
     }
-  }
 
 export default App;

@@ -1,54 +1,23 @@
-import React, {Component} from 'react';
+import React, {useContext} from 'react';
 import {Line} from 'react-chartjs-2';
 import './LineGraph.css';
+import { CountContext } from '../contexts/CountContext';
 
-class LineGraph extends Component {
+const LineGraph = () => {
 
-   // constructor for graph component
-   constructor(props) {
+   const { building, room, countList, timeList } = useContext( CountContext );
 
-      super(props);
-
-      // sets the data for the graph visual within the state
-      this.state = {
-         bldg: this.props.building,
-         room: this.props.room,
-         graphData: {
-            labels: this.props.times,
-            // labels: this.get_labels(),
-    
-            datasets: [
-            {
-               label: 'Count over time',
-               data: this.props.counts,
-               // backgroundColor: this.set_value_colors()
-            }]   
-         }
-      
-      };
-   }
-
-
-   componentDidUpdate(prevProps) {
-
-      if (prevProps !== this.props){
-         this.setState({
-            room: this.props.room,
-         })  
-      }
-   }
+   const graphData = {labels: timeList, datasets: [{label: 'Count over time', data: countList}]}
 
    // renders the graph with the passed down state
-   render(){
       return (
          <div className="LineGraph">
             <Line
-               data={this.state.graphData}
-
+               data = {graphData}
                options={{
                   title:{
                      display: true,
-                     text: this.state.bldg + " " + this.state.room,
+                     text: building + " " + room,
                      fontSize:25
                     },
                   maintainAspectRatio: false
@@ -57,6 +26,5 @@ class LineGraph extends Component {
          </div>
       )
    }
-}
 
 export default LineGraph;
