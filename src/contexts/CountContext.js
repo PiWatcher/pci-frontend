@@ -18,35 +18,25 @@ const CountContextProvider = (props) => {
     const [ timeList, setTimeList ] = useState([]);
 
     // creates state: latest recorded count
-    const [ currentCount, setCurrentCount ] = useState(null);
+    const [ currentCount, setCurrentCount ] = useState(0);
 
-    // set interval
-    // set graph distance
 
     const getCounts = async () => {
 
-        // BUG: must be a better way to do this
-        // resets arrays
-        var len = timeList.length
-
-        for(var i = 0; i < len; i++) {
-            countList.pop();
-        }
-
-        for(var k = 0; k < len; k++) {
-            timeList.pop();
-        }
+        // resets counts and times for room when room is changed
+        setCountList([]);
+        setTimeList([]);
 
         // API call for counts
-        const response = await axios('http://127.0.0.1:5000/api/'.concat('SICCS'));  // .concat(building)
+        const response = await axios('http://127.0.0.1:5000/api/'.concat(building));
 
         const mongoData = response.data;
 
         // parse data from room
 
-        for (var index = 0; index < mongoData.data.length; index++) {
+        for (let index = 0; index < mongoData.data.length; index++) {
             
-            var roomName = mongoData.data[index]['endpoint'];
+            let roomName = mongoData.data[index]['endpoint'];
 
             if (room === roomName) {
             
@@ -54,20 +44,21 @@ const CountContextProvider = (props) => {
             setCountList(countList => [...countList, mongoData.data[index]['count']]);
             
             // formats the date and adds to date list
-            var date = mongoData.data[index]['timestamp']['$date'];
+            let date = mongoData.data[index]['timestamp']['$date'];
             
-            var parsedDate = new Date(date);
+            let parsedDate = new Date(date);
 
-            var dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()} ${parsedDate.getHours()}:${parsedDate.getMinutes()}:${parsedDate.getSeconds()}`;
+            let dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()} ${parsedDate.getHours()}:${parsedDate.getMinutes()}:${parsedDate.getSeconds()}`;
 
             setTimeList (timeList => [...timeList, dateString]);
             }
         }
 
         
-        // BUG: current count does not reset
-        setCurrentCount (currentCount => [currentCount, countList[countList.length - 1]]);
+        // BUG: count card not rerendering on correct data change
+        setCurrentCount (countList[countList.length - 1]);
     };
+
 
     useEffect(() => {
         room !== '' && getCounts();

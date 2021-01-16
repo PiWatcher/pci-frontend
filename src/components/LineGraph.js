@@ -7,20 +7,22 @@ const LineGraph = () => {
 
    const { building, room, countList, timeList } = useContext( CountContext );
 
+   // FIX: parse for room cleanup for display
+ 
    const graphData = {labels: timeList, datasets: [{label: 'Count over time', data: countList}]}
 
    // renders the graph with the passed down state
       return (
          <div className="LineGraph">
             <Line
-               data = {graphData}
+               data = { graphData }
                options={{
                   title:{
                      display: true,
                      text: building + " " + room,
                      fontSize:25
                     },
-                  maintainAspectRatio: false
+                  maintainAspectRatio: false,
                }}
             />
          </div>

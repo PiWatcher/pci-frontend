@@ -22,15 +22,20 @@ const RoomContextProvider = (props) => {
     // API pull and parse logic for rooms in selected building
     const getRooms = async () => {
 
-        const response = await axios('http://127.0.0.1:5000/api/'.concat('SICCS')); // .concat(building)
+        // resets list of rooms when building is changed
+        setRoomList([]);
+
+        const response = await axios('http://127.0.0.1:5000/api/'.concat(building));
 
         const mongoData = response.data;
 
-        // BUG: repeats rooms
-        // loop through rooms and adds to list for viewing
-        for (var roomIndex = 0; roomIndex < 2; roomIndex++) {
 
-            var roomName = mongoData.data[roomIndex]['endpoint'];
+        // BUG: repeats rooms (currently limited to first two for testing)
+        
+        // loop through rooms and adds to list for viewing
+        for (let roomIndex = 0; roomIndex < 2; roomIndex++) {
+
+            let roomName = mongoData.data[roomIndex]['endpoint'];
 
             if (roomList.indexOf(roomName) < 0) {
                 setRoomList (roomList => [...roomList, roomName]);

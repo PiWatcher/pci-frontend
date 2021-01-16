@@ -5,13 +5,12 @@ import { CountContext } from '../contexts/CountContext';
 const CountCard = () => {
 
   const { currentCount } = useContext( CountContext );
-
+  
       return (
         <div className="CountCard">
             <div className="text-container">
                 Current Count: 
                 <div className="num-container">
-                    
                     {currentCount} / 100
                 </div>
             </div>
