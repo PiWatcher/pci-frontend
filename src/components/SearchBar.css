@@ -1,0 +1,12 @@
+.SearchBar {
+   display: inline-flex;
+}
+
+.count-row {
+   display: inline-flex;
+   margin-top: 50px;
+}
+
+ul li {
+   list-style-type: none;
+}
