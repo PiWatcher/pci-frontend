@@ -1,0 +1,23 @@
+.navbar {
+    display: flex;
+    margin: 0 auto;
+    width: 100vw;
+    height: 80px;
+    background-color: #003466;
+}
+
+.image-div {
+    background-color: grey;
+    margin-right: 25px;
+    width: 125px;
+}
+
+.logo {
+    width: 125px;
+    padding: 5px;
+}
+
+.search-div {
+    margin-top: 20px;
+    min-width: 80vw;
+}

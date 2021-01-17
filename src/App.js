@@ -11,7 +11,7 @@ import RoomContextProvider from './contexts/RoomContext';
 import CountContextProvider from './contexts/CountContext';
 
 // components
-import SearchBar from './components/SearchBar';
+import Navbar from './components/Navbar';
 import RoomList from './components/RoomList';
 import LineGraph from './components/LineGraph';
 import CountCard from './components/CountCard';
@@ -22,8 +22,8 @@ const App = () => {
       return (
         <div className="App">
           <BuildingContextProvider>
-            <SearchBar />
-          
+            <Navbar/>
+
             <RoomContextProvider>
               <RoomList />
 

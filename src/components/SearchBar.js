@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import './SearchBar.css';
 import { Dropdown } from 'semantic-ui-react';
 import { BuildingContext } from '../contexts/BuildingContext';
 
@@ -17,16 +16,14 @@ const SearchBar = () => {
 
   // returns searchbar component
   return (
-    <div className="search-bar">
-        <Dropdown
-          onChange = { handleSelectChange }
-          placeholder = 'Select a building'
-          fluid
-          search
-          selection
-          options = { buildingList }
-        />
-    </div>
+    <Dropdown className="dropdown"
+      onChange = { handleSelectChange }
+      placeholder = 'Select a building'
+      fluid
+      search
+      selection
+      options = { buildingList }
+    />
   );  
 }
  
