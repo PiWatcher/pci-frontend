@@ -10,8 +10,7 @@ const RoomList = () => {
     // FIX: parse for room cleanup for display
 
     // FIX: each room needs a key
-    const listItems = roomList.map((room) => <li className="rooms" 
-      onClick = {() => setRoom(room)} >{room}</li>)
+    const listItems = roomList.map((room) => <li onClick = {() => setRoom(room)} >{room}</li>)
 
     return (
       <div className="room-list">

@@ -25,15 +25,20 @@ const App = () => {
             <Navbar/>
 
             <RoomContextProvider>
-              <RoomList />
-
+              
               <CountContextProvider>
-                <div className="count-row">          
+                <div className="wide">
+                  <CountCard />  
+                </div>
+                    
+                <div className="column">      
                   <LineGraph />
-                  <CountCard />
                 </div>
               </CountContextProvider>
 
+              <div className="column">
+                <RoomList />
+              </div>
             </RoomContextProvider>
 
           </BuildingContextProvider>
