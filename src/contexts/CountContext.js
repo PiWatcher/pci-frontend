@@ -20,6 +20,9 @@ const CountContextProvider = (props) => {
     // creates state: latest recorded count
     const [ currentCount, setCurrentCount ] = useState(0);
 
+    // creates state: selected room capacity (currently hardcoded until backend provides)
+    const [ roomCapacity ] = useState(400);
+
 
     const getCounts = async () => {
 
@@ -54,8 +57,7 @@ const CountContextProvider = (props) => {
             }
         }
 
-        
-        // BUG: count card not rerendering on correct data change
+        // sets latest count of room into a variable
         setCurrentCount (countList[countList.length - 1]);
     };
 
@@ -66,7 +68,7 @@ const CountContextProvider = (props) => {
     
 
     return (
-        <CountContext.Provider value = {{ building, room, countList, timeList, currentCount }}>
+        <CountContext.Provider value = {{ building, room, countList, timeList, currentCount, roomCapacity }}>
             { props.children }
         </CountContext.Provider>
     )

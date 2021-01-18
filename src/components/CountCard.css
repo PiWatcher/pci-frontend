@@ -12,6 +12,11 @@
   }
 
   .num-container {
-    margin-top: 80px;
-    font-size: 2.5em;
+    margin-top: 60px;
+    font-size: 2.25em;
+  }
+
+  .per-container {
+    margin-top: 50px;
+    font-size: 1.25em;
   }
