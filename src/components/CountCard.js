@@ -9,9 +9,10 @@ const CountCard = () => {
   const [ roomPercentage, setRoomPercentage ] = useState(0);
 
 
+  // calculates room percentage without decimals
   const getCapacityPercentage = () => {
     const percentage = (currentCount / roomCapacity) * 100;
-    setRoomPercentage(percentage);
+    setRoomPercentage(Math.trunc(percentage));
   }
 
   // BUG: count card not rerendering in sequence with the graph
