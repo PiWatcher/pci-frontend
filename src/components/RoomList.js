@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
-import { RoomContext } from '../contexts/RoomContext';
+import { DataContext } from '../contexts/DataContext';
 import './RoomList.css';
 
 
 const RoomList = () => {
 
-    const { roomList, setRoom } = useContext( RoomContext );
+    const { roomList, setRoom } = useContext( DataContext );
 
     // FIX: parse for room cleanup for display
 

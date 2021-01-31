@@ -1,10 +1,10 @@
 import './CountCard.css';
 import React, {useContext, useState, useEffect} from 'react';
-import { CountContext } from '../contexts/CountContext';
+import { DataContext } from '../contexts/DataContext';
 
 const CountCard = () => {
 
-  const { currentCount, roomCapacity } = useContext( CountContext );
+  const { currentCount, roomCapacity } = useContext( DataContext );
 
   const [ roomPercentage, setRoomPercentage ] = useState(0);
 
