@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import { Dropdown } from 'semantic-ui-react';
-import { BuildingContext } from '../contexts/BuildingContext';
+import { DataContext } from '../contexts/DataContext';
 
 
 const SearchBar = () => {
 
   // consumes context of BuildingContext
-  const { buildingList, setBuilding } = useContext( BuildingContext );
+  const { buildingList, setBuilding } = useContext( DataContext );
   
 
   // pulls selection text from dropdown and passes it back to context

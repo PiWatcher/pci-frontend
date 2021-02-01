@@ -1,11 +1,11 @@
 import React, {useContext} from 'react';
 import {Line} from 'react-chartjs-2';
 import './LineGraph.css';
-import { CountContext } from '../contexts/CountContext';
+import { DataContext } from '../contexts/DataContext';
 
 const LineGraph = () => {
 
-   const { building, room, countList, timeList } = useContext( CountContext );
+   const { building, room, countList, timeList } = useContext( DataContext );
 
    // FIX: parse for room cleanup for display
  

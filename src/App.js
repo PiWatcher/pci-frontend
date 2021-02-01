@@ -6,44 +6,42 @@ import './App.css';
 import React from 'react';
 
 // contexts
-import BuildingContextProvider from './contexts/BuildingContext';
-import RoomContextProvider from './contexts/RoomContext';
-import CountContextProvider from './contexts/CountContext';
+import DataContextProvider from './contexts/DataContext';
 
 // components
 import Navbar from './components/Navbar';
 import RoomList from './components/RoomList';
 import LineGraph from './components/LineGraph';
+import TimeCard from './components/TimeCard'
 import CountCard from './components/CountCard';
 
 
 const App = () => {
 
-      return (
-        <div className="App">
-          <BuildingContextProvider>
-            <Navbar/>
+  return (
+    <div className="App">
+      <DataContextProvider>
+        <Navbar />
 
-            <RoomContextProvider>
-              
-              <CountContextProvider>
-                <div className="wide">
-                  <CountCard />  
-                </div>
-                    
-                <div className="column">      
-                  <LineGraph />
-                </div>
-              </CountContextProvider>
-
-              <div className="column">
-                <RoomList />
-              </div>
-            </RoomContextProvider>
-
-          </BuildingContextProvider>
+        <div className="column">
+          <TimeCard />
         </div>
-      );
-    }
+
+        <div className="column">
+          <CountCard />
+        </div>
+
+        <div className="column">
+          <LineGraph />
+        </div>
+
+        <div className="column">
+          <RoomList />
+        </div>
+
+      </DataContextProvider>
+    </div>
+  );
+}
 
 export default App;
