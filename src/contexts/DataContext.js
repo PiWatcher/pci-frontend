@@ -10,10 +10,7 @@ const DataContextProvider = (props) => {
 
 
     // backend URL for database
-    const dataURL = 'http://127.0.0.1:5000/api/SICCS';
-
-    // creates state for current data set
-    const [mongoData, setMongoData] = useState(null);
+    const dataURL = 'http://127.0.0.1:5000/api/';
 
     // creates state: list of buildings
     const [buildingList, setBuildingList] = useState([]);
@@ -40,20 +37,13 @@ const DataContextProvider = (props) => {
     const [roomCapacity] = useState(400);
 
 
-    // API pull logic for database
-    const getData = async () => {
-
-        const response = await axios(dataURL.concat(building));
-
-        setMongoData(response.data);
-
-    };
-
-
-    // API parse logic for buildings
+    // API pull and parse logic for buildings
     const getBuildings = async () => {
 
-        getData();
+        // hardcoded url until backend matures
+        const response = await axios('http://127.0.0.1:5000/api/SICCS');
+
+        const mongoData = response.data
 
         setBuildingList(buildingList => [...buildingList, {
             key: mongoData.building,
@@ -63,12 +53,16 @@ const DataContextProvider = (props) => {
     };
 
 
-
     // API pull and parse logic for rooms in selected building
     const getRooms = async () => {
 
         // resets list of rooms when building is changed
         setRoomList([]);
+
+        // modular url based on building change
+        const response = await axios(dataURL.concat(building));
+
+        const mongoData = response.data
 
         // BUG: repeats rooms (currently limited to first two for testing)
 
@@ -84,11 +78,17 @@ const DataContextProvider = (props) => {
     };
 
 
+    // API pull and parse logic for counts and timestamps in selected room
     const getCounts = async () => {
 
         // resets counts and times for room when room is changed
         setCountList([]);
         setTimeList([]);
+
+        // modular url based on building change
+        const response = await axios(dataURL.concat(building));
+
+        const mongoData = response.data
 
         // parse data from room
 
@@ -114,24 +114,27 @@ const DataContextProvider = (props) => {
 
         // sets latest count of room into a variable
         setCurrentCount(countList[countList.length - 1]);
+
     };
 
-
+    // updates components with pulled buildings from database
     useEffect(() => {
         getBuildings();
     }, [])
 
+    // updates components with pulled rooms after building selection
     useEffect(() => {
         building !== '' && getRooms();
     }, [building])
 
+    // updates components with pulled counts after room selection
     useEffect(() => {
         room !== '' && getCounts();
     }, [room])
 
 
     return (
-        <DataContext.Provider value={{ buildingList, building, setBuilding, countList, timeList, currentCount, roomCapacity, roomList, room, setRoom }}>
+        <DataContext.Provider value={{ buildingList, building, setBuilding, roomList, room, setRoom, countList, timeList, currentCount, roomCapacity }}>
             { props.children}
         </DataContext.Provider>
     )
