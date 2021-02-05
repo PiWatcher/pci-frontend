@@ -1,0 +1,12 @@
+.column {
+    display: inline-block;
+    margin-top: 25px;
+}
+
+.wide {
+    margin-top: 50px;
+}
+
+.Dashboard {
+    text-align: center;
+}

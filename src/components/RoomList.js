@@ -1,22 +1,31 @@
-import React, { useContext } from 'react';
-import { DataContext } from '../contexts/DataContext';
+
+// styling
 import './RoomList.css';
+
+// page imports
+import React, { useContext } from 'react';
+
+// contexts
+import { DataContext } from '../contexts/DataContext';
+
 
 
 const RoomList = () => {
 
-    const { roomList, setRoom } = useContext( DataContext );
+   // consumes data from DataContext
+   const { roomList, setRoom } = useContext(DataContext);
 
-    // FIX: parse for room cleanup for display
+   // FIX: parse for room cleanup for display
 
-    // FIX: each room needs a key
-    const listItems = roomList.map((room) => <li onClick = {() => setRoom(room)} >{room}</li>)
+   // FIX: each room needs a key
+   const listItems = roomList.map((room) => <li onClick={() => setRoom(room)} >{room}</li>)
 
-    return (
+   // returns parsed rooms in unordered list
+   return (
       <div className="room-list">
-        <ul>{listItems}</ul>
+         <ul>{listItems}</ul>
       </div>
-    )
+   )
 }
- 
+
 export default RoomList;
