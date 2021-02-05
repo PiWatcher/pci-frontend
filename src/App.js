@@ -6,40 +6,23 @@ import './App.css';
 import React from 'react';
 
 // contexts
-import DataContextProvider from './contexts/DataContext';
+import AuthContextProvider from './contexts/AuthContext';
 
 // components
-import Navbar from './components/Navbar';
-import RoomList from './components/RoomList';
-import LineGraph from './components/LineGraph';
-import TimeCard from './components/TimeCard'
-import CountCard from './components/CountCard';
+import PageRouter from './components/PageRouter';
 
 
 const App = () => {
 
   return (
     <div className="App">
-      <DataContextProvider>
-        <Navbar />
+      <AuthContextProvider>
 
-        <div className="column">
-          <TimeCard />
+        <div className="content">
+          <PageRouter />
         </div>
 
-        <div className="column">
-          <CountCard />
-        </div>
-
-        <div className="column">
-          <LineGraph />
-        </div>
-
-        <div className="column">
-          <RoomList />
-        </div>
-
-      </DataContextProvider>
+      </AuthContextProvider>
     </div>
   );
 }

@@ -1,29 +1,36 @@
+
+// styling
 import './TimeCard.css';
-import React, { useState, useEffect} from 'react';
+
+// page imports
+import React, { useState, useEffect } from 'react';
 
 const TimeCard = () => {
 
-    const [currentTime, setCurrentTime] = useState(new Date().toLocaleString());
- 
-    useEffect(() => {
-        let seconds = setInterval( () => {
-            setCurrentTime(new Date().toLocaleString())
-        }, 1000)
+   // local variable for current time
+   const [currentTime, setCurrentTime] = useState(new Date().toLocaleString());
 
-        return () => clearInterval(seconds);
-    }, [])
+   // updates state and time component every second
+   useEffect(() => {
+      let seconds = setInterval(() => {
+         setCurrentTime(new Date().toLocaleString())
+      }, 1000)
+
+      return () => clearInterval(seconds);
+   }, [])
 
 
-    return (
-        <div className="TimeCard">
-            <div className="text-container">
-            Current time: 
+   // returns component with live updating local time
+   return (
+      <div className="TimeCard">
+         <div className="text-container">
+            Current time:
         <div className="num-container">
-          {currentTime}
-        </div>
+               {currentTime}
+            </div>
+         </div>
       </div>
-    </div>
-  )
+   )
 }
 
 export default TimeCard;
