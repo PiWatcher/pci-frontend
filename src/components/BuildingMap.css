@@ -1,0 +1,29 @@
+.leaflet-container {
+    height: 600px;
+    margin: 15px;
+    border-radius: 15px;
+}
+
+.select-building-button {
+    border: 1px solid #003466;
+    border-radius: 5px;
+    padding: 5px 14px;
+    background-color: white;
+    cursor: pointer;
+    font-size: 1.25em;
+    margin-top: 15px;
+}
+
+.select-building-button:hover {
+    background-color: #003466;
+    color: white;
+}
+
+.popup {
+    text-align: center;
+}
+
+.popup span {
+    font-size: 1.25em;
+    font-weight: bold;
+}

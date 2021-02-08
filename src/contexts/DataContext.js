@@ -2,6 +2,7 @@
 // page imports
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import bldgDataJSON from '../data/bldgData.json';
 
 
 // context that pulls data from backend and parses
@@ -11,6 +12,9 @@ export const DataContext = createContext();
 const DataContextProvider = (props) => {
 
 
+   // NAU buildings data: name, number, coordinates
+   const [bldgData, setBldgData] = useState(bldgDataJSON.buildings)
+
    // backend URL for database
    const dataURL = 'http://127.0.0.1:5000/api/';
 
@@ -19,6 +23,12 @@ const DataContextProvider = (props) => {
 
    // creates state: selected building
    const [building, setBuilding] = useState('');
+
+   // create state: building coordinates
+   const [buildingCoordsList, setBuildingCoordsList] = useState([]);
+
+   // create state: building coordinates
+   const [buildingNumberList, setBuildingNumberList] = useState([]);
 
    // creates state: list of rooms
    const [roomList, setRoomList] = useState([]);
@@ -40,18 +50,42 @@ const DataContextProvider = (props) => {
 
 
    // API pull and parse logic for buildings
-   const getBuildings = async () => {
+   // const getBuildings = async () => {
 
-      // hardcoded url until backend matures
-      const response = await axios('http://127.0.0.1:5000/api/SICCS');
+   //    // hardcoded url until backend matures
+   //    const response = await axios('http://127.0.0.1:5000/api/SICCS');
 
-      const mongoData = response.data
+   //    const mongoData = response.data
 
-      setBuildingList(buildingList => [...buildingList, {
-         key: mongoData.building,
-         text: mongoData.building,
-         value: mongoData.building
-      }]);
+   //    setBuildingList(buildingList => [...buildingList, {
+   //       key: mongoData.building,
+   //       text: mongoData.building,
+   //       value: mongoData.building
+   //    }]);
+   // };
+
+
+   // API pull and parse logic for building information (currently from JSON file, not backend)
+   const getBuildings = () => {
+
+      for (let buildingIndex = 0; buildingIndex < bldgData.length; buildingIndex++) {
+
+         let buildingName = bldgData[buildingIndex]['name'];
+
+         let buildingNumber = bldgData[buildingIndex]['number'];
+
+         let buildingCoords = bldgData[buildingIndex]['coordinates'];
+
+         setBuildingList(buildingList => [...buildingList, {
+            key: buildingNumber,
+            text: buildingName,
+            value: buildingName
+         }]);
+
+         setBuildingNumberList(buildingNumberList => [...buildingNumberList, buildingNumber]);
+
+         setBuildingCoordsList(buildingCoordsList => [...buildingCoordsList, buildingCoords]);
+      }
    };
 
 
@@ -108,7 +142,8 @@ const DataContextProvider = (props) => {
 
             let parsedDate = new Date(date);
 
-            let dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()} ${parsedDate.getHours()}:${parsedDate.getMinutes()}:${parsedDate.getSeconds()}`;
+            let dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()} 
+               ${parsedDate.getHours()}:${parsedDate.getMinutes()}:${parsedDate.getSeconds()}`;
 
             setTimeList(timeList => [...timeList, dateString]);
          }
@@ -126,17 +161,20 @@ const DataContextProvider = (props) => {
 
    // updates components with pulled rooms after building selection
    useEffect(() => {
-      building !== '' && getRooms();
+      // building !== '' && getRooms();
    }, [building])
 
    // updates components with pulled counts after room selection
    useEffect(() => {
-      room !== '' && getCounts();
+      // room !== '' && getCounts();
    }, [room])
 
 
    return (
-      <DataContext.Provider value={{ buildingList, building, setBuilding, roomList, room, setRoom, countList, timeList, currentCount, roomCapacity }}>
+      <DataContext.Provider value={{
+         buildingList, buildingNumberList, buildingCoordsList,
+         building, setBuilding, roomList, room, setRoom, countList, timeList, currentCount, roomCapacity
+      }}>
          { props.children}
       </DataContext.Provider>
    )

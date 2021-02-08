@@ -59,8 +59,9 @@ const Login = () => {
             </div>
 
             <form onSubmit={handleSubmit}>
-               <input type="login" id="login" className="fadeIn second" placeholder="email" onChange={handleInputChange} />
-               <input type="password" id="password" className="fadeIn third" placeholder="password" onChange={handleInputChange} />
+               <input type="login" id="login" className="fadeIn second" placeholder="email"
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" onChange={handleInputChange} required />
+               <input type="password" id="password" className="fadeIn third" placeholder="password" onChange={handleInputChange} required />
                <input type="submit" className="fadeIn fourth" value="Log In" />
             </form>
          </div>
