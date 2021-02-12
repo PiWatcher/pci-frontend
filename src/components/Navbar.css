@@ -23,9 +23,19 @@
     min-width: 80vw;
 }
 
+.mapIcon-div {                 
+    width: 55px;
+    margin-top: 12px;
+    margin-left: 2px;
+}
+
+.mapIcon-div:hover {
+    color: grey;
+}
+
 .sign-out{
     margin-top: 28px;
-    margin-left: 50px;
+    margin-left: 20px;
     width: 100px;
     height: 40px;
     color: white;

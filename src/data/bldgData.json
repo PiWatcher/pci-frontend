@@ -1,0 +1,988 @@
+{
+    "buildings": [
+        {
+            "name": "Adel Mathematics",
+            "number": 26,
+            "coordinates": [
+                35.1909768256742,
+                -111.65613705391864
+            ]
+        },
+        {
+            "name": "Allen Hall",
+            "number": 46,
+            "coordinates": [
+                35.18591202981222,
+                -111.65491767681279
+            ]
+        },
+        {
+            "name": "Anthropology Laboratory",
+            "number": 49,
+            "coordinates": [
+                35.183774939915374,
+                -111.65456367686579
+            ]
+        },
+        {
+            "name": "Applied Research And Development (ARD)",
+            "number": 56,
+            "coordinates": [
+                35.18540123669958,
+                -111.65776643133655
+            ]
+        },
+        {
+            "name": "Aquatic and Tennis Complex (ATC)",
+            "number": 86,
+            "coordinates": [
+                35.19046147123046,
+                -111.65280089955768
+            ]
+        },
+        {
+            "name": "Ardrey Auditorium",
+            "number": "37A",
+            "coordinates": [
+                35.18815753124926,
+                -111.6575973539992
+            ]
+        },
+        {
+            "name": "Ashurst Hall",
+            "number": "11",
+            "coordinates": [
+                35.19211158090704,
+                -111.65677617661159
+            ]
+        },
+        {
+            "name": "Atmospheric Observatory/Lutz Telescope",
+            "number": "47",
+            "coordinates": [
+                35.184193239999786,
+                -111.65382187684584
+            ]
+        },
+        {
+            "name": "Babbitt Academic Annex",
+            "number": "23A",
+            "coordinates": [
+                35.19036674910912,
+                -111.65456975392807
+            ]
+        },
+        {
+            "name": "Babbitt Administration",
+            "number": "51",
+            "coordinates": [
+                35.179670419593016,
+                -111.65842379970842
+            ]
+        },
+        {
+            "name": "Beaver Street House",
+            "number": "07A",
+            "coordinates": [
+                35.19302119120521,
+                -111.65254555386825
+            ]
+        },
+        {
+            "name": "Beaver Street School",
+            "number": "93",
+            "coordinates": [
+                35.19181415124522,
+                -111.65286357662816
+            ]
+        },
+        {
+            "name": "Bilby Research Center",
+            "number": "52",
+            "coordinates": [
+                35.18227203716547,
+                -111.65551857690072
+            ]
+        },
+        {
+            "name": "Biological Sciences",
+            "number": "21",
+            "coordinates": [
+                35.19174202416104,
+                -111.6536553766382
+            ]
+        },
+        {
+            "name": "Biological Sciences Annex",
+            "number": "21B",
+            "coordinates": [
+                35.19098252566293,
+                -111.65377755391849
+            ]
+        },
+        {
+            "name": "Biology Greenhouse",
+            "number": "18A",
+            "coordinates": [
+                35.19095504997734,
+                -111.65428427665269
+            ]
+        },
+        {
+            "name": "Blome",
+            "number": "02",
+            "coordinates": [
+                35.19401721966181,
+                -111.6565898765732
+            ]
+        },
+        {
+            "name": "Bookstore/Postal Services",
+            "number": "35",
+            "coordinates": [
+                35.18825864599822,
+                -111.6537499539883
+            ]
+        },
+        {
+            "name": "Bury",
+            "number": "08",
+            "coordinates": [
+                35.192512622637175,
+                -111.6550061766162
+            ]
+        },
+        {
+            "name": "Butler Office Building",
+            "number": "7C",
+            "coordinates": [
+                35.19362505391794,
+                -111.65367775383496
+            ]
+        },
+        {
+            "name": "Calderón Learning Community",
+            "number": "29",
+            "coordinates": [
+                35.18666484364647,
+                -111.65599287677523
+            ]
+        },
+        {
+            "name": "Campbell Hall",
+            "number": "06",
+            "coordinates": [
+                35.19356998822469,
+                -111.65435407659398
+            ]
+        },
+        {
+            "name": "Campus Heights Apartments",
+            "number": "50",
+            "coordinates": [
+                35.184713936318055,
+                -111.65671325410561
+            ]
+        },
+        {
+            "name": "CECMEE Field Station",
+            "number": "97",
+            "coordinates": [
+                35.17564768957246,
+                -111.65300408598809
+            ]
+        },
+        {
+            "name": "Centennial (Parking and Human Resources)",
+            "number": "91",
+            "coordinates": [
+                35.19328772110441,
+                -111.65236323111124
+            ]
+        },
+        {
+            "name": "Ceramics Clay Mixing Facility",
+            "number": "80B",
+            "coordinates": [
+                35.17646405437106,
+                -111.64943997707464
+            ]
+        },
+        {
+            "name": "Ceramics Complex",
+            "number": "80",
+            "coordinates": [
+                35.17595652785011,
+                -111.64888705433971
+            ]
+        },
+        {
+            "name": "Chemical Storage Facility",
+            "number": "78",
+            "coordinates": [
+                35.17626615476235,
+                -111.65177477708029
+            ]
+        },
+        {
+            "name": "Cline Library",
+            "number": "28",
+            "coordinates": [
+                35.18946166784542,
+                -111.65803387668731
+            ]
+        },
+        {
+            "name": "Communications",
+            "number": "16",
+            "coordinates": [
+                35.191499650781054,
+                -111.65607757663713
+            ]
+        },
+        {
+            "name": "Cowden Learning Community",
+            "number": "38",
+            "coordinates": [
+                35.1877201199937,
+                -111.6565687540197
+            ]
+        },
+        {
+            "name": "Drury Inn and Suites",
+            "number": "58A",
+            "coordinates": [
+                35.19459071852769,
+                -111.65493175381542
+            ]
+        },
+        {
+            "name": "duBois South Union",
+            "number": "64",
+            "coordinates": [
+                35.1781910509564,
+                -111.65607757702531
+            ]
+        },
+        {
+            "name": "Eastburn Education Center",
+            "number": "27",
+            "coordinates": [
+                35.1912480251379,
+                -111.6582667766523
+            ]
+        },
+        {
+            "name": "Engineering Research",
+            "number": "98C",
+            "coordinates": [
+                35.17770033042194,
+                -111.64997567703132
+            ]
+        },
+        {
+            "name": "Environment, Forestry, and Natural Sciences",
+            "number": "69",
+            "coordinates": [
+                35.1774359524494,
+                -111.65773769978827
+            ]
+        },
+        {
+            "name": "Extended Campus Operations Center",
+            "number": "98D",
+            "coordinates": [
+                35.17757155218128,
+                -111.64997567704299
+            ]
+        },
+        {
+            "name": "Facility Services",
+            "number": "77",
+            "coordinates": [
+                35.17626582830625,
+                -111.6508606770723
+            ]
+        },
+        {
+            "name": "Facility Services Annex",
+            "number": "77A",
+            "coordinates": [
+                35.17535539833275,
+                -111.65006887709025
+            ]
+        },
+        {
+            "name": "Fountaine Residence",
+            "number": "89",
+            "coordinates": [
+                35.18857094645907,
+                -111.64814905397937
+            ]
+        },
+        {
+            "name": "Gabaldon Hall",
+            "number": "53",
+            "coordinates": [
+                35.18160923618771,
+                -111.65621727691966
+            ]
+        },
+        {
+            "name": "Gammage",
+            "number": "01",
+            "coordinates": [
+                35.193193253280626,
+                -111.65686937993152
+            ]
+        },
+        {
+            "name": "Gateway Student Success Center",
+            "number": "43",
+            "coordinates": [
+                35.186469743358586,
+                -111.65495968012365
+            ]
+        },
+        {
+            "name": "Geology",
+            "number": "12",
+            "coordinates": [
+                35.193111790713154,
+                -111.65655533450007
+            ]
+        },
+        {
+            "name": "Geology Annex",
+            "number": "13",
+            "coordinates": [
+                35.19212395170244,
+                -111.65733517996206
+            ]
+        },
+        {
+            "name": "Gillenwater Hall",
+            "number": "31",
+            "coordinates": [
+                35.18951704785518,
+                -111.65463545731164
+            ]
+        },
+        {
+            "name": "Greenhouse Complex",
+            "number": "79",
+            "coordinates": [
+                35.17692025346908,
+                -111.65258408040442
+            ]
+        },
+        {
+            "name": "Health and Learning Center (HLC)",
+            "number": "25",
+            "coordinates": [
+                35.18943082873137,
+                -111.65210105732214
+            ]
+        },
+        {
+            "name": "Health Professions",
+            "number": "66",
+            "coordinates": [
+                35.17777927397153,
+                -111.65649678038791
+            ]
+        },
+        {
+            "name": "High Country Conference Center",
+            "number": "58",
+            "coordinates": [
+                35.19453461863861,
+                -111.65426097990121
+            ]
+        },
+        {
+            "name": "Hilltop Townhomes",
+            "number": "59",
+            "coordinates": [
+                35.18422123903285,
+                -111.65238055747095
+            ]
+        },
+        {
+            "name": "Hogan",
+            "number": "82B",
+            "coordinates": [
+                35.17554885618062,
+                -111.65700345771867
+            ]
+        },
+        {
+            "name": "Honors Living and Learning Community",
+            "number": "41",
+            "coordinates": [
+                35.18574968853807,
+                -111.65712396209592
+            ]
+        },
+        {
+            "name": "Hospitality Resource and Research Center",
+            "number": "32",
+            "coordinates": [
+                35.18989030820842,
+                -111.6533181345921
+            ]
+        },
+        {
+            "name": "HRM/Eugene M Hughes East",
+            "number": "33",
+            "coordinates": [
+                35.18882696471711,
+                -111.65298605732335
+            ]
+        },
+        {
+            "name": "HRM/Eugene M Hughes West",
+            "number": "33A",
+            "coordinates": [
+                35.188970847049184,
+                -111.653841780052190
+            ]
+        },
+        {
+            "name": "Huffer Lane Facility",
+            "number": "96",
+            "coordinates": [
+                35.17734235263448,
+                -111.6593904031173
+            ]
+        },
+        {
+            "name": "Humphreys Office Building",
+            "number": "07B",
+            "coordinates": [
+                35.19463978241456,
+                -111.65311977990625
+            ]
+        },
+        {
+            "name": "Information Systems Building Annex",
+            "number": "54B",
+            "coordinates": [
+                35.186204842967726,
+                -111.6581269801312
+            ]
+        },
+        {
+            "name": "Information Technology Services (ITS)",
+            "number": "54",
+            "coordinates": [
+                35.185924250410935,
+                -111.65744033468135
+            ]
+        },
+        {
+            "name": "Institute For Human Development (IHD)",
+            "number": "27A",
+            "coordinates": [
+                35.191014802101634,
+                -111.65848235728488
+            ]
+        },
+        {
+            "name": "International Pavilion",
+            "number": "50A",
+            "coordinates": [
+                35.183223938569775,
+                -111.65677618021634
+            ]
+        },
+        {
+            "name": "KNAU/Campus Transit",
+            "number": "83",
+            "coordinates": [
+                35.17675285380004,
+                -111.64963235768428
+            ]
+        },
+        {
+            "name": "Learning Resource Center",
+            "number": "61",
+            "coordinates": [
+                35.17854261403599,
+                -111.65645018034206
+            ]
+        },
+        {
+            "name": "Liberal Arts",
+            "number": "18",
+            "coordinates": [
+                35.19100927547358,
+                -111.65435407998591
+            ]
+        },
+        {
+            "name": "McConnell Hall",
+            "number": "62",
+            "coordinates": [
+                35.17837293141399,
+                -111.65460430307984
+            ]
+        },
+        {
+            "name": "McDonald Hall",
+            "number": "40",
+            "coordinates": [
+                35.188254231058025,
+                -111.65469635735575
+            ]
+        },
+        {
+            "name": "McKay Village",
+            "number": "50B",
+            "coordinates": [
+                35.183633639122455,
+                -111.65665000292157
+            ]
+        },
+        {
+            "name": "Morton Hall",
+            "number": "04",
+            "coordinates": [
+                35.1934478207878,
+                -111.65447655720735
+            ]
+        },
+        {
+            "name": "Mountain View Hall",
+            "number": "55",
+            "coordinates": [
+                35.189082247213584,
+                -111.64939945732407
+            ]
+        },
+        {
+            "name": "Native American Cultural Center",
+            "number": "14",
+            "coordinates": [
+                35.1905390493634,
+                -111.65671235728246
+            ]
+        },
+        {
+            "name": "North Hall",
+            "number": "05",
+            "coordinates": [
+                35.19340065358674,
+                -111.65410395720072
+            ]
+        },
+        {
+            "name": "North Heating And Cooling Plant",
+            "number": "24",
+            "coordinates": [
+                35.19029444900243,
+                -111.65517525728944
+            ]
+        },
+        {
+            "name": "North Union",
+            "number": "03",
+            "coordinates": [
+                35.19355002058571,
+                -111.65551470265432
+            ]
+        },
+        {
+            "name": "Nursing",
+            "number": "72",
+            "coordinates": [
+                35.17659272878839,
+                -111.65677618040576
+            ]
+        },
+        {
+            "name": "Old Main",
+            "number": "10",
+            "coordinates": [
+                35.192759992623756,
+                -111.65615345723502
+            ]
+        },
+        {
+            "name": "Performing and Fine Arts",
+            "number": "37",
+            "coordinates": [
+                35.18846204629837,
+                -111.65831338006673
+            ]
+        },
+        {
+            "name": "Peterson Hall",
+            "number": "22",
+            "coordinates": [
+                35.190441826732155,
+                -111.65391765729323
+            ]
+        },
+        {
+            "name": "Physical Sciences",
+            "number": "19",
+            "coordinates": [
+                35.192639293279285,
+                -111.65362673451357
+            ]
+        },
+        {
+            "name": "Pine Ridge Village",
+            "number": "95",
+            "coordinates": [
+                35.18005066163903,
+                -111.65432480304798
+            ]
+        },
+        {
+            "name": "Ponderosa",
+            "number": "92",
+            "coordinates": [
+                35.19016264880794,
+                -111.66028690274307
+            ]
+        },
+        {
+            "name": "Printing Services",
+            "number": "57",
+            "coordinates": [
+                35.19382452004286,
+                -111.65266603447166
+            ]
+        },
+        {
+            "name": "Prochnow Auditorium",
+            "number": "03A",
+            "coordinates": [
+                35.19360593077035,
+                -111.65609399392113
+            ]
+        },
+        {
+            "name": "Purchasing",
+            "number": "98B",
+            "coordinates": [
+                35.17733282987993,
+                -111.65028445765968
+            ]
+        },
+        {
+            "name": "Raul H. Castro Social and Behavioral Sciences (SBS)",
+            "number": "65",
+            "coordinates": [
+                35.178170150997744,
+                -111.65794068036872
+            ]
+        },
+        {
+            "name": "Raymond Hall",
+            "number": "39",
+            "coordinates": [
+                35.18746927218642,
+                -111.65542635735412
+            ]
+        },
+        {
+            "name": "Reilly Hall",
+            "number": "48",
+            "coordinates": [
+                35.184753240826,
+                -111.65472678017267
+            ]
+        },
+        {
+            "name": "Renewable Energy Test Facility",
+            "number": "74",
+            "coordinates": [
+                35.17663074788572,
+                -111.65703479869136
+            ]
+        },
+        {
+            "name": "Riles",
+            "number": "15",
+            "coordinates": [
+                35.1915734782546,
+                -111.65624655724488
+            ]
+        },
+        {
+            "name": "RLSS Warehouse",
+            "number": "98F",
+            "coordinates": [
+                35.178453926336616,
+                -111.64922753942257
+            ]
+        },
+        {
+            "name": "Rolle Activity Center",
+            "number": "68",
+            "coordinates": [
+                35.17667022890267,
+                -111.65570488040353
+            ]
+        },
+        {
+            "name": "Roseberry Apartments",
+            "number": "13A",
+            "coordinates": [
+                35.19229992305778,
+                -111.65789407996508
+            ]
+        },
+        {
+            "name": "ROTC",
+            "number": "47A",
+            "coordinates": [
+                35.18384853976982,
+                -111.6538417802065
+            ]
+        },
+        {
+            "name": "School of Informatics, Computing, and Cyber Systems (SICCS)",
+            "number": "90",
+            "coordinates": [
+                35.18661192601159,
+                -111.6587325801356
+            ]
+        },
+        {
+            "name": "Science and Health Building",
+            "number": "36",
+            "coordinates": [
+                35.190777474331,
+                -111.65485717999255
+            ]
+        },
+        {
+            "name": "Science Annex",
+            "number": "20",
+            "coordinates": [
+                35.19292576259568,
+                -111.6532655572383
+            ]
+        },
+        {
+            "name": "Science Laboratory",
+            "number": "17",
+            "coordinates": [
+                35.192447922765126,
+                -111.65457067996086
+            ]
+        },
+        {
+            "name": "Sculpture Studio",
+            "number": "84",
+            "coordinates": [
+                35.17637378160239,
+                -111.65186218042803
+            ]
+        },
+        {
+            "name": "Sechrist Hall",
+            "number": "42",
+            "coordinates": [
+                35.18616735160903,
+                -111.65363815739933
+            ]
+        },
+        {
+            "name": "Seismic Observatory",
+            "number": "99",
+            "coordinates": [
+                35.16753735537844,
+                -111.64409447984225
+            ]
+        },
+        {
+            "name": "SkyView Apartments",
+            "number": "87",
+            "coordinates": [
+                35.182610747738394,
+                -111.65659885752498
+            ]
+        },
+        {
+            "name": "Social and Behavioral Sciences West (SBS)",
+            "number": "70",
+            "coordinates": [
+                35.17799595134213,
+                -111.6588722803737
+            ]
+        },
+        {
+            "name": "South Campus Recreation Complex",
+            "number": "85",
+            "coordinates": [
+                35.173915959409165,
+                -111.65659595776529
+            ]
+        },
+        {
+            "name": "South Heating And Cooling Plant",
+            "number": "67",
+            "coordinates": [
+                35.17723350758592,
+                -111.65491308037946
+            ]
+        },
+        {
+            "name": "South Village Apartments",
+            "number": "71",
+            "coordinates": [
+                35.1730509611194,
+                -111.65521578051491
+            ]
+        },
+        {
+            "name": "Southwest Forestry Sciences Complex",
+            "number": "82",
+            "coordinates": [
+                35.17627495474498,
+                -111.65756808042285
+            ]
+        },
+        {
+            "name": "Student and Academic Services (SAS)",
+            "number": "60",
+            "coordinates": [
+                35.18739284472066,
+                -111.65405735737235
+            ]
+        },
+        {
+            "name": "Taylor Hall",
+            "number": "09",
+            "coordinates": [
+                35.191881779774256,
+                -111.65503555723605
+            ]
+        },
+        {
+            "name": "Tea House",
+            "number": "80A",
+            "coordinates": [
+                35.17562615602779,
+                -111.64912368044139
+            ]
+        },
+        {
+            "name": "The Suites",
+            "number": "75",
+            "coordinates": [
+                35.17981176293613,
+                -111.65637558032986
+            ]
+        },
+        {
+            "name": "Tinsley Hall",
+            "number": "44",
+            "coordinates": [
+                35.186760034012686,
+                -111.65656985739841
+            ]
+        },
+        {
+            "name": "University Marketing and Operations",
+            "number": "16A",
+            "coordinates": [
+                35.17705220669264,
+                -111.64994113493476
+            ]
+        },
+        {
+            "name": "University Police",
+            "number": "98A",
+            "coordinates": [
+                35.17795835141648,
+                -111.65019125764984
+            ]
+        },
+        {
+            "name": "University Union Dining Services",
+            "number": "30A",
+            "coordinates": [
+                35.188868229843884,
+                -111.65589118006312
+            ]
+        },
+        {
+            "name": "University Union Dining Services Expansion",
+            "number": "30D",
+            "coordinates": [
+                35.18832226222954,
+                -111.65491905733776
+            ]
+        },
+        {
+            "name": "University Union Fieldhouse",
+            "number": "30",
+            "coordinates": [
+                35.18914881223518,
+                -111.65589118006312
+            ]
+        },
+        {
+            "name": "University Union Food Court",
+            "number": "30C",
+            "coordinates": [
+                35.18926254747964,
+                -111.65556518004384
+            ]
+        },
+        {
+            "name": "University Union Student Services",
+            "number": "30B",
+            "coordinates": [
+                35.18894222969756,
+                -111.65624655733609
+            ]
+        },
+        {
+            "name": "USDA Regional Forestry Complex",
+            "number": "N/A",
+            "coordinates": [
+                35.176555580615364,
+                -111.65756808042285
+            ]
+        },
+        {
+            "name": "W.A. Franke College Of Business",
+            "number": "81",
+            "coordinates": [
+                35.1793270833941,
+                -111.65738178035168
+            ]
+        },
+        {
+            "name": "Walkup Skydome and Ticket Office",
+            "number": "73",
+            "coordinates": [
+                35.18036903435829,
+                -111.65281245757296
+            ]
+        },
+        {
+            "name": "Wettaw Biology and Biochemistry Building",
+            "number": "88",
+            "coordinates": [
+                35.193051721571095,
+                -111.65331205721867
+            ]
+        },
+        {
+            "name": "Wilson Hall",
+            "number": "45",
+            "coordinates": [
+                35.18604662370814,
+                -111.65596448015978
+            ]
+        }
+    ]
+}

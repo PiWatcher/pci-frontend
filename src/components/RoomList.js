@@ -18,7 +18,7 @@ const RoomList = () => {
    // FIX: parse for room cleanup for display
 
    // FIX: each room needs a key
-   const listItems = roomList.map((room) => <li onClick={() => setRoom(room)} >{room}</li>)
+   const listItems = roomList.map((room) => <li key={room} onClick={() => setRoom(room)} >{room}</li>)
 
    // returns parsed rooms in unordered list
    return (
