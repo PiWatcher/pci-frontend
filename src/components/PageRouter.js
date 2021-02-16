@@ -6,7 +6,7 @@ import React, { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 
 // components
-import Login from './Login';
+import Auth from './Auth';
 import Dashboard from './Dashboard';
 
 
@@ -20,9 +20,9 @@ const PageRouter = () => {
    return (
       <div className="PageRouter">
          {
-            authStatus ?
-               <Dashboard /> :
-               <Login />
+            authStatus === null || authStatus === false ?
+               <Auth /> :
+               <Dashboard />
          }
       </div>
    );

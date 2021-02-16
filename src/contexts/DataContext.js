@@ -96,7 +96,12 @@ const DataContextProvider = (props) => {
       setRoomList([]);
 
       // modular url based on building change
-      const response = await axios(dataURL.concat(building));
+      const response = await axios(dataURL.concat(building), {}, {
+         auth: {
+            username: "admin",
+            password: "piwatcher2020"
+         }
+      });
 
       const mongoData = response.data
 
@@ -122,7 +127,12 @@ const DataContextProvider = (props) => {
       setTimeList([]);
 
       // modular url based on building change
-      const response = await axios(dataURL.concat(building));
+      const response = await axios(dataURL.concat(building), {}, {
+         auth: {
+            username: "admin",
+            password: "piwatcher2020"
+         }
+      });
 
       const mongoData = response.data
 
@@ -161,12 +171,12 @@ const DataContextProvider = (props) => {
 
    // updates components with pulled rooms after building selection
    useEffect(() => {
-      // building !== '' && getRooms();
+      //building !== '' && getRooms();
    }, [building])
 
    // updates components with pulled counts after room selection
    useEffect(() => {
-      // room !== '' && getCounts();
+      //room !== '' && getCounts();
    }, [room])
 
 
