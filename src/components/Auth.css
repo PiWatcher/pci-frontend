@@ -27,11 +27,16 @@ h2 {
   font-size: 16px;
   font-weight: 600;
   text-transform: uppercase;
-  display:inline-block;
-  margin: 40px 8px 10px 8px; 
   color: #cccccc;
 }
 
+h2:hover {
+  color: #003466;
+  -webkit-transition: color .5s;
+  -moz-transition: color .5s;
+  -o-transition: color .5s;
+  transition: color .5s;
+}
 
 
 /* STRUCTURE */
@@ -48,28 +53,16 @@ h2 {
   border-radius: 5px;
 }
 
-#formContent {
-  -webkit-border-radius: 10px 10px 10px 10px;
-  border-radius: 10px 10px 10px 10px;
-  background: #fff;
-  padding: 30px;
-  width: 90%;
-  max-width: 450px;
-  position: relative;
-  padding: 0px;
-  -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
-  box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
-  text-align: center;
+.sign-in {
+  display: inline-block;
+  margin: 20px;
 }
 
-#formFooter {
-  background-color: #f6f6f6;
-  border-top: 1px solid #dce8f1;
-  padding: 25px;
-  text-align: center;
-  -webkit-border-radius: 0 0 10px 10px;
-  border-radius: 0 0 10px 10px;
+.sign-up {
+  display: inline-block;
+  margin: 20px;
 }
+
 
 
 /* FORM TYPOGRAPHY*/
@@ -84,11 +77,12 @@ input[type=button], input[type=submit], input[type=reset]  {
   display: inline-block;
   text-transform: uppercase;
   font-size: 13px;
+  font-weight: 600;
   -webkit-box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
   box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
   -webkit-border-radius: 5px 5px 5px 5px;
   border-radius: 5px 5px 5px 5px;
-  margin: 10px 20px 20px 20px;
+  margin: 20px 20px 20px 20px;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
@@ -108,6 +102,39 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active  
   transform: scale(0.95);
 }
 
+/* name */
+
+input[type=name] {
+  background-color: #f6f6f6;
+  border: none;
+  color: #0d0d0d;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 5px;
+  width: 600px;
+  border: 2px solid #f6f6f6;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+}
+
+input[type=name]:focus {
+  background-color: #fff;
+  border-bottom: 2px solid gold;
+}
+
+input[type=name]:placeholder {
+  color: #cccccc;
+}
+
+
 /* email */
 
 input[type=login] {
@@ -120,7 +147,7 @@ input[type=login] {
   display: inline-block;
   font-size: 16px;
   margin: 5px;
-  width: 85%;
+  width: 600px;
   border: 2px solid #f6f6f6;
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -140,6 +167,7 @@ input[type=login]:placeholder {
   color: #cccccc;
 }
 
+
 /* password */
 input[type=password] {
     background-color: #f6f6f6;
@@ -151,7 +179,7 @@ input[type=password] {
     display: inline-block;
     font-size: 16px;
     margin: 5px;
-    width: 85%;
+    width: 600px;
     border: 2px solid #f6f6f6;
     -webkit-transition: all 0.5s ease-in-out;
     -moz-transition: all 0.5s ease-in-out;
@@ -171,7 +199,19 @@ input[type=password] {
     color: #cccccc;
   }
 
+/* auth failure */
+.failure-text {
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-size: 1.1em;
+  color: red;
+}
 
+/* sign up success */
+.sign-up-success {
+  padding: 60px;
+  font-size: 1.4em;
+}
 
 /* ANIMATIONS */
 
@@ -255,27 +295,18 @@ input[type=password] {
   animation-delay: 1s;
 }
 
-/* Simple CSS3 Fade-in Animation */
-.underlineHover:after {
-  display: block;
-  left: 0;
-  bottom: -10px;
-  width: 0;
-  height: 2px;
-  background-color: #56baed;
-  content: "";
-  transition: width 0.2s;
+.activeLoginType {
+  color: #003466;
+  border-bottom: 2px solid gold;
 }
 
-.underlineHover:hover {
-  color: #0d0d0d;
+.nonActiveLoginType {
+  color: #cccccc;
+  -webkit-transition: color .5s;
+  -moz-transition: color .5s;
+  -o-transition: color .5s;
+  transition: color .5s;
 }
-
-.underlineHover:hover:after{
-  width: 100%;
-}
-
-
 
 /* OTHERS */
 

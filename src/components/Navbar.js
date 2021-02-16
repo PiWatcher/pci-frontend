@@ -6,7 +6,7 @@ import './Navbar.css';
 import React, { useContext, useState } from 'react';
 import SearchBar from './SearchBar';
 import BuildingMap from './BuildingMap';
-import nauLogo from '../images/nauLogo.svg';
+import nauLogo from '../images/nauLogoDash.svg';
 import mapIcon from '../images/mapIcon.svg';
 
 // contexts
@@ -16,13 +16,20 @@ import { AuthContext } from '../contexts/AuthContext';
 
 const Navbar = () => {
 
-   const { setAuthStatus } = useContext(AuthContext);
+   const { setEmail, setPassword, setAuthStatus } = useContext(AuthContext);
 
+   // flag to show map or not on dashboard
    const [showMap, setShowMap] = useState(false);
 
+   // flip flag for showing map div
    const onMapClick = () => setShowMap(!showMap);
 
-   const signOut = () => setAuthStatus(false);
+   // sign out of dashboard, clear all data and reset auth status
+   const signOut = () => {
+      setEmail('');
+      setPassword('');
+      setAuthStatus(null);
+   }
 
 
    // returns navbar component (includes logo and search bar)

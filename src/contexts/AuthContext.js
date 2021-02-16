@@ -1,6 +1,7 @@
 
 // page imports
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
+import axios from 'axios';
 
 // context that manages user login and authentication
 
@@ -9,28 +10,99 @@ export const AuthContext = createContext();
 const AuthContextProvider = (props) => {
 
     // current authentication status
-    const [authStatus, setAuthStatus] = useState(false);
+    const [authStatus, setAuthStatus] = useState(null);
+
+    // current sign up status
+    const [signUpStatus, setSignUpStatus] = useState(false);
+
+    // selected auth type (log in or sing up)
+    const [selectedAuth, setSelectedAuth] = useState("Sign In");
 
     //  current user type
-    const [userType, setUserType] = useState('');
+    const [userType, setUserType] = useState('admin');
 
-    // submitted email
+    // submitted user name
+    const [userName, setUserName] = useState('');
+
+    // submitted email 
     const [email, setEmail] = useState('');
 
     // submitted password
     const [password, setPassword] = useState('');
 
 
-    // POST to backend for authentication
+    const authenticateAccount = async () => {
 
-    // if success, authStatus = true
+        const signInUrl = 'http://127.0.0.1:5000/api/signin';
 
-    // if not success, authStatus remains false and display an error
+        const signUpURL = 'http://127.0.0.1:5000/api/signup';
+
+        // if log in tab is selected
+        if (selectedAuth === "Sign In") {
+
+            // tries to connect to database and verify account information
+            try {
+                const response = await axios({
+                    method: 'post',
+                    url: signInUrl,
+                    data: {
+                        email: email,
+                        password: password
+                    }
+                });
+
+                // successfully verified
+                if (response.status === 200) {
+                    setAuthStatus(true);
+                }
+            }
+
+            // failed to sign in
+            catch {
+                setAuthStatus(false);
+            }
+        }
+
+        // if sign up tab is selected
+        else if (selectedAuth === "Sign Up") {
+
+            // tries to connect to database and post new account information
+            try {
+                const response = await axios({
+                    method: 'post',
+                    url: signUpURL,
+                    data: {
+                        name: userName,
+                        email: email,
+                        password: password,
+                        user_type: userType
+                    }
+                });
+
+                // successfully signed up
+                if (response.status === 201) {
+                    setSignUpStatus(true);
+                }
+            }
+
+            // failed to sign up
+            catch {
+                setAuthStatus(false);
+            }
+        }
+    }
+
+    // updates component once email and password have been updated
+    useEffect(() => {
+
+        email !== '' && password !== '' && authenticateAccount();
+
+    }, [userName, email, password])
 
 
     return (
-        <AuthContext.Provider value={{ setEmail, setPassword, authStatus, setAuthStatus }}>
-            { props.children}
+        <AuthContext.Provider value={{ setUserName, setEmail, setPassword, authStatus, setAuthStatus, selectedAuth, setSelectedAuth, signUpStatus }}>
+            {props.children}
         </AuthContext.Provider>
     )
 }
