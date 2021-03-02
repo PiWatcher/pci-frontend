@@ -1,9 +1,20 @@
-.LineGraph {
-    box-shadow: 0 4px 12px 0 rgba(0,0,0,0.2);
-    border-radius: 5px;
-    width: 800px;
-    height: 800px;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 20px;
-  }
+
+.line-graph-component {
+    height: 600px;
+    padding: 20px;
+    width: 825px;
+}
+
+.set-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    margin-top: 5px;
+}
+
+.set-buttons Button {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 5px;
+}

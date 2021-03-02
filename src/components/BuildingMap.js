@@ -17,7 +17,7 @@ import { DataContext } from '../contexts/DataContext';
 const BuildingMap = () => {
 
   // consumes data from DataContext
-  const { buildingList, buildingNumberList, buildingCoordsList, setBuilding } = useContext(DataContext);
+  const { buildingList, buildingNumberList, buildingCoordsList, setBuilding, setRoom } = useContext(DataContext);
 
   // home coordinates for map on load
   const nauCoordinates = [35.18580, -111.65508];
@@ -45,6 +45,13 @@ const BuildingMap = () => {
   L.Marker.prototype.options.icon = DefaultIcon;
 
 
+  // pulls selection text from dropdown and passes it back to context
+  const handleMapSelection = (building) => {
+    setBuilding(building);
+    setRoom('');
+  }
+
+
   // loops through buildingList and buildingCoordsList, constructs map markers, and pushes them to list
   for (let buildingIndex = 0; buildingIndex < buildingList.length; buildingIndex++) {
 
@@ -61,7 +68,7 @@ const BuildingMap = () => {
             <h3>{building}</h3>
             <span>(Building #{buildingNumber})</span>
             <div>
-              <button className="select-building-button" onClick={() => setBuilding(building)}>Select</button>
+              <button className="select-building-button" onClick={() => handleMapSelection(building)}>Select</button>
             </div>
           </div>
         </Popup>

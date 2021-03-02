@@ -46,16 +46,18 @@ const DataContextProvider = (props) => {
    const [currentCount, setCurrentCount] = useState(0);
 
    // creates state: selected room capacity (currently hardcoded until backend provides)
-   const [roomCapacity] = useState(400);
+   const [roomCapacity] = useState(0);
 
 
    // API pull and parse logic for buildings
    // const getBuildings = async () => {
 
    //    // hardcoded url until backend matures
-   //    const response = await axios('http://127.0.0.1:5000/api/SICCS');
+   //    const response = await axios('http://127.0.0.1:5000/api/data/buildings');
 
    //    const mongoData = response.data
+
+   //    for(var buildingIndex = 0; buildingIndex < mongoData.length; index++)
 
    //    setBuildingList(buildingList => [...buildingList, {
    //       key: mongoData.building,
@@ -94,6 +96,29 @@ const DataContextProvider = (props) => {
 
       // resets list of rooms when building is changed
       setRoomList([]);
+
+      // tries to connect to database and verify account information
+      // try {
+      //    const response = await axios({
+      //       method: 'post',
+      //       url: dataUrl
+      //       data: {
+      //          // query parameters
+      //       }
+      //    });
+
+      //    // successfully verified
+      //    if (response.status === 200) {
+
+      //       // set list of rooms
+      //       //setRoomList();
+      //    }
+      // }
+
+      // // failed to sign in
+      // catch {
+      //    //
+      // }
 
       // modular url based on building change
       const response = await axios(dataURL.concat(building), {}, {
