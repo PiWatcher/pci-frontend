@@ -10,7 +10,7 @@ export const AuthContext = createContext();
 const AuthContextProvider = (props) => {
 
     // current authentication status
-    const [authStatus, setAuthStatus] = useState(null);
+    const [authStatus, setAuthStatus] = useState(true);
 
     // current sign up status
     const [signUpStatus, setSignUpStatus] = useState(false);

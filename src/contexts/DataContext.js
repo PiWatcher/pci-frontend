@@ -2,7 +2,6 @@
 // page imports
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import bldgDataJSON from '../data/bldgData.json';
 
 
 // context that pulls data from backend and parses
@@ -11,12 +10,17 @@ export const DataContext = createContext();
 
 const DataContextProvider = (props) => {
 
+   // WIP: new data structure for building passing
 
-   // NAU buildings data: name, number, coordinates
-   const [bldgData, setBldgData] = useState(bldgDataJSON.buildings)
-
-   // backend URL for database
-   const dataURL = 'http://127.0.0.1:5000/api/';
+   // const [buildingList, setBuildingList] = useState([{
+   //    buildingInfo: {
+   //       key: "",
+   //       text: "",
+   //       value: ""
+   //    },
+   //    buildingNumber: 0,
+   //    buildingCoords: []
+   // }]);
 
    // creates state: list of buildings
    const [buildingList, setBuildingList] = useState([]);
@@ -50,96 +54,114 @@ const DataContextProvider = (props) => {
 
 
    // API pull and parse logic for buildings
-   // const getBuildings = async () => {
+   const getBuildings = async () => {
 
-   //    // hardcoded url until backend matures
-   //    const response = await axios('http://127.0.0.1:5000/api/data/buildings');
+      try {
+         const response = await axios({
+            method: 'get',
+            url: 'http://127.0.0.1:5000/api/data/buildings'
+         });
 
-   //    const mongoData = response.data
+         // successfully verified
+         if (response.status === 200) {
 
-   //    for(var buildingIndex = 0; buildingIndex < mongoData.length; index++)
+            let buildingData = response.data;
 
-   //    setBuildingList(buildingList => [...buildingList, {
-   //       key: mongoData.building,
-   //       text: mongoData.building,
-   //       value: mongoData.building
-   //    }]);
-   // };
+            for (let buildingIndex = 0; buildingIndex < buildingData.data.length; buildingIndex++) {
+
+               let buildingName = buildingData.data[buildingIndex];
+
+               // let buildingName = buildingData.data[buildingIndex]["name"];
+
+               // let buildingNumber = buildingData.data[buildingIndex]["number"];
+
+               // let buildingCoords = buildingData.data[buildingIndex]["coordinates"];
+
+               setBuildingList(buildingList => [...buildingList, {
+                  key: buildingName,
+                  text: buildingName,
+                  value: buildingName
+               }]);
+
+               setBuildingNumberList(buildingNumberList => [...buildingNumberList, 0]);
+
+               setBuildingCoordsList(buildingCoordsList => [...buildingCoordsList, [35.18580, -111.65508]]);
+            }
+         }
+      }
+
+      // failed to pull building list
+      catch {
+         console.log("Failed to pull buildings");
+      }
+   };
 
 
    // API pull and parse logic for building information (currently from JSON file, not backend)
-   const getBuildings = () => {
+   // const getBuildings = () => {
 
-      for (let buildingIndex = 0; buildingIndex < bldgData.length; buildingIndex++) {
+   //    for (let buildingIndex = 0; buildingIndex < bldgData.length; buildingIndex++) {
 
-         let buildingName = bldgData[buildingIndex]['name'];
+   //       let buildingName = bldgData[buildingIndex]['name'];
 
-         let buildingNumber = bldgData[buildingIndex]['number'];
+   //       let buildingNumber = bldgData[buildingIndex]['number'];
 
-         let buildingCoords = bldgData[buildingIndex]['coordinates'];
+   //       let buildingCoords = bldgData[buildingIndex]['coordinates'];
 
-         setBuildingList(buildingList => [...buildingList, {
-            key: buildingNumber,
-            text: buildingName,
-            value: buildingName
-         }]);
+   //       setBuildingList(buildingList => [...buildingList, {
+   //          key: buildingNumber,
+   //          text: buildingName,
+   //          value: buildingName
+   //       }]);
 
-         setBuildingNumberList(buildingNumberList => [...buildingNumberList, buildingNumber]);
+   //       setBuildingNumberList(buildingNumberList => [...buildingNumberList, buildingNumber]);
 
-         setBuildingCoordsList(buildingCoordsList => [...buildingCoordsList, buildingCoords]);
-      }
-   };
+   //       setBuildingCoordsList(buildingCoordsList => [...buildingCoordsList, buildingCoords]);
+   //    }
+   // };
 
 
    // API pull and parse logic for rooms in selected building
    const getRooms = async () => {
 
       // resets list of rooms when building is changed
-      setRoomList([]);
+      //setRoomList([]);
+      let localRoomList = [];
 
       // tries to connect to database and verify account information
-      // try {
-      //    const response = await axios({
-      //       method: 'post',
-      //       url: dataUrl
-      //       data: {
-      //          // query parameters
-      //       }
-      //    });
+      try {
+         const response = await axios({
+            method: 'get',
+            url: 'http://127.0.0.1:5000/api/data/building',
+            params: {
+               building: building
+            }
+         });
 
-      //    // successfully verified
-      //    if (response.status === 200) {
+         // successfully verified
+         if (response.status === 200) {
 
-      //       // set list of rooms
-      //       //setRoomList();
-      //    }
-      // }
+            let roomData = response.data.data;
 
-      // // failed to sign in
-      // catch {
-      //    //
-      // }
+            for (let roomIndex = 0; roomIndex < roomData.length; roomIndex++) {
 
-      // modular url based on building change
-      const response = await axios(dataURL.concat(building), {}, {
-         auth: {
-            username: "admin",
-            password: "piwatcher2020"
+               let roomName = roomData[roomIndex]["endpoint"];
+
+               if (localRoomList.indexOf(roomName) === -1) {
+                  localRoomList.push(roomName);
+                  //setRoomList(roomList => [...roomList, roomName]);
+               }
+            }
+
+            setRoomList(localRoomList);
          }
-      });
 
-      const mongoData = response.data
+         console.log("pulling buildings");
+      }
 
-      // BUG: repeats rooms (currently limited to first two for testing)
-
-      // loop through rooms and adds to list for viewing
-      for (let roomIndex = 0; roomIndex < 2; roomIndex++) {
-
-         let roomName = mongoData.data[roomIndex]['endpoint'];
-
-         if (roomList.indexOf(roomName) < 0) {
-            setRoomList(roomList => [...roomList, roomName]);
-         }
+      // failed to sign in
+      catch {
+         console.log("failed to pull rooms")
       }
    };
 
@@ -148,45 +170,61 @@ const DataContextProvider = (props) => {
    const getCounts = async () => {
 
       // resets counts and times for room when room is changed
-      setCountList([]);
-      setTimeList([]);
+      let localCountList = [];
+      let localTimeList = [];
 
-      // modular url based on building change
-      const response = await axios(dataURL.concat(building), {}, {
-         auth: {
-            username: "admin",
-            password: "piwatcher2020"
+      // tries to connect to database and verify account information
+      try {
+         const response = await axios({
+            method: 'get',
+            url: 'http://127.0.0.1:5000/api/data/building',
+            params: {
+               building: building
+            }
+         });
+
+         // successfully verified
+         if (response.status === 200) {
+
+            let countData = response.data.data;
+
+            for (let countIndex = 0; countIndex < countData.length; countIndex++) {
+
+               if (room === countData[countIndex]["endpoint"]) {
+
+                  let roomCount = countData[countIndex]["count"];
+                  let roomCapacity = countData[countIndex]["room_capacity"];
+
+                  // places count in count list
+                  localCountList.push(roomCount);
+
+
+                  // formats the date and adds to date list
+                  let date = countData[countIndex]["timestamp"]['$date'];
+
+                  let parsedDate = new Date(date);
+
+                  let dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()} 
+                     ${parsedDate.getHours()}:${parsedDate.getMinutes()}:${parsedDate.getSeconds()}`;
+
+
+                  localTimeList.push(dateString);
+               }
+            }
+
+            setCountList(localCountList);
+            setTimeList(localTimeList);
+
+            setCurrentCount(countList[countList.length - 1]);
          }
-      });
 
-      const mongoData = response.data
-
-      // parse data from room
-
-      for (let index = 0; index < mongoData.data.length; index++) {
-
-         let roomName = mongoData.data[index]['endpoint'];
-
-         if (room === roomName) {
-
-            // places count in count list
-            setCountList(countList => [...countList, mongoData.data[index]['count']]);
-
-            // formats the date and adds to date list
-            let date = mongoData.data[index]['timestamp']['$date'];
-
-            let parsedDate = new Date(date);
-
-            let dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()} 
-               ${parsedDate.getHours()}:${parsedDate.getMinutes()}:${parsedDate.getSeconds()}`;
-
-            setTimeList(timeList => [...timeList, dateString]);
-         }
+         console.log("pulling counts");
       }
 
-      // sets latest count of room into a variable
-      setCurrentCount(countList[countList.length - 1]);
-
+      // failed to sign in
+      catch {
+         console.log("failed to pull counts")
+      }
    };
 
    // updates components with pulled buildings from database
@@ -196,13 +234,17 @@ const DataContextProvider = (props) => {
 
    // updates components with pulled rooms after building selection
    useEffect(() => {
-      //building !== '' && getRooms();
-   }, [building])
+      building !== '' && getRooms();
+      room !== '' && getCounts();
 
-   // updates components with pulled counts after room selection
-   useEffect(() => {
-      //room !== '' && getCounts();
-   }, [room])
+      const interval = setInterval(() => {
+         building !== '' && getRooms();
+         room !== '' && getCounts();
+      }, 5000);
+
+      return () => clearInterval(interval);
+
+   }, [room, building])
 
 
    return (

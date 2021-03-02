@@ -22,25 +22,6 @@ const LineGraph = () => {
 
    const [currentQuery, setCurrentQuery] = useState('live');
 
-   const parseRoom = (roomString) => {
-
-      let index;
-      let capitalizedRoomString;
-
-      // text cleanup for showing
-      if (room !== '') {
-         for (index = 0; index < roomString.length; index++) {
-            let name1 = roomString.split('-')[0]
-            let name2 = roomString.split('-')[1]
-            let cleanedRoomString = name1 + " " + name2
-            capitalizedRoomString = cleanedRoomString.charAt(0).toUpperCase()
-               + cleanedRoomString.slice(1);
-         }
-
-         return capitalizedRoomString;
-      }
-   }
-
    // data to be displayed in the graph
    const graphData = (canvas) => {
 
@@ -74,7 +55,7 @@ const LineGraph = () => {
    const options = {
       title: {
          display: true,
-         text: building + (room === '' ? room : " - " + parseRoom(room)),
+         text: building + (room === '' ? room : " - " + room),
          fontSize: 30,
          fontColor: "#000000",
          fontFamily: 'Open Sans'
