@@ -1,8 +1,8 @@
 version: "3.7"
 
 services:
-  sample-prod:
-    container_name: pci-prototype-frontend
+  prod:
+    container_name: pci-prototype-frontend_prod
     build:
       context: .
       dockerfile: Dockerfile.prod

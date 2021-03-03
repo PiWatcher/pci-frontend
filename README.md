@@ -38,3 +38,28 @@ npm install
 npm start
 
 ```
+
+
+############################################################################
+
+## Docker Container
+
+
+### Develop
+
+```
+
+docker-compose up -d --build
+
+```
+
+
+### Production
+
+```
+
+docker build -f Dockerfile.prod -t prod:prod .
+
+docker-compose -f docker-compose.prod.yml up -d --build
+
+```
