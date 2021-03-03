@@ -1,12 +1,58 @@
-.column {
-    display: inline-block;
-    margin-top: 25px;
-}
 
-.wide {
-    margin-top: 50px;
-}
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
 
-.Dashboard {
+.dashboard-container {
     text-align: center;
 }
+
+.time-card-container {
+    width: 85vw;
+    max-width: 2000px;
+    height: 300px;
+    border-bottom: 2px solid rgba(0, 52, 102, 0.7);
+    font-family: 'Open Sans', sans-serif;
+    margin: 0 auto;
+    margin-bottom: 25px;
+}
+
+.data-row {
+    width: 80vw;
+    height: 650px;
+    margin: 0 auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    max-width: 1800px;
+}
+
+
+.line-graph-container {
+    display: inline-block;
+    vertical-align: middle;
+    height: 650px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
+    margin-right: 10px;
+}
+
+
+.room-list-container {
+    display: inline-block;
+    vertical-align: middle;
+    height: 650px;
+    width: 300px;
+    box-shadow: 0 4px 12px 0 rgba(0,0,0,0.1);
+    border-radius: 8px;
+    margin-left: 15px;
+}
+
+/* @media display and (min-width:600px)  {
+    
+    .line-graph {
+        display: none;
+    }
+
+    .room-list {
+        margin-left: 0px;
+        width: 80vw;
+    }
+} */

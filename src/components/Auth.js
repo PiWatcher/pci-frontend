@@ -6,7 +6,6 @@ import './Auth.css';
 import React, { useContext, useState } from 'react';
 import nauLogo from '../images/nauLogoLogin.svg';
 
-
 // contexts
 import { AuthContext } from '../contexts/AuthContext';
 
@@ -88,8 +87,8 @@ const Auth = () => {
         setPassword('');
 
         // sets css for log in tab selection
-        var signIn = document.getElementById("sign-in-id");
-        var signUp = document.getElementById("sign-up-id");
+        let signIn = document.getElementById("sign-in-id");
+        let signUp = document.getElementById("sign-up-id");
 
         if (signUp.classList.contains("activeLoginType")) {
 
@@ -113,9 +112,9 @@ const Auth = () => {
         setEmail('');
         setPassword('');
 
-        // sets css for sing up tab selection
-        var signIn = document.getElementById("sign-in-id");
-        var signUp = document.getElementById("sign-up-id");
+        // sets css for sign up tab selection
+        let signIn = document.getElementById("sign-in-id");
+        let signUp = document.getElementById("sign-up-id");
 
         if (signIn.classList.contains("activeLoginType")) {
 
@@ -127,12 +126,11 @@ const Auth = () => {
         }
     }
 
-
     // returns the login page with input form
     return (
         <div className="Login fadeInDown">
             <div className="wrapper">
-                <img src={nauLogo} className="fadeIn first" id="icon" alt="NAU Logo" />
+                <img src={nauLogo} className="fadeIn first" alt="NAU Logo" />
 
                 <div className="auth-functions fadeIn second">
                     <div className="sign-in">
@@ -155,7 +153,6 @@ const Auth = () => {
                                     <input type="login" id="email" placeholder="email"
                                         pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" onChange={handleInputChange} required />
                                     <input type="password" id="password" placeholder="password" onChange={handleInputChange} required />
-
                                     {
                                         // ternary for displaying failed auth verification (wrong email or password)
                                         authStatus === false ?
@@ -176,7 +173,7 @@ const Auth = () => {
 
                         :
 
-                        <div className="sign-up-form fadeIn third">
+                        <div className="sign-up-form fadeIn third" id="upForm">
                             {
                                 // ternary for displaying successful sign up
                                 signUpStatus === false ?
@@ -186,7 +183,6 @@ const Auth = () => {
                                         <input type="login" id="email" placeholder="email"
                                             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" onChange={handleInputChange} required />
                                         <input type="password" id="password" placeholder="password" onChange={handleInputChange} required />
-
                                         {
                                             // ternary for displaying failed sign up (based on failed connection to endpoint)
                                             authStatus === false ?

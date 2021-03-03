@@ -20,28 +20,27 @@ const Dashboard = () => {
 
    // returns the entire dashboard and its child components
    return (
-      <div className="Dashboard">
+      <div className="dashboard-container">
          <DataContextProvider>
             <Navbar />
 
-            <div className="column">
+            <div className="time-card-container">
                <TimeCard />
             </div>
 
-            <div className="column">
-               <CountCard />
-            </div>
+            <div className="data-row">
+               <div className="line-graph-container">
+                  <LineGraph />
+               </div>
 
-            <div className="column">
-               <LineGraph />
-            </div>
-
-            <div className="column">
-               <RoomList />
+               <div className="room-list-container">
+                  <CountCard />
+                  <RoomList />
+               </div>
             </div>
 
          </DataContextProvider>
-      </div>
+      </div >
    );
 }
 

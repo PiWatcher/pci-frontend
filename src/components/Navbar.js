@@ -35,7 +35,7 @@ const Navbar = () => {
    // returns navbar component (includes logo and search bar)
    return (
       <div>
-         <div className="navbar">
+         <div className="navbar-component">
             <div className="image-div">
                <img className="logo" src={nauLogo} alt="NAU Logo" />
             </div>

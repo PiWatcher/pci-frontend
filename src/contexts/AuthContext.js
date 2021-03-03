@@ -22,7 +22,7 @@ const AuthContextProvider = (props) => {
     const [userType, setUserType] = useState('admin');
 
     // submitted user name
-    const [userName, setUserName] = useState('');
+    const [userName, setUserName] = useState('User');
 
     // submitted email 
     const [email, setEmail] = useState('');
@@ -33,9 +33,9 @@ const AuthContextProvider = (props) => {
 
     const authenticateAccount = async () => {
 
-        const signInUrl = 'http://127.0.0.1:5000/api/signin';
+        const signInUrl = 'http://127.0.0.1:5000/api/auth/signin';
 
-        const signUpURL = 'http://127.0.0.1:5000/api/signup';
+        const signUpURL = 'http://127.0.0.1:5000/api/auth/signup';
 
         // if log in tab is selected
         if (selectedAuth === "Sign In") {
@@ -53,6 +53,10 @@ const AuthContextProvider = (props) => {
 
                 // successfully verified
                 if (response.status === 200) {
+
+                    // set user name to response
+                    //setUserName(response.username);
+
                     setAuthStatus(true);
                 }
             }
@@ -97,11 +101,11 @@ const AuthContextProvider = (props) => {
 
         email !== '' && password !== '' && authenticateAccount();
 
-    }, [userName, email, password])
+    }, [email, password])
 
 
     return (
-        <AuthContext.Provider value={{ setUserName, setEmail, setPassword, authStatus, setAuthStatus, selectedAuth, setSelectedAuth, signUpStatus }}>
+        <AuthContext.Provider value={{ setUserName, userName, setEmail, setPassword, authStatus, setAuthStatus, selectedAuth, setSelectedAuth, signUpStatus }}>
             {props.children}
         </AuthContext.Provider>
     )

@@ -1,7 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
+
+
 .leaflet-container {
     height: 600px;
-    margin: 15px;
-    border-radius: 15px;
+    margin-top: 25px;
+    margin-bottom: 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px 0 rgba(0,0,0,0.2);
 }
 
 .select-building-button {

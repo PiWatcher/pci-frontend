@@ -1,15 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
 
-.navbar {
+.navbar-component {
     display: flex;
-    margin: 0 auto;
     width: 100vw;
     height: 80px;
     background-color: #003466;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .image-div {
-    margin-right: 25px;
+    display: flex;
     width: 125px;
+    padding: 5px;
 }
 
 .logo {
@@ -19,13 +21,15 @@
 
 .search-div {
     margin-top: 20px;
-    min-width: 80vw;
+    margin-left: 40px;
+    width: 400px;
+    height: 800px;
 }
 
 .mapIcon-div {                 
     width: 55px;
     margin-top: 12px;
-    margin-left: 2px;
+    margin-left: 0px;
 }
 
 .mapIcon-div:hover {
@@ -34,13 +38,45 @@
 
 .sign-out{
     margin-top: 28px;
-    margin-left: 20px;
+    margin-left: auto;
+    margin-right: 20px;
     width: 100px;
     height: 40px;
     color: white;
-    font-size: 1.4em;
+    font-size: 1.25em;
 }
 
 .sign-out:hover {
     color: grey;
+  }
+
+.map-div {      
+    width: 85vw;
+    max-width: 2000px;
+    margin: 0 auto;
+}
+
+@media screen and (max-width: 600px) {
+
+    .image-div {
+        width: 75px;
+    }
+
+    .logo {
+        width: 75px;
+    }
+    
+    .search-div {
+        margin-left: 15px;
+    }
+
+    .mapIcon-div{
+        width: 8em;
+    }
+
+    .sign-out {
+        margin-top: 20px;
+        margin-right: 10px;
+    }
+
   }
