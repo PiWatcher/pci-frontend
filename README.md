@@ -59,8 +59,8 @@ docker-compose -f docker-compose.prod.yml up -d --build
 
 ## Pull latest build from Docker Hub
 
-'''
+```
 
 docker run -it -d --name pci-frontend -p 4000:80 piwatcher/pci-frontend:latest
 
-'''
+```
