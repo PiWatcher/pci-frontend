@@ -22,7 +22,7 @@ const AuthContextProvider = (props) => {
     const [userType, setUserType] = useState('admin');
 
     // submitted user name
-    const [userName, setUserName] = useState('User');
+    const [userName, setUserName] = useState('Seth Burchfield');
 
     // submitted email 
     const [email, setEmail] = useState('');

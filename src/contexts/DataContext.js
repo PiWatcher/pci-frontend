@@ -10,29 +10,11 @@ export const DataContext = createContext();
 
 const DataContextProvider = (props) => {
 
-   // WIP: new data structure for building passing
-
-   // const [buildingList, setBuildingList] = useState([{
-   //    buildingInfo: {
-   //       key: "",
-   //       text: "",
-   //       value: ""
-   //    },
-   //    buildingNumber: 0,
-   //    buildingCoords: []
-   // }]);
-
    // creates state: list of buildings
    const [buildingList, setBuildingList] = useState([]);
 
    // creates state: selected building
    const [building, setBuilding] = useState('');
-
-   // create state: building coordinates
-   const [buildingCoordsList, setBuildingCoordsList] = useState([]);
-
-   // create state: building coordinates
-   const [buildingNumberList, setBuildingNumberList] = useState([]);
 
    // creates state: list of rooms
    const [roomList, setRoomList] = useState([]);
@@ -42,15 +24,6 @@ const DataContextProvider = (props) => {
 
    // creates state: list of counts
    const [countList, setCountList] = useState([]);
-
-   // creates state: list of timestamps
-   const [timeList, setTimeList] = useState([]);
-
-   // creates state: latest recorded count
-   const [currentCount, setCurrentCount] = useState(0);
-
-   // creates state: selected room capacity (currently hardcoded until backend provides)
-   const [roomCapacity] = useState(0);
 
 
    // API pull and parse logic for buildings
@@ -73,21 +46,34 @@ const DataContextProvider = (props) => {
 
                // let buildingName = buildingData.data[buildingIndex]["name"];
 
+               // let buildingCount = buildingData.data[buildingIndex]["count"];
+
+               // let buildingCapacity = buildingData.data[buildingIndex]["capacity"];
+
                // let buildingNumber = buildingData.data[buildingIndex]["number"];
 
                // let buildingCoords = buildingData.data[buildingIndex]["coordinates"];
 
                setBuildingList(buildingList => [...buildingList, {
-                  key: buildingName,
-                  text: buildingName,
-                  value: buildingName
+
+                  buildingName: buildingName,
+
+                  // static building count
+                  buildingCount: 100,
+
+                  // static building capacity
+                  buildingCapacity: 2800,
+
+                  // static building number
+                  buildingNumber: 0,
+
+                  // static coordinates
+                  buildingCoords: [35.18580, -111.65508]
                }]);
-
-               setBuildingNumberList(buildingNumberList => [...buildingNumberList, 0]);
-
-               setBuildingCoordsList(buildingCoordsList => [...buildingCoordsList, [35.18580, -111.65508]]);
             }
          }
+
+         console.log("pulling building list");
       }
 
       // failed to pull building list
@@ -95,31 +81,6 @@ const DataContextProvider = (props) => {
          console.log("Failed to pull buildings");
       }
    };
-
-
-   // API pull and parse logic for building information (currently from JSON file, not backend)
-   // const getBuildings = () => {
-
-   //    for (let buildingIndex = 0; buildingIndex < bldgData.length; buildingIndex++) {
-
-   //       let buildingName = bldgData[buildingIndex]['name'];
-
-   //       let buildingNumber = bldgData[buildingIndex]['number'];
-
-   //       let buildingCoords = bldgData[buildingIndex]['coordinates'];
-
-   //       setBuildingList(buildingList => [...buildingList, {
-   //          key: buildingNumber,
-   //          text: buildingName,
-   //          value: buildingName
-   //       }]);
-
-   //       setBuildingNumberList(buildingNumberList => [...buildingNumberList, buildingNumber]);
-
-   //       setBuildingCoordsList(buildingCoordsList => [...buildingCoordsList, buildingCoords]);
-   //    }
-   // };
-
 
    // API pull and parse logic for rooms in selected building
    const getRooms = async () => {
@@ -143,20 +104,28 @@ const DataContextProvider = (props) => {
 
             let roomData = response.data.data;
 
+            // compiles list of rooms
             for (let roomIndex = 0; roomIndex < roomData.length; roomIndex++) {
 
                let roomName = roomData[roomIndex]["endpoint"];
 
                if (localRoomList.indexOf(roomName) === -1) {
-                  localRoomList.push(roomName);
-                  //setRoomList(roomList => [...roomList, roomName]);
+
+                  let roomCount = roomData[roomIndex]["count"];
+                  let roomCapacity = roomData[roomIndex]["room_capacity"];
+
+                  localRoomList.push({
+                     room: roomName,
+                     count: roomCount,
+                     capacity: roomCapacity
+                  });
                }
             }
 
             setRoomList(localRoomList);
          }
 
-         console.log("pulling buildings");
+         console.log("pulling room list");
       }
 
       // failed to sign in
@@ -171,7 +140,6 @@ const DataContextProvider = (props) => {
 
       // resets counts and times for room when room is changed
       let localCountList = [];
-      let localTimeList = [];
 
       // tries to connect to database and verify account information
       try {
@@ -193,11 +161,6 @@ const DataContextProvider = (props) => {
                if (room === countData[countIndex]["endpoint"]) {
 
                   let roomCount = countData[countIndex]["count"];
-                  let roomCapacity = countData[countIndex]["room_capacity"];
-
-                  // places count in count list
-                  localCountList.push(roomCount);
-
 
                   // formats the date and adds to date list
                   let date = countData[countIndex]["timestamp"]['$date'];
@@ -207,15 +170,14 @@ const DataContextProvider = (props) => {
                   let dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()} 
                      ${parsedDate.getHours()}:${parsedDate.getMinutes()}:${parsedDate.getSeconds()}`;
 
-
-                  localTimeList.push(dateString);
+                  localCountList.push({
+                     count: roomCount,
+                     timestamp: dateString
+                  });
                }
             }
 
             setCountList(localCountList);
-            setTimeList(localTimeList);
-
-            setCurrentCount(countList[countList.length - 1]);
          }
 
          console.log("pulling counts");
@@ -226,6 +188,11 @@ const DataContextProvider = (props) => {
          console.log("failed to pull counts")
       }
    };
+
+
+
+
+
 
    // updates components with pulled buildings from database
    useEffect(() => {
@@ -249,8 +216,7 @@ const DataContextProvider = (props) => {
 
    return (
       <DataContext.Provider value={{
-         buildingList, buildingNumberList, buildingCoordsList,
-         building, setBuilding, roomList, room, setRoom, countList, timeList, currentCount, roomCapacity
+         buildingList, building, setBuilding, roomList, room, setRoom, countList, setCountList
       }}>
          { props.children}
       </DataContext.Provider>

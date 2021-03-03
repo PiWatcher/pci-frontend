@@ -15,17 +15,17 @@ import { DataContext } from '../contexts/DataContext';
 const CountCard = () => {
 
    // consume data from DataContext
-   const { building, currentCount, roomCapacity } = useContext(DataContext);
+   const { building, buildingList } = useContext(DataContext);
 
    // local variable for room capacity percentage
    const [roomPercentage, setRoomPercentage] = useState(0);
 
-   const [trendIcon, setTrendIcon] = useState(upArrow);
+   const [trendIcon, setTrendIcon] = useState(horizontalLine);
 
 
    // calculates room percentage without decimals
    const getCapacityPercentage = () => {
-      const percentage = (currentCount / roomCapacity) * 100;
+      const percentage = (buildingList[0]["buildingCount"] / buildingList[0]["buildingCapacity"]) * 100;
 
       if (percentage > roomPercentage) {
 
@@ -53,15 +53,6 @@ const CountCard = () => {
       getCapacityPercentage();
    }
 
-
-   // BUG: count card not rerendering in sequence with the graph (issue with async)
-   useEffect(() => {
-
-      //updateCard();
-
-   }, [currentCount])
-
-
    // returns the count and percentage card
    return (
       <div className="count-card-component">
@@ -75,9 +66,7 @@ const CountCard = () => {
 
          <div className="count-row">
             <div className="per-container">
-               <p>
-                  {roomPercentage}%
-               </p>
+               0%
             </div>
 
             <div className="trend-container">

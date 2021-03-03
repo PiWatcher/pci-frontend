@@ -22,18 +22,18 @@ const RoomList = () => {
 
    const listItems = roomList.map(
 
-      (room) =>
-         <li key={room} onClick={() => setRoom(room)}>
+      (item, index) => (
+         <li key={index} onClick={() => setRoom(item.room)}>
             <div className="list-option">
                <div className="room">
                   <p>
-                     {room}
+                     {item.room}
                   </p>
                </div>
 
                <div className="usage">
                   <p>
-                     0%
+                     {Math.trunc((item.count / item.capacity) * 100)}%
                   </p>
 
                </div>
@@ -45,7 +45,7 @@ const RoomList = () => {
                </div>
             </div>
 
-         </li>
+         </li>)
    )
 
    // returns parsed rooms in unordered list

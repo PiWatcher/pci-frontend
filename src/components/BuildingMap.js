@@ -17,7 +17,7 @@ import { DataContext } from '../contexts/DataContext';
 const BuildingMap = () => {
 
   // consumes data from DataContext
-  const { buildingList, buildingNumberList, buildingCoordsList, setBuilding, setRoom } = useContext(DataContext);
+  const { buildingList, setBuilding, setRoom } = useContext(DataContext);
 
   // home coordinates for map on load
   const nauCoordinates = [35.18580, -111.65508];
@@ -51,30 +51,21 @@ const BuildingMap = () => {
     setRoom('');
   }
 
-
-  // loops through buildingList and buildingCoordsList, constructs map markers, and pushes them to list
-  for (let buildingIndex = 0; buildingIndex < buildingList.length; buildingIndex++) {
-
-    let building = buildingList[buildingIndex]['text'];
-
-    let buildingNumber = buildingNumberList[buildingIndex];
-
-    let buildingCoords = buildingCoordsList[buildingIndex];
-
+  buildingList.map(item => {
     markers.push(
-      <Marker position={buildingCoords}>
+      <Marker position={item.buildingCoords}>
         <Popup>
           <div className="popup">
-            <h3>{building}</h3>
-            <span>(Building #{buildingNumber})</span>
+            <h3>{item.buildingName}</h3>
+            <span>(Building #{item.buildingNumber})</span>
             <div>
-              <button className="select-building-button" onClick={() => handleMapSelection(building)}>Select</button>
+              <button className="select-building-button" onClick={() => handleMapSelection(item.building)}>Select</button>
             </div>
           </div>
         </Popup>
       </Marker>
     );
-  }
+  })
 
   // returns a map container with markers of listed building coordinates
   return (

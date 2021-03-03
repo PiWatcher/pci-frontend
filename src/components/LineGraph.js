@@ -18,12 +18,20 @@ import { DataContext } from '../contexts/DataContext';
 const LineGraph = () => {
 
    // consume data from DataContext
-   const { building, room, countList, timeList } = useContext(DataContext);
+   const { building, room, countList } = useContext(DataContext);
 
    const [currentQuery, setCurrentQuery] = useState('live');
 
    // data to be displayed in the graph
    const graphData = (canvas) => {
+
+      let counts = countList.map(function (item) {
+         return item.count;
+      })
+
+      let times = countList.map(function (item) {
+         return item.timestamp;
+      })
 
       var ctx = canvas.getContext("2d");
 
@@ -36,10 +44,10 @@ const LineGraph = () => {
       gradient.addColorStop(1, "rgb(0, 52, 102, 1)");
 
       return {
-         labels: timeList,
+         labels: times,
          datasets: [{
             label: 'Count',
-            data: countList,
+            data: counts,
             fill: "start",
             backgroundColor: gradient,
             borderColor: "rgb(0, 52, 102, 0.6)",
@@ -138,7 +146,7 @@ const LineGraph = () => {
    // updates graph on data change
    useEffect(() => {
 
-   }, [countList, timeList])
+   }, [countList])
 
    // returns the graph with the passed down state
    return (
