@@ -58,8 +58,6 @@ docker-compose up -d --build
 
 ```
 
-docker build -f Dockerfile.prod -t prod:prod .
-
 docker-compose -f docker-compose.prod.yml up -d --build
 
 ```
