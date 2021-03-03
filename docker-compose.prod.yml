@@ -1,8 +1,10 @@
 version: "3.7"
 
 services:
-  prod:
-    container_name: pci-prototype-frontend_prod
+  pci-frontend:
+    container_name: pci-frontend
+    image: piwatcher/pci-frontend:latest
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile.prod

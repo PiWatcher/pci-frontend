@@ -1,8 +1,9 @@
 version: "3.7"
 
 services:
-  dev:
-    container_name: pci-prototype-frontend_dev
+  pci-frontend_dev:
+    container_name: pci-frontend_dev
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile
