@@ -126,7 +126,7 @@ const DataContextProvider = (props) => {
             let roomData = response.data.data;
 
             // compiles list of rooms (from end of data source for latest count)
-            for (let roomIndex = roomData.length - 1; roomIndex > 0; roomIndex--) {
+            for (let roomIndex = roomData.length - 1; roomIndex >= 0; roomIndex--) {
 
                // console.log(localRoomList);
 
