@@ -54,26 +54,15 @@ const DataContextProvider = (props) => {
 
                // let buildingName = buildingData.data[buildingIndex]["name"];
 
-               // let buildingCount = buildingData.data[buildingIndex]["count"];
-
-               // let buildingCapacity = buildingData.data[buildingIndex]["capacity"];
-
                // let buildingNumber = buildingData.data[buildingIndex]["number"];
 
                // let buildingCoords = buildingData.data[buildingIndex]["coordinates"];
-
 
                // creates building object and pushes to list 
                localBuildingList.push({
 
                   // name of building
                   buildingName: buildingName,
-
-                  // static building count
-                  buildingCount: 1200,
-
-                  // static building capacity
-                  buildingCapacity: 2800,
 
                   // static building number
                   buildingNumber: 0,
@@ -126,7 +115,7 @@ const DataContextProvider = (props) => {
             let roomData = response.data.data;
 
             // compiles list of rooms (from end of data source for latest count)
-            for (let roomIndex = roomData.length - 1; roomIndex > 0; roomIndex--) {
+            for (let roomIndex = roomData.length - 1; roomIndex >= 0; roomIndex--) {
 
                // console.log(localRoomList);
 
