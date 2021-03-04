@@ -5,41 +5,49 @@ import axios from 'axios';
 
 
 // context that pulls data from backend and parses
-
 export const DataContext = createContext();
 
 const DataContextProvider = (props) => {
 
-   // creates state: list of buildings
-   const [buildingList, setBuildingList] = useState([]);
+   // production base url
+   const baseURL = "cscap1.iot.nau.edu";
+
+   //development base url
+   //const baseURL = "localhost";
 
    // creates state: selected building
    const [building, setBuilding] = useState('');
 
-   // creates state: list of rooms
-   const [roomList, setRoomList] = useState([]);
-
    // creates state: selected room
    const [room, setRoom] = useState('');
 
-   // creates state: list of counts
-   const [countList, setCountList] = useState([]);
+   // creates state: list of buildings pulled from endpoint
+   const [buildingList, setBuildingList] = useState([]);
 
+   // creates state: list of rooms pulled from endpoint
+   const [roomList, setRoomList] = useState([]);
+
+   // creates state: list of counts and timestamps
+   const [countList, setCountList] = useState([]);
 
    // API pull and parse logic for buildings
    const getBuildings = async () => {
 
+      // tries to pull and parse building data
       try {
          const response = await axios({
             method: 'get',
-            url: 'http://127.0.0.1:5000/api/data/buildings'
+            url: `http://${baseURL}:5000/api/data/buildings`
          });
 
-         // successfully verified
+         // successfully connected to endpoint and pulled data
          if (response.status === 200) {
 
             let buildingData = response.data;
 
+            let localBuildingList = [];
+
+            // compiles list of buildings
             for (let buildingIndex = 0; buildingIndex < buildingData.data.length; buildingIndex++) {
 
                let buildingName = buildingData.data[buildingIndex];
@@ -54,12 +62,15 @@ const DataContextProvider = (props) => {
 
                // let buildingCoords = buildingData.data[buildingIndex]["coordinates"];
 
-               setBuildingList(buildingList => [...buildingList, {
 
+               // creates building object and pushes to list 
+               localBuildingList.push({
+
+                  // name of building
                   buildingName: buildingName,
 
                   // static building count
-                  buildingCount: 100,
+                  buildingCount: 1200,
 
                   // static building capacity
                   buildingCapacity: 2800,
@@ -69,51 +80,65 @@ const DataContextProvider = (props) => {
 
                   // static coordinates
                   buildingCoords: [35.18580, -111.65508]
-               }]);
+               });
             }
+
+            // sort buildings alphabetically
+            localBuildingList = localBuildingList.sort(function (a, b) {
+               return a.buildingName.localeCompare(b.buildingName, undefined, {
+                  numeric: false,
+                  sensitivity: 'base'
+               });
+            });
+
+            // sets state to sorted list of buildings
+            setBuildingList(localBuildingList);
          }
 
-         console.log("pulling building list");
+         console.log("Pulled building list.");
       }
 
-      // failed to pull building list
+      // failed to pull and parse the building list
       catch {
-         console.log("Failed to pull buildings");
+         console.log("Failed to pull buildings.");
       }
    };
+
 
    // API pull and parse logic for rooms in selected building
    const getRooms = async () => {
 
-      // resets list of rooms when building is changed
-      //setRoomList([]);
       let localRoomList = [];
 
-      // tries to connect to database and verify account information
+      // tries to pull and parse building data
       try {
          const response = await axios({
             method: 'get',
-            url: 'http://127.0.0.1:5000/api/data/building',
+            url: `http://${baseURL}:5000/api/data/building`,
             params: {
                building: building
             }
          });
 
-         // successfully verified
+         // successfully connected to endpoint and pulled data
          if (response.status === 200) {
 
             let roomData = response.data.data;
 
-            // compiles list of rooms
-            for (let roomIndex = 0; roomIndex < roomData.length; roomIndex++) {
+            // compiles list of rooms (from end of data source for latest count)
+            for (let roomIndex = roomData.length - 1; roomIndex > 0; roomIndex--) {
+
+               // console.log(localRoomList);
 
                let roomName = roomData[roomIndex]["endpoint"];
 
-               if (localRoomList.indexOf(roomName) === -1) {
+               // adds room to list if not already within
+               if (localRoomList.map(function (item) { return item.room; }).indexOf(roomName) === -1) {
 
                   let roomCount = roomData[roomIndex]["count"];
                   let roomCapacity = roomData[roomIndex]["room_capacity"];
 
+                  // creates building object and pushes to list 
                   localRoomList.push({
                      room: roomName,
                      count: roomCount,
@@ -122,54 +147,63 @@ const DataContextProvider = (props) => {
                }
             }
 
+            // sorts rooms in order
+            localRoomList = localRoomList.sort(function (a, b) {
+               return a.room.localeCompare(b.room, undefined, {
+                  numeric: true,
+                  sensitivity: 'base'
+               });
+            });
+
+            // sets state to sorted list of rooms
             setRoomList(localRoomList);
          }
 
-         console.log("pulling room list");
+         console.log("Pulled room list.");
       }
 
       // failed to sign in
       catch {
-         console.log("failed to pull rooms")
+         console.log("Failed to pull rooms.")
       }
    };
 
 
-   // API pull and parse logic for counts and timestamps in selected room
+   // API pull and parse logic for counts and timestamps
    const getCounts = async () => {
 
-      // resets counts and times for room when room is changed
       let localCountList = [];
 
-      // tries to connect to database and verify account information
+      // tries to pull and parse selected room data
       try {
          const response = await axios({
             method: 'get',
-            url: 'http://127.0.0.1:5000/api/data/building',
+            url: `http://${baseURL}:5000/api/data/building`,
             params: {
                building: building
             }
          });
 
-         // successfully verified
+         // successfully connected to endpoint and pulled data
          if (response.status === 200) {
 
             let countData = response.data.data;
 
+            // compiles list of counts and timestamps (from beginning of data source)
             for (let countIndex = 0; countIndex < countData.length; countIndex++) {
 
                if (room === countData[countIndex]["endpoint"]) {
 
                   let roomCount = countData[countIndex]["count"];
 
-                  // formats the date and adds to date list
+                  // formats the date
                   let date = countData[countIndex]["timestamp"]['$date'];
 
                   let parsedDate = new Date(date);
 
-                  let dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()} 
-                     ${parsedDate.getHours()}:${parsedDate.getMinutes()}:${parsedDate.getSeconds()}`;
+                  let dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()} ${addZero(parsedDate.getHours())}:${addZero(parsedDate.getMinutes())}:${addZero(parsedDate.getSeconds())}`;
 
+                  // creates count/timestamp object and pushes to list
                   localCountList.push({
                      count: roomCount,
                      timestamp: dateString
@@ -177,33 +211,44 @@ const DataContextProvider = (props) => {
                }
             }
 
+            // sets state to counts/timestamps for selected room
             setCountList(localCountList);
          }
 
-         console.log("pulling counts");
+         console.log("Pulling counts.");
       }
 
       // failed to sign in
       catch {
-         console.log("failed to pull counts")
+         console.log("Failed to pull counts.")
       }
    };
 
+   // add zero to the time if single digit
+   const addZero = (time) => {
+      if (time < 10) {
+         time = "0" + time;
+      }
+      return time;
+   }
 
 
-
-
-
-   // updates components with pulled buildings from database
+   // pulls buildings on initial page load
    useEffect(() => {
       getBuildings();
    }, [])
 
+
    // updates components with pulled rooms after building selection
    useEffect(() => {
+
+      // gets rooms when a building is selected
       building !== '' && getRooms();
+
+      // gets counts whena room is selected
       room !== '' && getCounts();
 
+      // five seconds interval for data refresh 
       const interval = setInterval(() => {
          building !== '' && getRooms();
          room !== '' && getCounts();
@@ -211,7 +256,7 @@ const DataContextProvider = (props) => {
 
       return () => clearInterval(interval);
 
-   }, [room, building])
+   }, [building, room])
 
 
    return (

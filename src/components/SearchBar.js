@@ -21,6 +21,7 @@ const SearchBar = () => {
       setRoom('');
    }
 
+
    // returns searchbar component
    return (
       <Dropdown className="dropdown"

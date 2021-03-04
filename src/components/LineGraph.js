@@ -161,31 +161,37 @@ const LineGraph = () => {
                <Button variant={currentQuery === 'live' ? "contained" : "text"} color="secondary"
                   onClick={() => graphQuery('live')}>
                   Live
-            </Button>
-               <Button variant={currentQuery === '12 months' ? "contained" : "text"} color="primary"
-                  onClick={() => graphQuery('12 months')}>
-                  12 Months
-            </Button>
-               <Button variant={currentQuery === '6 months' ? "contained" : "text"} color="primary"
-                  onClick={() => graphQuery('6 months')}>
-                  6 Months
-            </Button>
-               <Button variant={currentQuery === '3 months' ? "contained" : "text"} color="primary"
-                  onClick={() => graphQuery('3 months')}>
-                  3 Months
-            </Button>
-               <Button variant={currentQuery === '1 month' ? "contained" : "text"} color="primary"
-                  onClick={() => graphQuery('1 month')}>
-                  1 Month
-            </Button>
-               <Button variant={currentQuery === '1 week' ? "contained" : "text"} color="primary"
-                  onClick={() => graphQuery('1 week')}>
-                  1 Week
-            </Button>
+               </Button>
+
                <Button variant={currentQuery === '24 hours' ? "contained" : "text"} color="primary"
                   onClick={() => graphQuery('24 hours')}>
                   24 Hours
-            </Button>
+               </Button>
+
+               <Button variant={currentQuery === '1 week' ? "contained" : "text"} color="primary"
+                  onClick={() => graphQuery('1 week')}>
+                  1 Week
+               </Button>
+
+               <Button variant={currentQuery === '1 month' ? "contained" : "text"} color="primary"
+                  onClick={() => graphQuery('1 month')}>
+                  1 Month
+               </Button>
+
+               <Button variant={currentQuery === '3 months' ? "contained" : "text"} color="primary"
+                  onClick={() => graphQuery('3 months')}>
+                  3 Months
+               </Button>
+
+               <Button variant={currentQuery === '6 months' ? "contained" : "text"} color="primary"
+                  onClick={() => graphQuery('6 months')}>
+                  6 Months
+               </Button>
+
+               <Button variant={currentQuery === '12 months' ? "contained" : "text"} color="primary"
+                  onClick={() => graphQuery('12 months')}>
+                  12 Months
+               </Button>
             </MuiThemeProvider>
          </div>
       </div>

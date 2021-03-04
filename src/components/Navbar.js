@@ -31,7 +31,6 @@ const Navbar = () => {
       setAuthStatus(null);
    }
 
-
    // returns navbar component (includes logo and search bar)
    return (
       <div>

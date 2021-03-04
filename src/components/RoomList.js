@@ -20,6 +20,13 @@ const RoomList = () => {
 
    const [trendIcon, setTrendIcon] = useState(horizontalLine);
 
+   const getUsage = (count, capacity) => {
+
+      let usage = Math.trunc((count / capacity) * 100)
+
+      return (usage);
+   }
+
    const listItems = roomList.map(
 
       (item, index) => (
@@ -33,7 +40,7 @@ const RoomList = () => {
 
                <div className="usage">
                   <p>
-                     {Math.trunc((item.count / item.capacity) * 100)}%
+                     {getUsage(item.count, item.capacity)}%
                   </p>
 
                </div>

@@ -22,9 +22,6 @@ const BuildingMap = () => {
   // home coordinates for map on load
   const nauCoordinates = [35.18580, -111.65508];
 
-  // list of JSX markers and their popups derived from buildingList and buildingCoordsList
-  const markers = [];
-
   // constant for map's ability to zoom in/out on scroll
   const zoomStatus = true;
 
@@ -51,21 +48,6 @@ const BuildingMap = () => {
     setRoom('');
   }
 
-  buildingList.map(item => {
-    markers.push(
-      <Marker position={item.buildingCoords}>
-        <Popup>
-          <div className="popup">
-            <h3>{item.buildingName}</h3>
-            <span>(Building #{item.buildingNumber})</span>
-            <div>
-              <button className="select-building-button" onClick={() => handleMapSelection(item.building)}>Select</button>
-            </div>
-          </div>
-        </Popup>
-      </Marker>
-    );
-  })
 
   // returns a map container with markers of listed building coordinates
   return (
@@ -75,7 +57,21 @@ const BuildingMap = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {markers}
+      {buildingList.map((item) => {
+        return (
+          <Marker position={item.buildingCoords}>
+            <Popup>
+              <div className="popup">
+                <h3>{item.buildingName}</h3>
+                <span>(Building #{item.buildingNumber})</span>
+                <div>
+                  <button className="select-building-button" onClick={() => handleMapSelection(item.buildingName)}>Select</button>
+                </div>
+              </div>
+            </Popup>
+          </Marker>
+        );
+      })}
 
     </MapContainer >
   )

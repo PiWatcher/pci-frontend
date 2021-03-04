@@ -9,8 +9,14 @@ export const AuthContext = createContext();
 
 const AuthContextProvider = (props) => {
 
+    // production base url
+    const baseURL = "cscap1.iot.nau.edu";
+
+    //development base url
+    //const baseURL = "localhost";
+
     // current authentication status
-    const [authStatus, setAuthStatus] = useState(true);
+    const [authStatus, setAuthStatus] = useState(null);
 
     // current sign up status
     const [signUpStatus, setSignUpStatus] = useState(false);
@@ -33,9 +39,9 @@ const AuthContextProvider = (props) => {
 
     const authenticateAccount = async () => {
 
-        const signInUrl = 'http://127.0.0.1:5000/api/auth/signin';
+        const signInUrl = `http://${baseURL}:5000/api/auth/signin`;
 
-        const signUpURL = 'http://127.0.0.1:5000/api/auth/signup';
+        const signUpURL = `http://${baseURL}:5000/api/auth/signup`;
 
         // if log in tab is selected
         if (selectedAuth === "Sign In") {

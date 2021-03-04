@@ -3,7 +3,7 @@
 import './CountCard.css';
 
 // page imports
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import upArrow from '../images/Green_Arrow_Up.svg';
 import downArrow from '../images/Red_Arrow_Down.svg'
 import horizontalLine from '../images/Horizontal_Line.svg';
@@ -46,11 +46,6 @@ const CountCard = () => {
       }
 
       setRoomPercentage(Math.trunc(percentage));
-   }
-
-
-   const updateCard = () => {
-      getCapacityPercentage();
    }
 
    // returns the count and percentage card
