@@ -20,9 +20,10 @@ const PageRouter = () => {
    return (
       <div className="PageRouter">
          {
-            authStatus === null || authStatus === false ?
-               <Auth /> :
-               <Dashboard />
+            authStatus === true ?
+               <Dashboard /> :
+               <Auth />
+
          }
       </div>
    );

@@ -18,31 +18,20 @@ import { DataContext } from '../contexts/DataContext';
 const LineGraph = () => {
 
    // consume data from DataContext
-   const { building, room, countList, timeList } = useContext(DataContext);
+   const { building, room, countList } = useContext(DataContext);
 
    const [currentQuery, setCurrentQuery] = useState('live');
 
-   const parseRoom = (roomString) => {
-
-      let index;
-      let capitalizedRoomString;
-
-      // text cleanup for showing
-      if (room !== '') {
-         for (index = 0; index < roomString.length; index++) {
-            let name1 = roomString.split('-')[0]
-            let name2 = roomString.split('-')[1]
-            let cleanedRoomString = name1 + " " + name2
-            capitalizedRoomString = cleanedRoomString.charAt(0).toUpperCase()
-               + cleanedRoomString.slice(1);
-         }
-
-         return capitalizedRoomString;
-      }
-   }
-
    // data to be displayed in the graph
    const graphData = (canvas) => {
+
+      let counts = countList.map(function (item) {
+         return item.count;
+      })
+
+      let times = countList.map(function (item) {
+         return item.timestamp;
+      })
 
       var ctx = canvas.getContext("2d");
 
@@ -55,10 +44,10 @@ const LineGraph = () => {
       gradient.addColorStop(1, "rgb(0, 52, 102, 1)");
 
       return {
-         labels: timeList,
+         labels: times,
          datasets: [{
             label: 'Count',
-            data: countList,
+            data: counts,
             fill: "start",
             backgroundColor: gradient,
             borderColor: "rgb(0, 52, 102, 0.6)",
@@ -74,7 +63,7 @@ const LineGraph = () => {
    const options = {
       title: {
          display: true,
-         text: building + (room === '' ? room : " - " + parseRoom(room)),
+         text: building + (room === '' ? room : " - " + room),
          fontSize: 30,
          fontColor: "#000000",
          fontFamily: 'Open Sans'
@@ -157,7 +146,7 @@ const LineGraph = () => {
    // updates graph on data change
    useEffect(() => {
 
-   }, [countList, timeList])
+   }, [countList])
 
    // returns the graph with the passed down state
    return (
@@ -172,31 +161,37 @@ const LineGraph = () => {
                <Button variant={currentQuery === 'live' ? "contained" : "text"} color="secondary"
                   onClick={() => graphQuery('live')}>
                   Live
-            </Button>
-               <Button variant={currentQuery === '12 months' ? "contained" : "text"} color="primary"
-                  onClick={() => graphQuery('12 months')}>
-                  12 Months
-            </Button>
-               <Button variant={currentQuery === '6 months' ? "contained" : "text"} color="primary"
-                  onClick={() => graphQuery('6 months')}>
-                  6 Months
-            </Button>
-               <Button variant={currentQuery === '3 months' ? "contained" : "text"} color="primary"
-                  onClick={() => graphQuery('3 months')}>
-                  3 Months
-            </Button>
-               <Button variant={currentQuery === '1 month' ? "contained" : "text"} color="primary"
-                  onClick={() => graphQuery('1 month')}>
-                  1 Month
-            </Button>
-               <Button variant={currentQuery === '1 week' ? "contained" : "text"} color="primary"
-                  onClick={() => graphQuery('1 week')}>
-                  1 Week
-            </Button>
+               </Button>
+
                <Button variant={currentQuery === '24 hours' ? "contained" : "text"} color="primary"
                   onClick={() => graphQuery('24 hours')}>
                   24 Hours
-            </Button>
+               </Button>
+
+               <Button variant={currentQuery === '1 week' ? "contained" : "text"} color="primary"
+                  onClick={() => graphQuery('1 week')}>
+                  1 Week
+               </Button>
+
+               <Button variant={currentQuery === '1 month' ? "contained" : "text"} color="primary"
+                  onClick={() => graphQuery('1 month')}>
+                  1 Month
+               </Button>
+
+               <Button variant={currentQuery === '3 months' ? "contained" : "text"} color="primary"
+                  onClick={() => graphQuery('3 months')}>
+                  3 Months
+               </Button>
+
+               <Button variant={currentQuery === '6 months' ? "contained" : "text"} color="primary"
+                  onClick={() => graphQuery('6 months')}>
+                  6 Months
+               </Button>
+
+               <Button variant={currentQuery === '12 months' ? "contained" : "text"} color="primary"
+                  onClick={() => graphQuery('12 months')}>
+                  12 Months
+               </Button>
             </MuiThemeProvider>
          </div>
       </div>

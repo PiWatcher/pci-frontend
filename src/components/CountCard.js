@@ -15,52 +15,58 @@ import { DataContext } from '../contexts/DataContext';
 const CountCard = () => {
 
    // consume data from DataContext
-   const { building, currentCount, roomCapacity } = useContext(DataContext);
+   const { building, roomList } = useContext(DataContext);
 
-   // local variable for room capacity percentage
-   const [roomPercentage, setRoomPercentage] = useState(0);
+   // state for building usage
+   const [buildingUsage, setBuildingUsage] = useState(0);
 
-   const [trendIcon, setTrendIcon] = useState(upArrow);
+   // state for trend symbol
+   const [trendIcon, setTrendIcon] = useState(horizontalLine);
 
 
    // calculates room percentage without decimals
-   const getCapacityPercentage = () => {
-      const percentage = (currentCount / roomCapacity) * 100;
+   const getBuildingUsage = () => {
 
-      if (percentage > roomPercentage) {
+      let buildingCount = 0;
+      let buildingCapacity = 0;
+
+      for (let roomIndex = 0; roomIndex < roomList.length; roomIndex++) {
+
+         buildingCount += roomList[roomIndex].count;
+         buildingCapacity += roomList[roomIndex].capacity;
+      }
+
+      let localUsage = Math.trunc((buildingCount / buildingCapacity) * 100);
+
+      if (localUsage > buildingUsage) {
 
          // set to green up arrow
          setTrendIcon(upArrow);
 
       }
 
-      else if (percentage < roomPercentage) {
+      else if (localUsage < buildingUsage) {
 
          // set to red down arrow
          setTrendIcon(downArrow);
+
       }
 
       else {
+
          // set to blue horizontal line
          setTrendIcon(horizontalLine);
+
       }
 
-      setRoomPercentage(Math.trunc(percentage));
+      setBuildingUsage(localUsage);
    }
 
-
-   const updateCard = () => {
-      getCapacityPercentage();
-   }
-
-
-   // BUG: count card not rerendering in sequence with the graph (issue with async)
    useEffect(() => {
 
-      //updateCard();
+      building !== '' && getBuildingUsage();
 
-   }, [currentCount])
-
+   })
 
    // returns the count and percentage card
    return (
@@ -75,9 +81,7 @@ const CountCard = () => {
 
          <div className="count-row">
             <div className="per-container">
-               <p>
-                  {roomPercentage}%
-               </p>
+               {buildingUsage}%
             </div>
 
             <div className="trend-container">

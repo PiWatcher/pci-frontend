@@ -20,44 +20,39 @@ const RoomList = () => {
 
    const [trendIcon, setTrendIcon] = useState(horizontalLine);
 
+   const getUsage = (count, capacity) => {
 
-   const parseRoom = (roomString) => {
+      let usage = Math.trunc((count / capacity) * 100)
 
-      let index;
-      let capitalizedRoomString;
-
-      // text cleanup for showing
-      for (index = 0; index < roomString.length; index++) {
-         let name1 = roomString.split('-')[0]
-         let name2 = roomString.split('-')[1]
-         let cleanedRoomString = name1 + " " + name2
-         capitalizedRoomString = cleanedRoomString.charAt(0).toUpperCase()
-            + cleanedRoomString.slice(1);
-      }
-
-      return capitalizedRoomString;
+      return (usage);
    }
-
 
    const listItems = roomList.map(
 
-      (room) =>
-         <li key={room} onClick={() => setRoom(room)}>
+      (item, index) => (
+         <li key={index} onClick={() => setRoom(item.room)}>
             <div className="list-option">
                <div className="room">
-                  {parseRoom(room)}
+                  <p>
+                     {item.room}
+                  </p>
                </div>
 
                <div className="usage">
-                  0%
+                  <p>
+                     {getUsage(item.count, item.capacity)}%
+                  </p>
+
                </div>
 
                <div className="trend">
-                  <img className="logo" src={trendIcon} alt="Current trend of room" />
+                  <p>
+                     <img className="logo" src={trendIcon} alt="Current trend of room" />
+                  </p>
                </div>
             </div>
 
-         </li>
+         </li>)
    )
 
    // returns parsed rooms in unordered list

@@ -11,14 +11,16 @@ import 'semantic-ui-css/semantic.min.css'
 const SearchBar = () => {
 
    // consumes data from DataContext
-   const { buildingList, building, setBuilding, setRoom } = useContext(DataContext);
+   const { buildingList, building, setBuilding, setRoom, setCountList } = useContext(DataContext);
 
 
    // pulls selection text from dropdown and passes it back to context
    const handleSelectChange = (e, { value }) => {
       setBuilding(value);
+      setCountList([]);
       setRoom('');
    }
+
 
    // returns searchbar component
    return (
@@ -28,7 +30,13 @@ const SearchBar = () => {
          fluid
          search
          selection
-         options={buildingList}
+         options={buildingList.map(item => {
+            return {
+               key: item.buildingName,
+               text: item.buildingName,
+               value: item.buildingName
+            }
+         })}
          selectOnBlur={false}
       />
    );

@@ -17,13 +17,10 @@ import { DataContext } from '../contexts/DataContext';
 const BuildingMap = () => {
 
   // consumes data from DataContext
-  const { buildingList, buildingNumberList, buildingCoordsList, setBuilding, setRoom } = useContext(DataContext);
+  const { buildingList, setBuilding, setRoom } = useContext(DataContext);
 
   // home coordinates for map on load
   const nauCoordinates = [35.18580, -111.65508];
-
-  // list of JSX markers and their popups derived from buildingList and buildingCoordsList
-  const markers = [];
 
   // constant for map's ability to zoom in/out on scroll
   const zoomStatus = true;
@@ -52,30 +49,6 @@ const BuildingMap = () => {
   }
 
 
-  // loops through buildingList and buildingCoordsList, constructs map markers, and pushes them to list
-  for (let buildingIndex = 0; buildingIndex < buildingList.length; buildingIndex++) {
-
-    let building = buildingList[buildingIndex]['text'];
-
-    let buildingNumber = buildingNumberList[buildingIndex];
-
-    let buildingCoords = buildingCoordsList[buildingIndex];
-
-    markers.push(
-      <Marker position={buildingCoords}>
-        <Popup>
-          <div className="popup">
-            <h3>{building}</h3>
-            <span>(Building #{buildingNumber})</span>
-            <div>
-              <button className="select-building-button" onClick={() => handleMapSelection(building)}>Select</button>
-            </div>
-          </div>
-        </Popup>
-      </Marker>
-    );
-  }
-
   // returns a map container with markers of listed building coordinates
   return (
     <MapContainer center={nauCoordinates} zoom={zoomSet} scrollWheelZoom={zoomStatus}>
@@ -84,7 +57,21 @@ const BuildingMap = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {markers}
+      {buildingList.map((item) => {
+        return (
+          <Marker position={item.buildingCoords}>
+            <Popup>
+              <div className="popup">
+                <h3>{item.buildingName}</h3>
+                <span>(Building #{item.buildingNumber})</span>
+                <div>
+                  <button className="select-building-button" onClick={() => handleMapSelection(item.buildingName)}>Select</button>
+                </div>
+              </div>
+            </Popup>
+          </Marker>
+        );
+      })}
 
     </MapContainer >
   )
