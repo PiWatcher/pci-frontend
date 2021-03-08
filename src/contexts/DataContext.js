@@ -1,6 +1,6 @@
 
 // page imports
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 
@@ -10,10 +10,10 @@ export const DataContext = createContext();
 const DataContextProvider = (props) => {
 
    // production base url
-   //const baseURL = "cscap1.iot.nau.edu";
+   const baseURL = "cscap1.iot.nau.edu";
 
    //development base url
-   const baseURL = "localhost";
+   //const baseURL = "localhost";
 
    // creates state: selected building
    const [building, setBuilding] = useState('');
@@ -201,7 +201,6 @@ const DataContextProvider = (props) => {
             setCountList(localCountList);
          }
 
-
       }
 
       // failed to sign in
@@ -223,7 +222,8 @@ const DataContextProvider = (props) => {
       getBuildings();
    }, [])
 
-   // updates components with pulled rooms after building selection
+
+   // updates components on 5 second interval
    useEffect(() => {
 
       // gets rooms when a building is selected

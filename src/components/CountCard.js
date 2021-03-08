@@ -42,7 +42,6 @@ const CountCard = () => {
 
          // set to green up arrow
          setTrendIcon(upArrow);
-         console.log("up");
 
       }
 
@@ -50,7 +49,7 @@ const CountCard = () => {
 
          // set to red down arrow
          setTrendIcon(downArrow);
-         console.log("down");
+
       }
 
       // else {
