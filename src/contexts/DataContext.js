@@ -1,6 +1,6 @@
 
 // page imports
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 
 
@@ -10,10 +10,10 @@ export const DataContext = createContext();
 const DataContextProvider = (props) => {
 
    // production base url
-   const baseURL = "cscap1.iot.nau.edu";
+   //const baseURL = "cscap1.iot.nau.edu";
 
    //development base url
-   //const baseURL = "localhost";
+   const baseURL = "localhost";
 
    // creates state: selected building
    const [building, setBuilding] = useState('');
@@ -83,8 +83,6 @@ const DataContextProvider = (props) => {
             // sets state to sorted list of buildings
             setBuildingList(localBuildingList);
          }
-
-         console.log("Pulled building list.");
       }
 
       // failed to pull and parse the building list
@@ -148,7 +146,6 @@ const DataContextProvider = (props) => {
             setRoomList(localRoomList);
          }
 
-         console.log("Pulled room list.");
       }
 
       // failed to sign in
@@ -204,7 +201,7 @@ const DataContextProvider = (props) => {
             setCountList(localCountList);
          }
 
-         console.log("Pulling counts.");
+
       }
 
       // failed to sign in
@@ -221,12 +218,10 @@ const DataContextProvider = (props) => {
       return time;
    }
 
-
    // pulls buildings on initial page load
    useEffect(() => {
       getBuildings();
    }, [])
-
 
    // updates components with pulled rooms after building selection
    useEffect(() => {

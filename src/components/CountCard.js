@@ -42,6 +42,7 @@ const CountCard = () => {
 
          // set to green up arrow
          setTrendIcon(upArrow);
+         console.log("up");
 
       }
 
@@ -49,24 +50,26 @@ const CountCard = () => {
 
          // set to red down arrow
          setTrendIcon(downArrow);
-
+         console.log("down");
       }
 
-      else {
+      // else {
 
-         // set to blue horizontal line
-         setTrendIcon(horizontalLine);
-
-      }
+      //    // set to red down arrow
+      //    setTrendIcon(horizontalLine);
+      //    console.log('same');
+      // }
 
       setBuildingUsage(localUsage);
+
    }
 
+   // updates components with pulled rooms after building selection
    useEffect(() => {
 
       building !== '' && getBuildingUsage();
 
-   })
+   }, [roomList])
 
    // returns the count and percentage card
    return (

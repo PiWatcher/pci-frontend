@@ -13,7 +13,7 @@ import { AuthContext } from '../contexts/AuthContext';
 const Auth = () => {
 
     // consume data from AuthContext
-    const { setUserName, setEmail, setPassword, authStatus, setAuthStatus, signUpStatus, setSelectedAuth } = useContext(AuthContext);
+    const { authStatus, setAuthStatus, signUpStatus, authenticateAccount, createAccount } = useContext(AuthContext);
 
     // local variable for user password during text input
     const [localUserName, setLocalUserName] = useState('');
@@ -52,19 +52,14 @@ const Auth = () => {
         // sets if user log in
         if (localSelectedAuth === "Sign In") {
 
-            setEmail(localEmail);
-            setPassword(localPassword);
-            setSelectedAuth(localSelectedAuth);
+            authenticateAccount(localEmail, localPassword);
 
         }
 
         // sets if user sign up
         else if (localSelectedAuth === "Sign Up") {
 
-            setUserName(localUserName);
-            setEmail(localEmail);
-            setPassword(localPassword);
-            setSelectedAuth(localSelectedAuth);
+            createAccount(localUserName, localEmail, localPassword);
 
         }
 
@@ -82,9 +77,6 @@ const Auth = () => {
 
         // resets auth status to null to restore original values on tab change
         setAuthStatus(null);
-        setUserName('');
-        setEmail('');
-        setPassword('');
 
         // sets css for log in tab selection
         let signIn = document.getElementById("sign-in-id");
@@ -109,8 +101,6 @@ const Auth = () => {
 
         // resets auth status to null to restore original values on tab change
         setAuthStatus(null);
-        setEmail('');
-        setPassword('');
 
         // sets css for sign up tab selection
         let signIn = document.getElementById("sign-in-id");

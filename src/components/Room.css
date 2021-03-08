@@ -1,0 +1,54 @@
+.list-option {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    border-bottom: 2px solid rgba(236, 236, 236, 1);
+    padding: 10px;
+  }
+
+  .list-option:hover{
+    background-color: rgba(0, 52, 102, 0.2);
+  }
+  
+  .room {
+    font-size: 1.25em;
+    display: flex;
+    border-right: 2px solid rgba(236, 236, 236, 1);
+    width: 50%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .usage {
+    font-size: 1.25em;
+    display: flex;
+    border-right: 2px solid rgba(236, 236, 236, 1);
+    width: 50%;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+
+    -webkit-transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+  }
+
+  .trend {
+    display: flex;
+    width: 50%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+
+    -webkit-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+  }
+
+  .trend img {
+    width: 60px;
+  }

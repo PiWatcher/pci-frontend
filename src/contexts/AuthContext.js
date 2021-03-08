@@ -10,19 +10,16 @@ export const AuthContext = createContext();
 const AuthContextProvider = (props) => {
 
     // production base url
-    const baseURL = "cscap1.iot.nau.edu";
+    //const baseURL = "cscap1.iot.nau.edu";
 
     //development base url
-    //const baseURL = "localhost";
+    const baseURL = "localhost";
 
     // current authentication status
-    const [authStatus, setAuthStatus] = useState(null);
+    const [authStatus, setAuthStatus] = useState(true);
 
     // current sign up status
     const [signUpStatus, setSignUpStatus] = useState(false);
-
-    // selected auth type (log in or sing up)
-    const [selectedAuth, setSelectedAuth] = useState("Sign In");
 
     //  current user type
     const [userType, setUserType] = useState('admin');
@@ -30,91 +27,73 @@ const AuthContextProvider = (props) => {
     // submitted user name
     const [userName, setUserName] = useState('Test User');
 
-    // submitted email 
-    const [email, setEmail] = useState('');
-
-    // submitted password
-    const [password, setPassword] = useState('');
-
-
-    const authenticateAccount = async () => {
+    const authenticateAccount = async (email, password) => {
 
         const signInUrl = `http://${baseURL}:5000/api/auth/signin`;
 
-        const signUpURL = `http://${baseURL}:5000/api/auth/signup`;
-
-        // if log in tab is selected
-        if (selectedAuth === "Sign In") {
-
-            // tries to connect to database and verify account information
-            try {
-                const response = await axios({
-                    method: 'post',
-                    url: signInUrl,
-                    data: {
-                        email: email,
-                        password: password
-                    }
-                });
-
-                // successfully verified
-                if (response.status === 200) {
-
-                    // set user name to response
-                    //setUserName(response.username);
-
-                    setAuthStatus(true);
+        // tries to connect to database and verify account information
+        try {
+            const response = await axios({
+                method: 'post',
+                url: signInUrl,
+                data: {
+                    email: email,
+                    password: password
                 }
-            }
+            });
 
-            // failed to sign in
-            catch {
-                setAuthStatus(false);
+            // successfully verified
+            if (response.status === 200) {
+
+                // set user name to response
+                //setUserName(response.username);
+
+                setAuthStatus(true);
             }
         }
 
-        // if sign up tab is selected
-        else if (selectedAuth === "Sign Up") {
-
-            // tries to connect to database and post new account information
-            try {
-                const response = await axios({
-                    method: 'post',
-                    url: signUpURL,
-                    data: {
-                        name: userName,
-                        email: email,
-                        password: password,
-                        user_type: userType
-                    }
-                });
-
-                // successfully signed up
-                if (response.status === 201) {
-                    setSignUpStatus(true);
-                }
-            }
-
-            // failed to sign up
-            catch {
-                setAuthStatus(false);
-            }
+        // failed to sign in
+        catch {
+            setAuthStatus(false);
         }
     }
 
-    // updates component once email and password have been updated
-    useEffect(() => {
 
-        email !== '' && password !== '' && authenticateAccount();
+    const createAccount = async (name, email, password) => {
 
-    }, [email, password])
+        const signUpURL = `http://${baseURL}:5000/api/auth/signup`;
 
+        // tries to connect to database and post new account information
+        try {
+            const response = await axios({
+                method: 'post',
+                url: signUpURL,
+                data: {
+                    name: name,
+                    email: email,
+                    password: password,
+                    user_type: userType
+                }
+            });
+
+            // successfully signed up
+            if (response.status === 201) {
+                setSignUpStatus(true);
+            }
+        }
+
+        // failed to sign up
+        catch {
+            setAuthStatus(false);
+        }
+    }
 
     return (
-        <AuthContext.Provider value={{ setUserName, userName, setEmail, setPassword, authStatus, setAuthStatus, selectedAuth, setSelectedAuth, signUpStatus }}>
+        <AuthContext.Provider value={{ userName, authStatus, setAuthStatus, signUpStatus, authenticateAccount, createAccount }}>
             {props.children}
         </AuthContext.Provider>
     )
 }
+
 
 export default AuthContextProvider
