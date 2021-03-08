@@ -10,5 +10,3 @@ services:
       dockerfile: Dockerfile.prod
     ports:
       - "4000:80"
-    networks:
-      - frontend_prod

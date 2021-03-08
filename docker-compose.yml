@@ -12,7 +12,5 @@ services:
       - "/app/node_modules"
     ports:
       - 3001:3000
-    networks:
-      - frontend
     environment:
       - CHOKIDAR_USEPOLLING=true
