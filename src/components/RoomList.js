@@ -3,10 +3,8 @@
 import './RoomList.css';
 
 // page imports
-import React, { useContext, useState } from 'react';
-import upArrow from '../images/Green_Arrow_Up.svg';
-import downArrow from '../images/Red_Arrow_Down.svg'
-import horizontalLine from '../images/Horizontal_Line.svg';
+import React, { useContext, useState, useEffect } from 'react';
+import Room from './Room';
 
 // contexts
 import { DataContext } from '../contexts/DataContext';
@@ -16,49 +14,68 @@ import { DataContext } from '../contexts/DataContext';
 const RoomList = () => {
 
    // consumes data from DataContext
-   const { roomList, setRoom } = useContext(DataContext);
+   const { roomList } = useContext(DataContext);
 
-   const [trendIcon, setTrendIcon] = useState(horizontalLine);
+   const [search, setSearch] = useState('');
 
-   const getUsage = (count, capacity) => {
+   const [filteredRoomList, setFilteredRoomList] = useState([]);
 
-      let usage = Math.trunc((count / capacity) * 100)
+   // pulls search text for processing
+   const searchHandler = (e) => {
 
-      return (usage);
+      if (e.target.id === "roomSearch") {
+         setSearch(e.target.value);
+      }
    }
 
-   const listItems = roomList.map(
+   // filters out rooms based on search text
+   const roomFilter = (filter) => {
 
-      (item, index) => (
-         <li key={index} onClick={() => setRoom(item.room)}>
-            <div className="list-option">
-               <div className="room">
-                  <p>
-                     {item.room}
-                  </p>
-               </div>
+      let filteredRooms = roomList.filter(function (item) {
+         return item['room'].indexOf(filter) !== -1;
+      })
 
-               <div className="usage">
-                  <p>
-                     {getUsage(item.count, item.capacity)}%
-                  </p>
+      setFilteredRoomList(filteredRooms);
+   }
 
-               </div>
+   // maps all rooms in data set
+   let nonFiltered =
+      roomList.map((item, index) =>
+         <Room
+            key={index}
+            room={item.room}
+            count={item.count}
+            capacity={item.capacity}
+         />)
 
-               <div className="trend">
-                  <p>
-                     <img className="logo" src={trendIcon} alt="Current trend of room" />
-                  </p>
-               </div>
-            </div>
+   // maps only rooms that match search query
+   let filtered =
+      filteredRoomList.map((item, index) =>
+         <Room
+            key={index}
+            room={item.room}
+            count={item.count}
+            capacity={item.capacity}
+         />)
 
-         </li>)
-   )
+   // filters rooms on room list change and query change
+   useEffect(() => {
+
+      roomFilter(search);
+
+   }, [roomList, search])
+
 
    // returns parsed rooms in unordered list
    return (
-      <div className="room-list-component">
-         <ul>{listItems}</ul>
+      <div>
+         <input type="text" id="roomSearch" onChange={searchHandler} placeholder="Search for a room" />
+         <div className="room-list-component">
+
+            <ul>
+               {search === '' ? nonFiltered : filtered}
+            </ul>
+         </div>
       </div>
    )
 }

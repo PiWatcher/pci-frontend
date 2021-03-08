@@ -26,7 +26,7 @@ const SearchBar = () => {
    return (
       <Dropdown className="dropdown"
          onChange={handleSelectChange}
-         placeholder={building === "" ? "Select a building" : building}
+         placeholder={building === "" ? "Search for a building" : building}
          fluid
          search
          selection

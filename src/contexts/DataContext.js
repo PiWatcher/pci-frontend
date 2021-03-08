@@ -83,8 +83,6 @@ const DataContextProvider = (props) => {
             // sets state to sorted list of buildings
             setBuildingList(localBuildingList);
          }
-
-         console.log("Pulled building list.");
       }
 
       // failed to pull and parse the building list
@@ -148,7 +146,6 @@ const DataContextProvider = (props) => {
             setRoomList(localRoomList);
          }
 
-         console.log("Pulled room list.");
       }
 
       // failed to sign in
@@ -204,7 +201,6 @@ const DataContextProvider = (props) => {
             setCountList(localCountList);
          }
 
-         console.log("Pulling counts.");
       }
 
       // failed to sign in
@@ -221,14 +217,13 @@ const DataContextProvider = (props) => {
       return time;
    }
 
-
    // pulls buildings on initial page load
    useEffect(() => {
       getBuildings();
    }, [])
 
 
-   // updates components with pulled rooms after building selection
+   // updates components on 5 second interval
    useEffect(() => {
 
       // gets rooms when a building is selected

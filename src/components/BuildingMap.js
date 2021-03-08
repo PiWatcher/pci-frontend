@@ -17,7 +17,7 @@ import { DataContext } from '../contexts/DataContext';
 const BuildingMap = () => {
 
   // consumes data from DataContext
-  const { buildingList, setBuilding, setRoom } = useContext(DataContext);
+  const { buildingList, setBuilding, setRoom, setCountList } = useContext(DataContext);
 
   // home coordinates for map on load
   const nauCoordinates = [35.18580, -111.65508];
@@ -46,6 +46,7 @@ const BuildingMap = () => {
   const handleMapSelection = (building) => {
     setBuilding(building);
     setRoom('');
+    setCountList([]);
   }
 
 
