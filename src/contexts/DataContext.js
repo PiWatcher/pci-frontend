@@ -10,10 +10,7 @@ export const DataContext = createContext();
 const DataContextProvider = (props) => {
 
    // production base url
-   const baseURL = "cscap1.iot.nau.edu";
-
-   //development base url
-   //const baseURL = "localhost";
+   const baseURL = process.env.REACT_APP_BASE_URL;
 
    // creates state: selected building
    const [building, setBuilding] = useState('');
@@ -37,7 +34,7 @@ const DataContextProvider = (props) => {
       try {
          const response = await axios({
             method: 'get',
-            url: `http://${baseURL}:5000/api/data/buildings`
+            url: `${baseURL}:5000/api/data/buildings`
          });
 
          // successfully connected to endpoint and pulled data
@@ -101,7 +98,7 @@ const DataContextProvider = (props) => {
       try {
          const response = await axios({
             method: 'get',
-            url: `http://${baseURL}:5000/api/data/building`,
+            url: `${baseURL}:5000/api/data/building`,
             params: {
                building: building
             }
@@ -164,7 +161,7 @@ const DataContextProvider = (props) => {
       try {
          const response = await axios({
             method: 'get',
-            url: `http://${baseURL}:5000/api/data/building`,
+            url: `${baseURL}:5000/api/data/building`,
             params: {
                building: building
             }

@@ -10,10 +10,7 @@ export const AuthContext = createContext();
 const AuthContextProvider = (props) => {
 
     // production base url
-    const baseURL = "cscap1.iot.nau.edu";
-
-    //development base url
-    //const baseURL = "localhost";
+    const baseURL = process.env.REACT_APP_BASE_URL;
 
     // current authentication status
     const [authStatus, setAuthStatus] = useState(null);
@@ -31,7 +28,7 @@ const AuthContextProvider = (props) => {
     // sends given user data to backend for authentication
     const authenticateAccount = async (email, password) => {
 
-        const signInUrl = `http://${baseURL}:5000/api/auth/signin`;
+        const signInUrl = `${baseURL}:5000/api/auth/signin`;
 
         // tries to connect to database and verify account information
         try {
@@ -64,7 +61,7 @@ const AuthContextProvider = (props) => {
     // sends given user data to backend for acccount creation
     const createAccount = async (name, email, password) => {
 
-        const signUpURL = `http://${baseURL}:5000/api/auth/signup`;
+        const signUpURL = `${baseURL}:5000/api/auth/signup`;
 
         // tries to connect to database and post new account information
         try {

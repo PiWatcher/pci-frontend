@@ -13,6 +13,10 @@ COPY package-lock.json ./
 RUN npm install --silent
 RUN npm install react-scripts@4.0.3 -g --silent
 
+# setting the develop base url
+ARG REACT_APP_BASE_URL
+ENV REACT_APP_BASE_URL $REACT_APP_BASE_URL
+
 # add app
 COPY . ./
 
