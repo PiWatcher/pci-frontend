@@ -15,7 +15,7 @@ import { DataContext } from '../contexts/DataContext';
 const Room = (props) => {
 
     // consumes data from DataContext
-    const { setRoom } = useContext(DataContext);
+    const { roomList, setRoom } = useContext(DataContext);
 
     // state of room name
     const [localRoom, setLocalRoom] = useState('');
@@ -54,9 +54,8 @@ const Room = (props) => {
 
         // else {
 
-        //    // set to red down arrow
-        //    setTrendIcon(horizontalLine);
-        //    console.log('same');
+        //     // set to red down arrow
+        //     setTrendIcon(horizontalLine);
         // }
 
         setRoomUsage(localUsage);
@@ -65,10 +64,8 @@ const Room = (props) => {
 
     // updates on data change (new room to create)
     useEffect(() => {
-
         createRoom();
-
-    }, [props.count])
+    })
 
 
     return (

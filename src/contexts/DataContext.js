@@ -116,19 +116,24 @@ const DataContextProvider = (props) => {
 
                let roomName = roomData[roomIndex]["endpoint"];
 
-               // adds room to list if not already within
-               if (localRoomList.map(function (item) { return item.room; }).indexOf(roomName) === -1) {
+               if (roomName !== null) {
 
-                  let roomCount = roomData[roomIndex]["count"];
-                  let roomCapacity = roomData[roomIndex]["room_capacity"];
+                  // adds room to list if not already within
+                  if (localRoomList.map(function (item) { return item.room; }).indexOf(roomName) === -1) {
 
-                  // creates building object and pushes to list 
-                  localRoomList.push({
-                     room: roomName,
-                     count: roomCount,
-                     capacity: roomCapacity
-                  });
+                     let roomCount = roomData[roomIndex]["count"];
+                     let roomCapacity = roomData[roomIndex]["room_capacity"];
+
+                     // creates building object and pushes to list 
+                     localRoomList.push({
+                        room: roomName,
+                        count: roomCount,
+                        capacity: roomCapacity
+                     });
+                  }
                }
+
+
             }
 
             // sorts rooms in order

@@ -56,12 +56,20 @@ const CountCard = () => {
 
       //    // set to red down arrow
       //    setTrendIcon(horizontalLine);
-      //    console.log('same');
       // }
 
       setBuildingUsage(localUsage);
 
    }
+
+   useEffect(() => {
+
+      setBuildingUsage(0);
+      setTrendIcon(horizontalLine);
+
+   }, [building])
+
+
 
    // updates components with pulled rooms after building selection
    useEffect(() => {
