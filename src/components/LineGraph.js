@@ -104,7 +104,9 @@ const LineGraph = () => {
                display: true,
                fontColor: "#000000",
                fontSize: 16,
-               fontFamily: 'Open Sans'
+               fontFamily: 'Open Sans',
+               beginAtZero: true,
+               precision: 0
             },
             gridLines: {
                display: true,

@@ -10,10 +10,7 @@ export const DataContext = createContext();
 const DataContextProvider = (props) => {
 
    // production base url
-   const baseURL = "cscap1.iot.nau.edu";
-
-   //development base url
-   //const baseURL = "localhost";
+   const baseURL = process.env.REACT_APP_BASE_URL;
 
    // creates state: selected building
    const [building, setBuilding] = useState('');
@@ -37,7 +34,7 @@ const DataContextProvider = (props) => {
       try {
          const response = await axios({
             method: 'get',
-            url: `http://${baseURL}:5000/api/data/buildings`
+            url: `${baseURL}:5000/api/data/buildings`
          });
 
          // successfully connected to endpoint and pulled data
@@ -101,7 +98,7 @@ const DataContextProvider = (props) => {
       try {
          const response = await axios({
             method: 'get',
-            url: `http://${baseURL}:5000/api/data/building`,
+            url: `${baseURL}:5000/api/data/building`,
             params: {
                building: building
             }
@@ -119,19 +116,24 @@ const DataContextProvider = (props) => {
 
                let roomName = roomData[roomIndex]["endpoint"];
 
-               // adds room to list if not already within
-               if (localRoomList.map(function (item) { return item.room; }).indexOf(roomName) === -1) {
+               if (roomName !== null) {
 
-                  let roomCount = roomData[roomIndex]["count"];
-                  let roomCapacity = roomData[roomIndex]["room_capacity"];
+                  // adds room to list if not already within
+                  if (localRoomList.map(function (item) { return item.room; }).indexOf(roomName) === -1) {
 
-                  // creates building object and pushes to list 
-                  localRoomList.push({
-                     room: roomName,
-                     count: roomCount,
-                     capacity: roomCapacity
-                  });
+                     let roomCount = roomData[roomIndex]["count"];
+                     let roomCapacity = roomData[roomIndex]["room_capacity"];
+
+                     // creates building object and pushes to list 
+                     localRoomList.push({
+                        room: roomName,
+                        count: roomCount,
+                        capacity: roomCapacity
+                     });
+                  }
                }
+
+
             }
 
             // sorts rooms in order
@@ -164,7 +166,7 @@ const DataContextProvider = (props) => {
       try {
          const response = await axios({
             method: 'get',
-            url: `http://${baseURL}:5000/api/data/building`,
+            url: `${baseURL}:5000/api/data/building`,
             params: {
                building: building
             }

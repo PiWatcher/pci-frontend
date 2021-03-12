@@ -14,6 +14,10 @@ RUN npm ci --silent
 RUN npm install react-scripts@4.0.3 -g --silent
 COPY . ./
 
+# setting the production base url
+ARG REACT_APP_BASE_URL
+ENV REACT_APP_BASE_URL $REACT_APP_BASE_URL
+
 # build production react app
 RUN npm run build
 

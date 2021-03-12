@@ -14,7 +14,7 @@ import { DataContext } from '../contexts/DataContext';
 const RoomList = () => {
 
    // consumes data from DataContext
-   const { roomList } = useContext(DataContext);
+   const { building, roomList } = useContext(DataContext);
 
    const [search, setSearch] = useState('');
 
@@ -35,28 +35,28 @@ const RoomList = () => {
          return item['room'].indexOf(filter) !== -1;
       })
 
-      setFilteredRoomList(filteredRooms);
+      // maps only rooms that match search query
+      let filtered =
+         filteredRooms.map((item, index) =>
+            <Room
+               key={index}
+               room={item.room}
+               count={item.count}
+               capacity={item.capacity}
+            />)
+
+      setFilteredRoomList(filtered);
    }
 
-   // maps all rooms in data set
-   let nonFiltered =
-      roomList.map((item, index) =>
-         <Room
-            key={index}
-            room={item.room}
-            count={item.count}
-            capacity={item.capacity}
-         />)
 
-   // maps only rooms that match search query
-   let filtered =
-      filteredRoomList.map((item, index) =>
-         <Room
-            key={index}
-            room={item.room}
-            count={item.count}
-            capacity={item.capacity}
-         />)
+
+   // filters rooms on room list change and query change
+   useEffect(() => {
+
+      setSearch('');
+
+   }, [building])
+
 
    // filters rooms on room list change and query change
    useEffect(() => {
@@ -69,11 +69,11 @@ const RoomList = () => {
    // returns parsed rooms in unordered list
    return (
       <div>
-         <input type="text" id="roomSearch" onChange={searchHandler} placeholder="Search for a room" />
+         <input type="text" id="roomSearch" onChange={searchHandler} placeholder="Search for a room" value={search} />
          <div className="room-list-component">
 
             <ul>
-               {search === '' ? nonFiltered : filtered}
+               {filteredRoomList}
             </ul>
          </div>
       </div>
