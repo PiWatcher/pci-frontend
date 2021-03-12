@@ -15,7 +15,7 @@ import { DataContext } from '../contexts/DataContext';
 const CountCard = () => {
 
    // consume data from DataContext
-   const { building, roomList } = useContext(DataContext);
+   const { selectedBuilding, roomList } = useContext(DataContext);
 
    // state for building usage
    const [buildingUsage, setBuildingUsage] = useState(0);
@@ -56,25 +56,17 @@ const CountCard = () => {
 
       //    // set to red down arrow
       //    setTrendIcon(horizontalLine);
+      //    console.log('same');
       // }
 
       setBuildingUsage(localUsage);
 
    }
 
-   useEffect(() => {
-
-      setBuildingUsage(0);
-      setTrendIcon(horizontalLine);
-
-   }, [building])
-
-
-
    // updates components with pulled rooms after building selection
    useEffect(() => {
 
-      building !== '' && getBuildingUsage();
+      selectedBuilding !== '' && getBuildingUsage();
 
    }, [roomList])
 
@@ -84,7 +76,7 @@ const CountCard = () => {
 
          <div className="bldg-container">
             <p>
-               {building}
+               {selectedBuilding}
             </p>
 
          </div>

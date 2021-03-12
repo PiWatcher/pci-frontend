@@ -1,6 +1,6 @@
 
 // page imports
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useState } from 'react';
 import axios from 'axios';
 
 // context that manages user login and authentication
@@ -13,7 +13,7 @@ const AuthContextProvider = (props) => {
     const baseURL = process.env.REACT_APP_BASE_URL;
 
     // current authentication status
-    const [authStatus, setAuthStatus] = useState(null);
+    const [authStatus, setAuthStatus] = useState(true);
 
     // current sign up status
     const [signUpStatus, setSignUpStatus] = useState(false);

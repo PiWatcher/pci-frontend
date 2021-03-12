@@ -1,14 +1,9 @@
 
-.line-graph-component {
-    height: 600px;
-    padding: 20px;
-    width: 825px;
-}
 
 .set-buttons {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; 
     height: 50px;
     margin-top: 5px;
 }
@@ -17,4 +12,9 @@
     padding-left: 10px;
     padding-right: 10px;
     margin: 5px;
+}
+
+.plot-graph {
+    width: 100%;
+    height: 100%;
 }

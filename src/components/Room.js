@@ -15,7 +15,7 @@ import { DataContext } from '../contexts/DataContext';
 const Room = (props) => {
 
     // consumes data from DataContext
-    const { roomList, setRoom } = useContext(DataContext);
+    const { selectedRooms, setSelectedRooms } = useContext(DataContext);
 
     // state of room name
     const [localRoom, setLocalRoom] = useState('');
@@ -54,22 +54,37 @@ const Room = (props) => {
 
         // else {
 
-        //     // set to red down arrow
-        //     setTrendIcon(horizontalLine);
+        //    // set to red down arrow
+        //    setTrendIcon(horizontalLine);
+        //    console.log('same');
         // }
 
         setRoomUsage(localUsage);
     }
 
+    // constructs room data for packaging
+    const addToSelectedRooms = (localRoom) => {
+
+        const MAX_SELECTED_ROOMS = 4;
+
+        if (selectedRooms.length < MAX_SELECTED_ROOMS) {
+
+            setSelectedRooms([...selectedRooms, localRoom])
+        }
+
+    }
+
 
     // updates on data change (new room to create)
     useEffect(() => {
+
         createRoom();
-    })
+
+    }, [props.count])
 
 
     return (
-        <li key={props.index} onClick={() => setRoom(localRoom)}>
+        <li key={props.index} onClick={() => addToSelectedRooms(localRoom)}>
             <div className="list-option">
                 <div className="room">
                     <p>

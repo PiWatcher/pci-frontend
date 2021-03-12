@@ -2,8 +2,9 @@
   @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
   
   .room-list-component {
+    margin-top: 10px;
     overflow: auto;
-    height: 355px;
+    height: 680px;
     font-family: 'Open Sans', sans-serif;
   }
 
