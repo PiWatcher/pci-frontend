@@ -11,7 +11,7 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
 // contexts
-import { DataContext } from '../contexts/DataContext';
+import { DataContext } from '../../contexts/DataContext';
 
 
 const BuildingMap = () => {
@@ -57,9 +57,9 @@ const BuildingMap = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {buildingList.map((item) => {
+      {buildingList.map((item, index) => {
         return (
-          <Marker position={item.buildingCoords}>
+          <Marker key={index} position={item.buildingCoords}>
             <Popup>
               <div className="popup">
                 <h3>{item.buildingName}</h3>

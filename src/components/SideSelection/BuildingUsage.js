@@ -1,21 +1,18 @@
 
 // styling
-import './CountCard.css';
+import './BuildingUsage.css';
 
 // page imports
-import React, { useContext, useState, useEffect } from 'react';
-import upArrow from '../images/Green_Arrow_Up.svg';
-import downArrow from '../images/Red_Arrow_Down.svg'
-import horizontalLine from '../images/Horizontal_Line.svg';
-
-// contexts
-import { DataContext } from '../contexts/DataContext';
+import React, { useState, useEffect } from 'react';
+import upArrow from '../../images/Green_Arrow_Up.svg';
+import downArrow from '../../images/Red_Arrow_Down.svg'
+import horizontalLine from '../../images/Horizontal_Line.svg';
 
 
-const CountCard = () => {
+const BuildingUsage = (props) => {
 
-   // consume data from DataContext
-   const { selectedBuilding, roomList } = useContext(DataContext);
+   // consume props
+   const { building, rooms } = props;
 
    // state for building usage
    const [buildingUsage, setBuildingUsage] = useState(0);
@@ -30,10 +27,11 @@ const CountCard = () => {
       let buildingCount = 0;
       let buildingCapacity = 0;
 
-      for (let roomIndex = 0; roomIndex < roomList.length; roomIndex++) {
+      for (let roomIndex = 0; roomIndex < rooms.length; roomIndex++) {
 
-         buildingCount += roomList[roomIndex].count;
-         buildingCapacity += roomList[roomIndex].capacity;
+         buildingCount += rooms[roomIndex].count;
+         buildingCapacity += rooms[roomIndex].capacity;
+
       }
 
       let localUsage = Math.trunc((buildingCount / buildingCapacity) * 100);
@@ -52,23 +50,21 @@ const CountCard = () => {
 
       }
 
-      // else {
+      else {
 
-      //    // set to red down arrow
-      //    setTrendIcon(horizontalLine);
-      //    console.log('same');
-      // }
+         // set to horizontal line
+         setTrendIcon(horizontalLine);
+      }
 
       setBuildingUsage(localUsage);
-
    }
 
    // updates components with pulled rooms after building selection
    useEffect(() => {
 
-      selectedBuilding !== '' && getBuildingUsage();
+      getBuildingUsage();
 
-   }, [roomList])
+   })
 
    // returns the count and percentage card
    return (
@@ -76,7 +72,7 @@ const CountCard = () => {
 
          <div className="bldg-container">
             <p>
-               {selectedBuilding}
+               {building}
             </p>
 
          </div>
@@ -94,4 +90,4 @@ const CountCard = () => {
    )
 }
 
-export default CountCard;
+export default BuildingUsage;

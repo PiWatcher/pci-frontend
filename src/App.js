@@ -10,7 +10,7 @@ import AuthContextProvider from './contexts/AuthContext';
 import DataContextProvider from './contexts/DataContext';
 
 // components
-import PageRouter from './components/PageRouter';
+import PageRouter from './components/Authentication/PageRouter';
 
 
 const App = () => {

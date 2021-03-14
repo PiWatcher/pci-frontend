@@ -6,18 +6,18 @@ import './Navbar.css';
 import React, { useContext, useState } from 'react';
 import SearchBar from './SearchBar';
 import BuildingMap from './BuildingMap';
-import nauLogo from '../images/nauLogoDash.svg';
-import mapIcon from '../images/mapIcon.svg';
+import nauLogo from '../../images/nauLogoDash.svg';
+import mapIcon from '../../images/mapIcon.svg';
 
 // contexts
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext';
 
 
 
 const Navbar = () => {
 
 
-   const { setEmail, setPassword, setAuthStatus, userType } = useContext(AuthContext);
+   const { setAuthStatus } = useContext(AuthContext);
 
    // flag to show map or not on dashboard
    const [showMap, setShowMap] = useState(false);

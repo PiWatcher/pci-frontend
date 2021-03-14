@@ -3,22 +3,23 @@
 import './Room.css';
 
 // page imports
-import React, { useContext, useState, useEffect } from 'react';
-import upArrow from '../images/Green_Arrow_Up.svg';
-import downArrow from '../images/Red_Arrow_Down.svg'
-import horizontalLine from '../images/Horizontal_Line.svg';
+import React, { useState, useEffect, useContext } from 'react';
+import upArrow from '../../images/Green_Arrow_Up.svg';
+import downArrow from '../../images/Red_Arrow_Down.svg'
+import horizontalLine from '../../images/Horizontal_Line.svg';
 
 // contexts
-import { DataContext } from '../contexts/DataContext';
+import { DataContext } from '../../contexts/DataContext';
+
 
 
 const Room = (props) => {
 
-    // consumes data from DataContext
-    const { selectedRooms, setSelectedRooms } = useContext(DataContext);
+    // consume props
+    const { room, count, capacity } = props;
 
-    // state of room name
-    const [localRoom, setLocalRoom] = useState('');
+    // consume data from DataContext
+    const { selectedRooms, setSelectedRooms } = useContext(DataContext);
 
     // state of room usage
     const [roomUsage, setRoomUsage] = useState(0);
@@ -37,9 +38,7 @@ const Room = (props) => {
     // constructs room data for packaging
     const createRoom = () => {
 
-        setLocalRoom(props.room);
-
-        let localUsage = getUsage(props.count, props.capacity);
+        let localUsage = getUsage(count, capacity);
 
         if (localUsage > roomUsage) {
             // set to green up arrow
@@ -52,43 +51,39 @@ const Room = (props) => {
             setTrendIcon(downArrow);
         }
 
-        // else {
-
-        //    // set to red down arrow
-        //    setTrendIcon(horizontalLine);
-        //    console.log('same');
-        // }
+        else {
+            // set to horizontal line
+            setTrendIcon(horizontalLine);
+        }
 
         setRoomUsage(localUsage);
     }
 
     // constructs room data for packaging
-    const addToSelectedRooms = (localRoom) => {
+    const selectRoom = () => {
 
         const MAX_SELECTED_ROOMS = 4;
 
         if (selectedRooms.length < MAX_SELECTED_ROOMS) {
 
-            setSelectedRooms([...selectedRooms, localRoom])
+            setSelectedRooms([...selectedRooms, room])
         }
-
     }
-
 
     // updates on data change (new room to create)
     useEffect(() => {
 
         createRoom();
 
-    }, [props.count])
+    }, [count])
 
 
     return (
-        <li key={props.index} onClick={() => addToSelectedRooms(localRoom)}>
+        <li key={room} onClick={() => selectRoom(room)}>
             <div className="list-option">
                 <div className="room">
                     <p>
-                        {localRoom}
+                        {room}
                     </p>
                 </div>
 

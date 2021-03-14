@@ -4,10 +4,10 @@ import './Auth.css';
 
 // page imports
 import React, { useContext, useState } from 'react';
-import nauLogo from '../images/nauLogoLogin.svg';
+import nauLogo from '../../images/nauLogoLogin.svg';
 
 // contexts
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext';
 
 
 const Auth = () => {

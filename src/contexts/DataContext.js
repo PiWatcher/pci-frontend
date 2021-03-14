@@ -21,9 +21,6 @@ const DataContextProvider = (props) => {
    // creates state: list of buildings pulled from endpoint
    const [buildingList, setBuildingList] = useState([]);
 
-   // creates state: list of rooms pulled from endpoint
-   const [roomList, setRoomList] = useState([]);
-
 
    // API pull and parse logic for buildings
    const getBuildings = async () => {
@@ -84,95 +81,14 @@ const DataContextProvider = (props) => {
       }
    };
 
-
-   // API pull and parse logic for rooms in selected building
-   const getRooms = async () => {
-
-      let localRoomList = [];
-
-      // tries to pull and parse building data
-      try {
-         const response = await axios({
-            method: 'get',
-            url: `${baseURL}:5000/api/data/building`,
-            params: {
-               building: selectedBuilding
-            }
-         });
-
-         // successfully connected to endpoint and pulled data
-         if (response.status === 200) {
-
-            let roomData = response.data.data;
-
-            // compiles list of rooms (from end of data source for latest count)
-            for (let roomIndex = roomData.length - 1; roomIndex >= 0; roomIndex--) {
-
-               // console.log(localRoomList);
-
-               let roomName = roomData[roomIndex]["endpoint"];
-
-               // adds room to list if not already within
-               if (localRoomList.map(function (item) { return item.room; }).indexOf(roomName) === -1) {
-
-                  let roomCount = roomData[roomIndex]["count"];
-                  let roomCapacity = roomData[roomIndex]["room_capacity"];
-
-                  // creates building object and pushes to list 
-                  localRoomList.push({
-                     room: roomName,
-                     count: roomCount,
-                     capacity: roomCapacity
-                  });
-               }
-            }
-
-            // sorts rooms in order
-            localRoomList = localRoomList.sort(function (a, b) {
-               return a.room.localeCompare(b.room, undefined, {
-                  numeric: true,
-                  sensitivity: 'base'
-               });
-            });
-
-            // sets state to sorted list of rooms
-            setRoomList(localRoomList);
-         }
-
-      }
-
-      // failed to sign in
-      catch {
-         console.log("Failed to pull rooms.")
-      }
-   };
-
-
    // pulls buildings on initial page load
    useEffect(() => {
       getBuildings();
    }, [])
 
-
-   // updates components on 5 second interval
-   useEffect(() => {
-
-      // gets rooms when a building is selected
-      selectedBuilding !== '' && getRooms();
-
-      // // five seconds interval for data refresh 
-      // const interval = setInterval(() => {
-      //    selectedBuilding !== '' && getRooms();
-      // }, 5000);
-
-      // return () => clearInterval(interval);
-
-   }, [selectedBuilding, selectedRooms])
-
-
    return (
       <DataContext.Provider value={{
-         buildingList, selectedBuilding, setSelectedBuilding, roomList, selectedRooms, setSelectedRooms, baseURL
+         buildingList, selectedBuilding, setSelectedBuilding, selectedRooms, setSelectedRooms, baseURL
       }}>
          { props.children}
       </DataContext.Provider>
