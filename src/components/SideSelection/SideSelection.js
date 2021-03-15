@@ -46,18 +46,20 @@ const SideSelection = () => {
 
                     let roomName = roomData[roomIndex]["endpoint"];
 
-                    // adds room to list if not already within
-                    if (localRoomList.map(function (item) { return item.room; }).indexOf(roomName) === -1) {
+                    if (roomName != null) {
+                        // adds room to list if not already within
+                        if (localRoomList.map(function (item) { return item.room; }).indexOf(roomName) === -1) {
 
-                        let roomCount = roomData[roomIndex]["count"];
-                        let roomCapacity = roomData[roomIndex]["room_capacity"];
+                            let roomCount = roomData[roomIndex]["count"];
+                            let roomCapacity = roomData[roomIndex]["room_capacity"];
 
-                        // creates building object and pushes to list 
-                        localRoomList.push({
-                            room: roomName,
-                            count: roomCount,
-                            capacity: roomCapacity
-                        });
+                            // creates building object and pushes to list 
+                            localRoomList.push({
+                                room: roomName,
+                                count: roomCount,
+                                capacity: roomCapacity
+                            });
+                        }
                     }
                 }
 

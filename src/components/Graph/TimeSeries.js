@@ -37,7 +37,7 @@ const TimeSeries = (props) => {
 
    const { width, height, ref } = useResizeDetector({
       refreshMode: 'debounce',
-      refreshRate: 75
+      refreshRate: 10
    })
 
    // // API pull and parse logic for counts and timestamps
@@ -157,13 +157,9 @@ const TimeSeries = (props) => {
       autosize: true,
       width: width,
       height: height,
-      margin: {
-         l: 50,
-         r: 50,
-         b: 50,
-         t: 75,
-         pad: 4
-      },
+      margin: { l: 50, r: 50, b: 50, t: 75, pad: 4 },
+      plot_bgcolor: "rgba(0,0,0,0)",
+      paper_bgcolor: "rgba(0,0,0,0)",
    };
 
    useEffect(() => {
@@ -196,7 +192,6 @@ const TimeSeries = (props) => {
                config={{ responsive: true }}
                data={data}
                layout={layout}
-               displayLogo={false}
             />
 
             <QueryButtons currentQuery={currentQuery} setCurrentQuery={setCurrentQuery} />
