@@ -16,29 +16,29 @@
 }
 
 .data-row {
-    width: 80vw;
-    height: 650px;
+    width: 90vw;
     margin: 0 auto;
     margin-top: 50px;
     margin-bottom: 50px;
-    max-width: 1800px;
+    max-width: 2000px;
+    display: flex;
 }
-
 
 .line-graph-container {
-    display: inline-block;
-    vertical-align: middle;
-    height: 650px;
+    width: 75vw;
+}
+
+
+
+.chart-div {
     border-radius: 10px;
     box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
-    margin-right: 10px;
 }
+
 
 
 .room-list-container {
-    display: inline-block;
-    vertical-align: middle;
-    height: 650px;
+    height: 1000px;
     width: 300px;
     box-shadow: 0 4px 12px 0 rgba(0,0,0,0.1);
     border-radius: 8px;

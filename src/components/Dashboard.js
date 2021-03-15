@@ -1,45 +1,48 @@
 
 // styling
 import './Dashboard.css';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
 
 // page imports
-import React from 'react';
+import React, { useContext } from 'react';
+
 
 // contexts
-import DataContextProvider from '../contexts/DataContext';
+
+import { DataContext } from '../contexts/DataContext';
 
 // components
-import Navbar from './Navbar';
-import RoomList from './RoomList';
-import LineGraph from './LineGraph';
-import TimeCard from './TimeCard';
-import CountCard from './CountCard';
+import Navbar from './Navigation/Navbar';
+import SideSelection from './SideSelection/SideSelection';
+import ChartLayout from './Graph/ChartLayout';
 
 
 const Dashboard = () => {
 
+   // consume data from DataContext
+   const { selectedBuilding } = useContext(DataContext);
+
+
    // returns the entire dashboard and its child components
    return (
       <div className="dashboard-container">
-         <DataContextProvider>
-            <Navbar />
 
-            <div className="time-card-container">
-               <TimeCard />
+         <Navbar />
+
+         <div className="data-row">
+            <div className="line-graph-container">
+
+               <ChartLayout />
+
             </div>
 
-            <div className="data-row">
-               <div className="line-graph-container">
-                  <LineGraph />
-               </div>
+            {selectedBuilding !== '' ?
+               <SideSelection />
+               : null
+            }
 
-               <div className="room-list-container">
-                  <CountCard />
-                  <RoomList />
-               </div>
-            </div>
-
-         </DataContextProvider>
+         </div >
       </div >
    );
 }

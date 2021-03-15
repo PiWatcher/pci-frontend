@@ -11,13 +11,13 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
 // contexts
-import { DataContext } from '../contexts/DataContext';
+import { DataContext } from '../../contexts/DataContext';
 
 
 const BuildingMap = () => {
 
   // consumes data from DataContext
-  const { buildingList, setBuilding, setRoom, setCountList } = useContext(DataContext);
+  const { buildingList, setSelectedBuilding, setSelectedRooms } = useContext(DataContext);
 
   // home coordinates for map on load
   const nauCoordinates = [35.18580, -111.65508];
@@ -44,9 +44,8 @@ const BuildingMap = () => {
 
   // pulls selection text from dropdown and passes it back to context
   const handleMapSelection = (building) => {
-    setBuilding(building);
-    setRoom('');
-    setCountList([]);
+    setSelectedBuilding(building);
+    setSelectedRooms([]);
   }
 
 
@@ -58,9 +57,9 @@ const BuildingMap = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {buildingList.map((item) => {
+      {buildingList.map((item, index) => {
         return (
-          <Marker position={item.buildingCoords}>
+          <Marker key={index} position={item.buildingCoords}>
             <Popup>
               <div className="popup">
                 <h3>{item.buildingName}</h3>

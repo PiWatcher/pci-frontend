@@ -13,19 +13,14 @@ const DataContextProvider = (props) => {
    const baseURL = process.env.REACT_APP_BASE_URL;
 
    // creates state: selected building
-   const [building, setBuilding] = useState('');
+   const [selectedBuilding, setSelectedBuilding] = useState('');
 
    // creates state: selected room
-   const [room, setRoom] = useState('');
+   const [selectedRooms, setSelectedRooms] = useState([]);
 
    // creates state: list of buildings pulled from endpoint
    const [buildingList, setBuildingList] = useState([]);
 
-   // creates state: list of rooms pulled from endpoint
-   const [roomList, setRoomList] = useState([]);
-
-   // creates state: list of counts and timestamps
-   const [countList, setCountList] = useState([]);
 
    // API pull and parse logic for buildings
    const getBuildings = async () => {
@@ -52,8 +47,6 @@ const DataContextProvider = (props) => {
                // let buildingName = buildingData.data[buildingIndex]["name"];
 
                // let buildingNumber = buildingData.data[buildingIndex]["number"];
-
-               // let buildingCoords = buildingData.data[buildingIndex]["coordinates"];
 
                // creates building object and pushes to list 
                localBuildingList.push({
@@ -88,166 +81,14 @@ const DataContextProvider = (props) => {
       }
    };
 
-
-   // API pull and parse logic for rooms in selected building
-   const getRooms = async () => {
-
-      let localRoomList = [];
-
-      // tries to pull and parse building data
-      try {
-         const response = await axios({
-            method: 'get',
-            url: `${baseURL}:5000/api/data/building`,
-            params: {
-               building: building
-            }
-         });
-
-         // successfully connected to endpoint and pulled data
-         if (response.status === 200) {
-
-            let roomData = response.data.data;
-
-            // compiles list of rooms (from end of data source for latest count)
-            for (let roomIndex = roomData.length - 1; roomIndex >= 0; roomIndex--) {
-
-               // console.log(localRoomList);
-
-               let roomName = roomData[roomIndex]["endpoint"];
-
-               if (roomName !== null) {
-
-                  // adds room to list if not already within
-                  if (localRoomList.map(function (item) { return item.room; }).indexOf(roomName) === -1) {
-
-                     let roomCount = roomData[roomIndex]["count"];
-                     let roomCapacity = roomData[roomIndex]["room_capacity"];
-
-                     // creates building object and pushes to list 
-                     localRoomList.push({
-                        room: roomName,
-                        count: roomCount,
-                        capacity: roomCapacity
-                     });
-                  }
-               }
-
-
-            }
-
-            // sorts rooms in order
-            localRoomList = localRoomList.sort(function (a, b) {
-               return a.room.localeCompare(b.room, undefined, {
-                  numeric: true,
-                  sensitivity: 'base'
-               });
-            });
-
-            // sets state to sorted list of rooms
-            setRoomList(localRoomList);
-         }
-
-      }
-
-      // failed to sign in
-      catch {
-         console.log("Failed to pull rooms.")
-      }
-   };
-
-
-   // API pull and parse logic for counts and timestamps
-   const getCounts = async () => {
-
-      let localCountList = [];
-
-      // tries to pull and parse selected room data
-      try {
-         const response = await axios({
-            method: 'get',
-            url: `${baseURL}:5000/api/data/building`,
-            params: {
-               building: building
-            }
-         });
-
-         // successfully connected to endpoint and pulled data
-         if (response.status === 200) {
-
-            let countData = response.data.data;
-
-            // compiles list of counts and timestamps (from beginning of data source)
-            for (let countIndex = 0; countIndex < countData.length; countIndex++) {
-
-               if (room === countData[countIndex]["endpoint"]) {
-
-                  let roomCount = countData[countIndex]["count"];
-
-                  // formats the date
-                  let date = countData[countIndex]["timestamp"]['$date'];
-
-                  let parsedDate = new Date(date);
-
-                  let dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()} ${addZero(parsedDate.getHours())}:${addZero(parsedDate.getMinutes())}:${addZero(parsedDate.getSeconds())}`;
-
-                  // creates count/timestamp object and pushes to list
-                  localCountList.push({
-                     count: roomCount,
-                     timestamp: dateString
-                  });
-               }
-            }
-
-            // sets state to counts/timestamps for selected room
-            setCountList(localCountList);
-         }
-
-      }
-
-      // failed to sign in
-      catch {
-         console.log("Failed to pull counts.")
-      }
-   };
-
-   // add zero to the time if single digit
-   const addZero = (time) => {
-      if (time < 10) {
-         time = "0" + time;
-      }
-      return time;
-   }
-
    // pulls buildings on initial page load
    useEffect(() => {
       getBuildings();
    }, [])
 
-
-   // updates components on 5 second interval
-   useEffect(() => {
-
-      // gets rooms when a building is selected
-      building !== '' && getRooms();
-
-      // gets counts whena room is selected
-      room !== '' && getCounts();
-
-      // five seconds interval for data refresh 
-      const interval = setInterval(() => {
-         building !== '' && getRooms();
-         room !== '' && getCounts();
-      }, 5000);
-
-      return () => clearInterval(interval);
-
-   }, [building, room])
-
-
    return (
       <DataContext.Provider value={{
-         buildingList, building, setBuilding, roomList, room, setRoom, countList, setCountList
+         buildingList, selectedBuilding, setSelectedBuilding, selectedRooms, setSelectedRooms, baseURL
       }}>
          { props.children}
       </DataContext.Provider>

@@ -1,6 +1,6 @@
 
 // page imports
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useState } from 'react';
 import axios from 'axios';
 
 // context that manages user login and authentication

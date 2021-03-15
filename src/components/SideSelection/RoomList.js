@@ -3,18 +3,13 @@
 import './RoomList.css';
 
 // page imports
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Room from './Room';
 
-// contexts
-import { DataContext } from '../contexts/DataContext';
+const RoomList = (props) => {
 
-
-
-const RoomList = () => {
-
-   // consumes data from DataContext
-   const { building, roomList } = useContext(DataContext);
+   // consume props
+   const { building, rooms } = props;
 
    const [search, setSearch] = useState('');
 
@@ -22,7 +17,6 @@ const RoomList = () => {
 
    // pulls search text for processing
    const searchHandler = (e) => {
-
       if (e.target.id === "roomSearch") {
          setSearch(e.target.value);
       }
@@ -31,7 +25,7 @@ const RoomList = () => {
    // filters out rooms based on search text
    const roomFilter = (filter) => {
 
-      let filteredRooms = roomList.filter(function (item) {
+      let filteredRooms = rooms.filter(function (item) {
          return item['room'].indexOf(filter) !== -1;
       })
 
@@ -49,7 +43,6 @@ const RoomList = () => {
    }
 
 
-
    // filters rooms on room list change and query change
    useEffect(() => {
 
@@ -63,7 +56,7 @@ const RoomList = () => {
 
       roomFilter(search);
 
-   }, [roomList, search])
+   }, [rooms, search])
 
 
    // returns parsed rooms in unordered list
@@ -71,7 +64,6 @@ const RoomList = () => {
       <div>
          <input type="text" id="roomSearch" onChange={searchHandler} placeholder="Search for a room" value={search} />
          <div className="room-list-component">
-
             <ul>
                {filteredRoomList}
             </ul>

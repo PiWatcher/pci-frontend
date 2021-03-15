@@ -3,13 +3,13 @@
 import React, { useContext, useEffect } from 'react';
 
 // contexts
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext';
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 
 // components
 import Auth from './Auth';
-import Dashboard from './Dashboard';
+import Dashboard from '../Dashboard';
 
 const PageRouter = () => {
 

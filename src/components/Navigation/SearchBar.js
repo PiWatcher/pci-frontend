@@ -1,24 +1,27 @@
 
+
+// styling
+import './SearchBar.css';
+
 // page imports
 import React, { useContext } from 'react';
 import { Dropdown } from 'semantic-ui-react';
 
 // contexts
-import { DataContext } from '../contexts/DataContext';
+import { DataContext } from '../../contexts/DataContext';
 import 'semantic-ui-css/semantic.min.css'
 
 
 const SearchBar = () => {
 
    // consumes data from DataContext
-   const { buildingList, building, setBuilding, setRoom, setCountList } = useContext(DataContext);
+   const { buildingList, selectedBuilding, setSelectedBuilding, setSelectedRooms } = useContext(DataContext);
 
 
    // pulls selection text from dropdown and passes it back to context
    const handleSelectChange = (e, { value }) => {
-      setBuilding(value);
-      setCountList([]);
-      setRoom('');
+      setSelectedBuilding(value);
+      setSelectedRooms([]);
    }
 
 
@@ -26,7 +29,7 @@ const SearchBar = () => {
    return (
       <Dropdown className="dropdown"
          onChange={handleSelectChange}
-         placeholder={building === "" ? "Search for a building" : building}
+         placeholder={selectedBuilding === "" ? "Search for a building" : selectedBuilding}
          fluid
          search
          selection
