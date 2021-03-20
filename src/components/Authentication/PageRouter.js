@@ -10,6 +10,7 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 // components
 import Auth from './Auth';
 import Dashboard from '../Dashboard';
+import AdminSettings from '../Admin/AdminSettings';
 
 const PageRouter = () => {
 
@@ -41,19 +42,26 @@ const PageRouter = () => {
 
                   <Route path="/auth" component={Auth}>
                      {authStatus === true ?
-                        <Redirect to="/dashboard" component={Dashboard} /> :
+                        <Redirect to="/dashboard" component={AdminSettings} /> :
                         null
                      }
                   </Route>
 
                   {authStatus === true ?
-                     <Route path="/dashboard" component={Dashboard} /> :
-                     null
+                     <Route path="/dashboard" component={AdminSettings} /> :
+                     <Redirect to="/auth" component={Auth} />
                   }
 
                   <Route path="*">
                      <Redirect to="/auth" component={Auth} />
                   </Route>
+
+                  {/* {authStatus === true && userRole == 'admin' ?
+                     <Route path="/admin" component={AdminSettings} /> :
+                     null
+                  } */}
+
+                  <Route path="/admin" component={AdminSettings} />
 
                </Switch>
             </BrowserRouter>

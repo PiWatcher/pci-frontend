@@ -1,83 +1,85 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap");
 
 .navbar-component {
-    display: flex;
-    width: 100vw;
-    height: 80px;
-    background-color: #003466;
-    font-family: 'Open Sans', sans-serif;
+   display: flex;
+   width: 100vw;
+   height: 80px;
+   background-color: #003466;
+   font-family: "Open Sans", sans-serif;
 }
 
 .image-div {
-    display: flex;
-    width: 125px;
-    padding: 5px;
+   display: flex;
+   width: 125px;
+   padding: 5px;
 }
 
 .logo {
-    width: 125px;
-    padding: 5px;
+   width: 125px;
+   padding: 5px;
 }
 
 .search-div {
-    margin-top: 20px;
-    margin-left: 40px;
-    width: 400px;
-    height: 800px;
+   margin-top: 20px;
+   margin-left: 40px;
+   width: 400px;
+   height: 800px;
 }
 
-.mapIcon-div {                 
-    width: 55px;
-    margin-top: 12px;
-    margin-left: 0px;
+.mapIcon-div {
+   width: 55px;
+   margin-top: 12px;
+   margin-left: 0px;
 }
 
 .mapIcon-div:hover {
-    color: grey;
+   color: grey;
 }
 
-.sign-out{
-    margin-top: 28px;
-    margin-left: auto;
-    margin-right: 20px;
-    width: 100px;
-    height: 40px;
-    color: white;
-    font-size: 1.25em;
+.sign-out {
+   margin-top: 28px;
+   margin-left: auto;
+   margin-right: 20px;
+   width: 100px;
+   height: 40px;
+   color: white;
+   font-size: 1.25em;
 }
 
 .sign-out:hover {
-    color: grey;
-  }
-
-.map-div {      
-    width: 85vw;
-    max-width: 2000px;
-    margin: 0 auto;
+   color: grey;
 }
 
+.map-div {
+   width: 85vw;
+   max-width: 2000px;
+   margin: 0 auto;
+}
+
+.admin-div {
+   margin-top: 10px;
+   width: 50px;
+}
 
 @media screen and (max-width: 600px) {
+   .image-div {
+      width: 75px;
+   }
 
-    .image-div {
-        width: 75px;
-    }
+   .logo {
+      width: 75px;
+   }
 
-    .logo {
-        width: 75px;
-    }
-    
-    .search-div {
-        margin-left: 15px;
-    }
+   .search-div {
+      margin-left: 15px;
+   }
 
-    .mapIcon-div{
-        width: 8em;
-    }
+   .mapIcon-div {
+      width: 8em;
+   }
 
-    .sign-out {
-        margin-top: 20px;
-        margin-right: 10px;
-    }
-
-  }
+   .sign-out {
+      margin-top: 20px;
+      margin-right: 10px;
+   }
+}

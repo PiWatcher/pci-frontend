@@ -8,9 +8,12 @@ import SearchBar from './SearchBar';
 import BuildingMap from './BuildingMap';
 import nauLogo from '../../images/nauLogoDash.svg';
 import mapIcon from '../../images/mapIcon.svg';
+import adminIcon from '../../images/adminIcon.svg';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
+import { Link } from "react-router-dom";
+import AdminSettings from '../Admin/AdminSettings';
 
 
 
@@ -44,7 +47,14 @@ const Navbar = () => {
             </div>
 
             <div className="mapIcon-div">
-               <img className="map" onClick={onMapClick} src={mapIcon} alt="Map Icon" />
+               <Link path="/admin">
+                  <img className="map" onClick={onMapClick} src={mapIcon} alt="Map Icon" />
+               </Link>
+
+            </div>
+
+            <div className="admin-div">
+               <img className="admin" src={adminIcon} alt=" Admin Icon" />
             </div>
 
             <div className="sign-out" onClick={signOut}>
