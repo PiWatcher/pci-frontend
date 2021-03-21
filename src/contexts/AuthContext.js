@@ -19,10 +19,13 @@ const AuthContextProvider = (props) => {
     const [signUpStatus, setSignUpStatus] = useState(false);
 
     //  current user type
-    const [userType, setUserType] = useState('admin');
+    const [userRole, setUserRole] = useState('admin');
 
     // submitted user name
     const [userName, setUserName] = useState('Test User');
+
+    // user token returned from the backend
+    const [userToken, setUserToken] = useState('');
 
 
     // sends given user data to backend for authentication
@@ -72,7 +75,7 @@ const AuthContextProvider = (props) => {
                     name: name,
                     email: email,
                     password: password,
-                    user_type: userType
+                    user_type: userRole
                 }
             });
 
@@ -89,7 +92,7 @@ const AuthContextProvider = (props) => {
     }
 
     return (
-        <AuthContext.Provider value={{ userName, authStatus, setAuthStatus, signUpStatus, authenticateAccount, createAccount }}>
+        <AuthContext.Provider value={{ userName, userRole, userToken, authStatus, setAuthStatus, signUpStatus, authenticateAccount, createAccount }}>
             {props.children}
         </AuthContext.Provider>
     )

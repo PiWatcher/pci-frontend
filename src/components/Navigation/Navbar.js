@@ -12,7 +12,7 @@ import adminIcon from '../../images/adminIcon.svg';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
-import { Link } from "react-router-dom";
+import { Link, Route, Switch } from 'react-router-dom';
 import AdminSettings from '../Admin/AdminSettings';
 
 
@@ -20,7 +20,7 @@ import AdminSettings from '../Admin/AdminSettings';
 const Navbar = () => {
 
 
-   const { setAuthStatus } = useContext(AuthContext);
+   const { userName, userRole, setAuthStatus } = useContext(AuthContext);
 
    // flag to show map or not on dashboard
    const [showMap, setShowMap] = useState(false);
@@ -42,20 +42,34 @@ const Navbar = () => {
                <img className="logo" src={nauLogo} alt="NAU Logo" />
             </div>
 
+            <div className="welcome-div">
+               <p>
+                  Welcome, {userName}
+               </p>
+            </div>
+
             <div className="search-div">
                <SearchBar />
             </div>
 
             <div className="mapIcon-div">
-               <Link path="/admin">
-                  <img className="map" onClick={onMapClick} src={mapIcon} alt="Map Icon" />
-               </Link>
-
+               <img className="map" onClick={onMapClick} src={mapIcon} alt="Map Icon" />
             </div>
 
-            <div className="admin-div">
+            <Link to="/admin">
                <img className="admin" src={adminIcon} alt=" Admin Icon" />
-            </div>
+            </Link>
+
+            {userRole === 'admin' ?
+               <div className="adminIcon-div">
+                  <Link to="/admin">
+                     <img className="adminIcon" src={adminIcon} alt=" Admin Icon" />
+
+                  </Link>
+               </div>
+               :
+               null
+            }
 
             <div className="sign-out" onClick={signOut}>
                Sign Out

@@ -140,8 +140,7 @@ const Auth = () => {
                             {
                                 <form onSubmit={handleSubmit}>
                                     <input type="hidden" />
-                                    <input type="login" id="email" placeholder="email"
-                                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" onChange={handleInputChange} required />
+                                    <input type="login" id="email" placeholder="email" onChange={handleInputChange} required />
                                     <input type="password" id="password" placeholder="password" onChange={handleInputChange} required />
                                     {
                                         // ternary for displaying failed auth verification (wrong email or password)
@@ -169,10 +168,13 @@ const Auth = () => {
                                 signUpStatus === false ?
 
                                     <form onSubmit={handleSubmit}>
-                                        <input type="name" id="name" placeholder="full name" onChange={handleInputChange} required />
+                                        <input type="name" id="name" placeholder="full name" pattern="^[a-z]([-']?[a-z]+)*( [a-z]([-']?[a-z]+)*)+$"
+                                            onChange={handleInputChange} required />
                                         <input type="login" id="email" placeholder="email"
-                                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" onChange={handleInputChange} required />
-                                        <input type="password" id="password" placeholder="password" onChange={handleInputChange} required />
+                                            pattern="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@nau.edu$" onChange={handleInputChange} required />
+                                        <input type="password" id="password" placeholder="password"
+                                            pattern="^(?![a-z]*$)(?![A-Z]*$)(?!\d*$)(?!\p{P}*$)(?![^a-zA-Z\d\p{P}]*$).{6,}$" onChange={handleInputChange} required />
+                                        <p>Password must include at least two types of characters and be six characters long.</p>
                                         {
                                             // ternary for displaying failed sign up (based on failed connection to endpoint)
                                             authStatus === false ?

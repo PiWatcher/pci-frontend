@@ -22,10 +22,10 @@ const ChartLayout = () => {
     const { selectedBuilding, selectedRooms } = useContext(DataContext);
 
     let gridLayout = ([
-        { i: '0', x: 0, y: 0, w: 1, h: 1 },
-        { i: '1', x: 1, y: 0, w: 1, h: 1 },
-        { i: '2', x: 0, y: 1, w: 1, h: 1 },
-        { i: '3', x: 1, y: 1, w: 1, h: 1 }
+        { i: '0', x: 0, y: 0, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2, },
+        { i: '1', x: 1, y: 0, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2, },
+        { i: '2', x: 0, y: 1, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2, },
+        { i: '3', x: 1, y: 1, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2, }
     ]);
 
     const charts = selectedRooms.map((room, index) => {

@@ -4,9 +4,6 @@ import './Room.css';
 
 // page imports
 import React, { useState, useEffect, useContext } from 'react';
-import upArrow from '../../images/Green_Arrow_Up.svg';
-import downArrow from '../../images/Red_Arrow_Down.svg'
-import horizontalLine from '../../images/Horizontal_Line.svg';
 
 // contexts
 import { DataContext } from '../../contexts/DataContext';
@@ -25,7 +22,7 @@ const Room = (props) => {
     const [roomUsage, setRoomUsage] = useState(0);
 
     // state of trend
-    const [trendIcon, setTrendIcon] = useState(horizontalLine);
+    const [usageColor, setUsageColor] = useState('low-usage');
 
     // calculates usage from given data
     const getUsage = (count, capacity) => {
@@ -40,20 +37,22 @@ const Room = (props) => {
 
         let localUsage = getUsage(count, capacity);
 
-        if (localUsage > roomUsage) {
-            // set to green up arrow
-            setTrendIcon(upArrow);
+        if (localUsage <= 50) {
+
+            // set to green text
+            setUsageColor('low-usage');
         }
 
-        else if (localUsage < roomUsage) {
+        else if (localUsage > 50 && localUsage <= 75) {
 
             // set to red down arrow
-            setTrendIcon(downArrow);
+            setUsageColor('moderate-usage');
         }
 
-        else {
+        else if (localUsage > 75 && localUsage <= 100) {
+
             // set to horizontal line
-            setTrendIcon(horizontalLine);
+            setUsageColor('high-usage');
         }
 
         setRoomUsage(localUsage);
@@ -88,14 +87,8 @@ const Room = (props) => {
                 </div>
 
                 <div className="usage">
-                    <p>
+                    <p className={`${usageColor}`}>
                         {roomUsage}%
-                    </p>
-                </div>
-
-                <div className="trend">
-                    <p>
-                        <img className="logo" src={trendIcon} alt="Current trend of room" />
                     </p>
                 </div>
             </div>

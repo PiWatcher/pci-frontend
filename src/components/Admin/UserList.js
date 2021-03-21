@@ -1,14 +1,11 @@
 // styling
-import './Room.css';
+import './UserList.css';
 
 // page imports
-import React, { useState, useEffect, useContext } from 'react';
-import upArrow from '../../images/Green_Arrow_Up.svg';
-import downArrow from '../../images/Red_Arrow_Down.svg'
-import horizontalLine from '../../images/Horizontal_Line.svg';
+import React, { useState, useEffect } from 'react';
 
 // contexts
-import { DataContext } from '../../contexts/DataContext';
+import User from '../Admin/User';
 
 
 
@@ -16,7 +13,7 @@ const UserList = (props) => {
 
 
     // consume props
-    const { userList, roleList } = props;
+    const { users, roles } = props;
 
     const [search, setSearch] = useState('');
 
@@ -24,7 +21,7 @@ const UserList = (props) => {
 
     // pulls search text for processing
     const searchHandler = (e) => {
-        if (e.target.id === "roomSearch") {
+        if (e.target.id === "userSearch") {
             setSearch(e.target.value);
         }
     }
@@ -32,37 +29,39 @@ const UserList = (props) => {
     // filters out rooms based on search text
     const userFilter = (filter) => {
 
-        let filteredUsers = usersList.filter(function (item) {
+        let filteredUsers = users.filter(function (item) {
             return item['name'].indexOf(filter) !== -1;
         })
 
         // maps only rooms that match search query
         let filtered =
-            filteredUsers.map((item, index) =>
+            filteredUsers.map((user) =>
                 <User
-                    key={email}
-                    name={userName}
-                    email={userEmail}
-                    role={useRole}
+                    key={user.email}
+                    name={user.name}
+                    email={user.email}
+                    role={user.role}
+                    roles={roles}
                 />)
 
-        setFilteredRoomList(filtered);
+        setFilteredUserList(filtered);
     }
 
 
     // filters rooms on room list change and query change
     useEffect(() => {
 
-        roomFilter(search);
+        userFilter(search);
 
     }, [search])
 
 
     // returns parsed rooms in unordered list
     return (
-        <div>
-            <input type="text" id="roomSearch" onChange={searchHandler} placeholder="Search for a room" value={search} />
-            <div className="room-list-component">
+        <div className="user-list-component">
+            <p>Registered Users</p>
+            <input type="text" id="userSearch" onChange={searchHandler} placeholder="Search for a user" value={search} />
+            <div className="user-list">
                 <ul>
                     {filteredUserList}
                 </ul>

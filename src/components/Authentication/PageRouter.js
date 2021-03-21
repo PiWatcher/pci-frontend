@@ -15,7 +15,7 @@ import AdminSettings from '../Admin/AdminSettings';
 const PageRouter = () => {
 
    // consumes current authentication status from AuthContext
-   const { authStatus } = useContext(AuthContext);
+   const { userRole, authStatus } = useContext(AuthContext);
 
 
    // updates components with pulled rooms after building selection
@@ -40,28 +40,27 @@ const PageRouter = () => {
             <BrowserRouter >
                <Switch>
 
-                  <Route path="/auth" component={Auth}>
+                  <Route exact path="/auth" component={Auth}>
                      {authStatus === true ?
-                        <Redirect to="/dashboard" component={AdminSettings} /> :
+                        <Redirect to="/dashboard" component={Dashboard} /> :
                         null
                      }
                   </Route>
 
                   {authStatus === true ?
-                     <Route path="/dashboard" component={AdminSettings} /> :
+                     <Route exact path="/dashboard" component={Dashboard} /> :
                      <Redirect to="/auth" component={Auth} />
                   }
+
+                  {authStatus === true && userRole === 'admin' ?
+                     <Route exact path="/admin" component={AdminSettings} /> :
+                     <Redirect to="/dashboard" component={Dashboard} />
+                  }
+
 
                   <Route path="*">
                      <Redirect to="/auth" component={Auth} />
                   </Route>
-
-                  {/* {authStatus === true && userRole == 'admin' ?
-                     <Route path="/admin" component={AdminSettings} /> :
-                     null
-                  } */}
-
-                  <Route path="/admin" component={AdminSettings} />
 
                </Switch>
             </BrowserRouter>
