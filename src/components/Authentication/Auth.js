@@ -118,7 +118,7 @@ const Auth = () => {
 
     // returns the login page with input form
     return (
-        <div className="Login fadeInDown">
+        <div className="login fadeInDown">
             <div className="wrapper">
                 <img src={nauLogo} className="fadeIn first" alt="NAU Logo" />
 

@@ -13,7 +13,7 @@ const AuthContextProvider = (props) => {
     const baseURL = process.env.REACT_APP_BASE_URL;
 
     // current authentication status
-    const [authStatus, setAuthStatus] = useState(true);
+    const [authStatus, setAuthStatus] = useState(null);
 
     // current sign up status
     const [signUpStatus, setSignUpStatus] = useState(false);
