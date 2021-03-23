@@ -16,11 +16,13 @@
 }
 
 .user-name {
-   font-size: 1.25em;
+   font-size: 1.3em;
 }
 
 .user-email {
-   font-size: 1em;
+   font-size: 1.1em;
+
+   color: gray;
 }
 
 .user-role {

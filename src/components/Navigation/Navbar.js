@@ -9,18 +9,15 @@ import BuildingMap from './BuildingMap';
 import nauLogo from '../../images/nauLogoDash.svg';
 import mapIcon from '../../images/mapIcon.svg';
 import adminIcon from '../../images/adminIcon.svg';
+import { Link } from 'react-router-dom';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
-import { Link, Route, Switch } from 'react-router-dom';
-import AdminSettings from '../Admin/AdminSettings';
-
-
 
 const Navbar = () => {
 
 
-   const { userName, userRole, setAuthStatus } = useContext(AuthContext);
+   const { userRole, setAuthStatus } = useContext(AuthContext);
 
    // flag to show map or not on dashboard
    const [showMap, setShowMap] = useState(false);
@@ -33,47 +30,43 @@ const Navbar = () => {
       setAuthStatus(null);
    }
 
-
    // returns navbar component (includes logo and search bar)
    return (
       <div>
          <div className="navbar-component">
-            <div className="image-div">
-               <img className="logo" src={nauLogo} alt="NAU Logo" />
-            </div>
-
-            <div className="welcome-div">
-               <p>
-                  Welcome, {userName}
-               </p>
+            <div className="logo-div">
+               <img src={nauLogo} alt="NAU Logo" />
             </div>
 
             <div className="search-div">
                <SearchBar />
             </div>
 
-            <div className="mapIcon-div">
+            <div className="map-icon-div">
                <img className="map" onClick={onMapClick} src={mapIcon} alt="Map Icon" />
             </div>
+
 
             <Link to="/admin">
                <img className="admin" src={adminIcon} alt=" Admin Icon" />
             </Link>
 
-            {userRole === 'admin' ?
-               <div className="adminIcon-div">
-                  <Link to="/admin">
-                     <img className="adminIcon" src={adminIcon} alt=" Admin Icon" />
+            <div className="right-side-div">
+               {userRole === 'admin' ?
+                  <div className="admin-icon-div">
+                     <Link to="/admin">
+                        <img src={adminIcon} alt=" Admin Icon" />
+                     </Link>
+                  </div>
+                  :
+                  null
+               }
 
-                  </Link>
+               <div className="sign-out-div" onClick={signOut}>
+                  Sign Out
                </div>
-               :
-               null
-            }
-
-            <div className="sign-out" onClick={signOut}>
-               Sign Out
             </div>
+
          </div>
 
          <div className="map-div">

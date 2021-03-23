@@ -21,7 +21,7 @@ const Room = (props) => {
     // state of room usage
     const [roomUsage, setRoomUsage] = useState(0);
 
-    // state of trend
+    // state of usage coloring
     const [usageColor, setUsageColor] = useState('low-usage');
 
     // calculates usage from given data

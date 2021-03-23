@@ -13,7 +13,7 @@ const UserList = (props) => {
 
 
     // consume props
-    const { users, roles } = props;
+    const { users, roles, pullUsers } = props;
 
     const [search, setSearch] = useState('');
 
@@ -42,6 +42,7 @@ const UserList = (props) => {
                     email={user.email}
                     role={user.role}
                     roles={roles}
+                    pullUsers={pullUsers}
                 />)
 
         setFilteredUserList(filtered);

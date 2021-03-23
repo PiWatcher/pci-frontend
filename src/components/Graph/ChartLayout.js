@@ -5,14 +5,11 @@ import 'react-resizable/css/styles.css';
 
 // page imports
 import React, { useContext } from 'react';
-
-// contexts
-import { DataContext } from '../../contexts/DataContext';
-
-// components
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import TimeSeries from './TimeSeries';
 
+// contexts
+import { DataContext } from '../../contexts/DataContext';
 
 const ChartLayout = () => {
 
@@ -28,6 +25,7 @@ const ChartLayout = () => {
         { i: '3', x: 1, y: 1, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2, }
     ]);
 
+    // constructed charts
     const charts = selectedRooms.map((room, index) => {
         return (<div className="time-series" data-grid={gridLayout[index]} key={index.toString()}><TimeSeries building={selectedBuilding} room={room} /></div>)
     });

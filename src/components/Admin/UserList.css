@@ -1,23 +1,24 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap");
-
 .user-list-component {
-   overflow: auto;
-   height: 750px;
-   width: 500px;
-   font-family: "Open Sans", sans-serif;
    text-align: center;
    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
-   margin-top: 40px;
-   margin-bottom: 40px;
    border-radius: 8px;
+   margin: 50px auto 50px auto;
+   width: 500px;
+   padding-top: 20px;
 }
 
 .user-list-component p {
-   font-size: 2.5em;
-   margin-top: 20px;
+   font-size: 2.75em;
+   margin-bottom: 20px;
 }
 
-ul {
+.user-list {
+   margin-top: 10px;
+   overflow: auto;
+   height: 600px;
+}
+
+.user-list ul {
    list-style-type: none;
    padding-left: 0;
 }
@@ -28,4 +29,21 @@ input[type="text"] {
    display: inline-block;
    border: 1px solid #ccc;
    border-radius: 5px;
+   font-family: "Open Sans", sans-serif;
+}
+
+@media screen and (max-width: 700px) {
+   .user-list-component {
+      width: 400px;
+      margin: 25px auto 25px auto;
+   }
+
+   .user-list {
+      height: 500px;
+   }
+
+   .user-list-component p {
+      font-size: 2.5em;
+      margin-top: 10px;
+   }
 }

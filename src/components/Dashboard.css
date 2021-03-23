@@ -1,54 +1,30 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
-
 .dashboard-container {
-    text-align: center;
+   text-align: center;
 }
 
-.time-card-container {
-    width: 85vw;
-    max-width: 2000px;
-    height: 300px;
-    border-bottom: 2px solid rgba(0, 52, 102, 0.7);
-    font-family: 'Open Sans', sans-serif;
-    margin: 0 auto;
-    margin-bottom: 25px;
+.dashboard-row {
+   width: 90vw;
+   margin: 50 auto 50 auto;
+   max-width: 2000px;
+   display: flex;
 }
 
-.data-row {
-    width: 90vw;
-    margin: 0 auto;
-    margin-top: 50px;
-    margin-bottom: 50px;
-    max-width: 2000px;
-    display: flex;
-}
-
-.line-graph-container {
-    width: 75vw;
+.chart-container {
+   width: 75vw;
 }
 
 .chart-div {
-    border-radius: 10px;
-    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
+   border-radius: 10px;
+   box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
 }
 
-.room-list-container {
-    height: 1000px;
-    width: 300px;
-    box-shadow: 0 4px 12px 0 rgba(0,0,0,0.1);
-    border-radius: 8px;
-    margin-left: 15px;
-}
+@media (max-width: 768px) {
+   .chart-container {
+      display: none;
+   }
 
-@media (max-width:768px)  {
-    
-    .line-graph-container {
-        display: none;
-    }
-
-    .room-list-container {
-        width: 75vw;
-        min-width: 300px;
-    }
+   .room-list-container {
+      width: 75vw;
+      min-width: 300px;
+   }
 }

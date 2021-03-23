@@ -35,43 +35,8 @@ const DataContextProvider = (props) => {
          // successfully connected to endpoint and pulled data
          if (response.status === 200) {
 
-            let buildingData = response.data;
-
-            let localBuildingList = [];
-
-            // compiles list of buildings
-            for (let buildingIndex = 0; buildingIndex < buildingData.data.length; buildingIndex++) {
-
-               let buildingName = buildingData.data[buildingIndex];
-
-               // let buildingName = buildingData.data[buildingIndex]["name"];
-
-               // let buildingNumber = buildingData.data[buildingIndex]["number"];
-
-               // creates building object and pushes to list 
-               localBuildingList.push({
-
-                  // name of building
-                  buildingName: buildingName,
-
-                  // static building number
-                  buildingNumber: 0,
-
-                  // static coordinates
-                  buildingCoords: [35.18580, -111.65508]
-               });
-            }
-
-            // sort buildings alphabetically
-            localBuildingList = localBuildingList.sort(function (a, b) {
-               return a.buildingName.localeCompare(b.buildingName, undefined, {
-                  numeric: false,
-                  sensitivity: 'base'
-               });
-            });
-
-            // sets state to sorted list of buildings
-            setBuildingList(localBuildingList);
+            // sets state list of buildings and their information
+            setBuildingList(response.data);
          }
       }
 

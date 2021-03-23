@@ -5,16 +5,16 @@ import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import axios from 'axios';
 
-import Navbar from '../Navigation/Navbar';
+import CleanNavbar from '../Navigation/CleanNavbar';
 import UserList from '../Admin/UserList';
 
 
 
 const AdminSettings = () => {
 
-    const [pulledUsers, setPulledUsers] = useState([{ name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Duane Booher', email: 'email@nau.edu', role: 'public' }]);
+    const [pulledUsers, setPulledUsers] = useState([{ name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Duane Booher', email: 'email@nau.edu', role: 'public' }]);
 
-    const [pulledRoles, setPulledRoles] = useState(['admin', 'public']);
+    const [pulledRoles, setPulledRoles] = useState([{ role_name: 'Admin', is_admin: true, can_view_raw: true }, { role_name: 'Public', is_admin: false, can_view_raw: false }]);
 
     const { userName, userToken, baseURL } = useContext(AuthContext);
 
@@ -85,9 +85,9 @@ const AdminSettings = () => {
     // returns the entire dashboard and its child components
     return (
         <div className="admin-container">
-            <Navbar />
+            <CleanNavbar />
             <div className="admin-user-list">
-                <UserList users={pulledUsers} roles={pulledRoles} />
+                <UserList users={pulledUsers} roles={pulledRoles} pullUsers={pullUsers} />
             </div>
         </div >
     );

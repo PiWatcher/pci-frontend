@@ -4,9 +4,6 @@ import './BuildingUsage.css';
 
 // page imports
 import React, { useState, useEffect } from 'react';
-import upArrow from '../../images/Green_Arrow_Up.svg';
-import downArrow from '../../images/Red_Arrow_Down.svg'
-import horizontalLine from '../../images/Horizontal_Line.svg';
 
 
 const BuildingUsage = (props) => {
@@ -18,7 +15,7 @@ const BuildingUsage = (props) => {
    const [buildingUsage, setBuildingUsage] = useState(0);
 
    // state for trend symbol
-   const [trendIcon, setTrendIcon] = useState(horizontalLine);
+   const [usageColor, setUsageColor] = useState('');
 
 
    // calculates room percentage without decimals
@@ -36,24 +33,22 @@ const BuildingUsage = (props) => {
 
       let localUsage = Math.trunc((buildingCount / buildingCapacity) * 100);
 
-      if (localUsage > buildingUsage) {
+      if (localUsage <= 50) {
 
-         // set to green up arrow
-         setTrendIcon(upArrow);
-
+         // set to green text
+         setUsageColor('low-usage');
       }
 
-      else if (localUsage < buildingUsage) {
+      else if (localUsage > 50 && localUsage <= 75) {
 
          // set to red down arrow
-         setTrendIcon(downArrow);
-
+         setUsageColor('moderate-usage');
       }
 
-      else {
+      else if (localUsage > 75 && localUsage <= 100) {
 
          // set to horizontal line
-         setTrendIcon(horizontalLine);
+         setUsageColor('high-usage');
       }
 
       setBuildingUsage(localUsage);
@@ -68,23 +63,17 @@ const BuildingUsage = (props) => {
 
    // returns the count and percentage card
    return (
-      <div className="count-card-component">
+      <div className="building-usage-component">
 
-         <div className="bldg-container">
+         <div className="building-container">
             <p>
                {building}
             </p>
 
          </div>
 
-         <div className="count-row">
-            <div className="per-container">
-               {buildingUsage}%
-            </div>
-
-            <div className="trend-container">
-               <img className="logo" src={trendIcon} alt="Current trend of building" />
-            </div>
+         <div className="percent-container">
+            {buildingUsage}%
          </div>
       </div>
    )

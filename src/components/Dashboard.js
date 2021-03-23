@@ -1,15 +1,11 @@
 
 // styling
 import './Dashboard.css';
-import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
 
 // page imports
 import React, { useContext } from 'react';
 
-
 // contexts
-
 import { DataContext } from '../contexts/DataContext';
 
 // components
@@ -30,8 +26,8 @@ const Dashboard = () => {
 
          <Navbar />
 
-         <div className="data-row">
-            <div className="line-graph-container">
+         <div className="dashboard-row">
+            <div className="chart-container">
 
                <ChartLayout />
 

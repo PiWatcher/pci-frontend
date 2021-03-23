@@ -1,8 +1,4 @@
 
-
-// styling
-import './SearchBar.css';
-
 // page imports
 import React, { useContext } from 'react';
 import { Dropdown } from 'semantic-ui-react';

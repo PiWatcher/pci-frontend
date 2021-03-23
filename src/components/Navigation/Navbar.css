@@ -1,63 +1,61 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap");
-
 .navbar-component {
    display: flex;
    width: 100vw;
    height: 80px;
    background-color: #003466;
-   font-family: "Open Sans", sans-serif;
-   vertical-align: middle;
+   align-items: center;
 }
 
-.welcome-div {
+.logo-div {
    display: flex;
-   width: 200px;
-   padding: 5px;
-   color: white;
-   font-size: 1.4em;
-   margin-top: 20px;
+   margin-left: 10px;
 }
 
-.image-div {
-   display: flex;
-   width: 125px;
-   padding: 5px;
-}
-
-.logo {
-   width: 125px;
+.logo-div img {
+   width: 115px;
    padding: 5px;
 }
 
 .search-div {
    display: flex;
-   margin-top: 20px;
-   margin-left: 40px;
-   width: 350px;
-   height: 30px;
+   margin: 0 0 0 20px;
+   width: 400px;
 }
 
-.mapIcon-div {
+.map-icon-div {
    display: flex;
-   width: 55px;
+   width: 30px;
+   margin: 0 0 0 20px;
 }
 
-.mapIcon-div:hover {
+.map-icon-div img {
+   width: 28px;
+}
+
+.map-icon-div img:hover {
    color: grey;
+   cursor: pointer;
 }
 
-.sign-out {
+.right-side-div {
    display: flex;
-   margin-top: 28px;
-   margin-left: auto;
-   margin-right: 20px;
-   height: 40px;
+   align-items: center;
+   margin: 0 0 0 auto;
+}
+
+.admin-icon-div img {
+   width: 35px;
+}
+
+.sign-out-div {
+   margin: 0 20px 0 15px;
    color: white;
-   font-size: 1.25em;
+   font-size: 1.4em;
 }
 
-.sign-out:hover {
-   color: grey;
+.sign-out-div:hover {
+   color: gray;
+   cursor: pointer;
 }
 
 .map-div {
@@ -66,35 +64,26 @@
    margin: 0 auto;
 }
 
-.adminIcon-div {
-   display: flex;
-   margin-top: 20px;
-   margin-left: auto;
-}
-
-.adminIcon {
-   width: 35px;
-}
-
-@media screen and (max-width: 600px) {
-   .image-div {
-      width: 75px;
-   }
-
-   .logo {
+@media screen and (max-width: 750px) {
+   .logo-div img {
       width: 75px;
    }
 
    .search-div {
+      margin-left: 10px;
+   }
+
+   .map-icon-div img {
+      width: 25px;
+   }
+
+   .admin-icon-div img {
+      width: 35px;
       margin-left: 15px;
    }
 
-   .mapIcon-div {
-      width: 8em;
-   }
-
-   .sign-out {
-      margin-top: 20px;
+   .sign-out-div {
       margin-right: 10px;
+      font-size: 1.15em;
    }
 }

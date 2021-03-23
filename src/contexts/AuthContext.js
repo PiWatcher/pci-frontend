@@ -22,7 +22,7 @@ const AuthContextProvider = (props) => {
     const [userRole, setUserRole] = useState('admin');
 
     // submitted user name
-    const [userName, setUserName] = useState('Test User');
+    const [userName, setUserName] = useState('Seth');
 
     // user token returned from the backend
     const [userToken, setUserToken] = useState('');
@@ -47,9 +47,10 @@ const AuthContextProvider = (props) => {
             // successfully verified
             if (response.status === 200) {
 
-                // set user name to response
-                //setUserName(response.username);
-
+                // set user information from response
+                setUserName('');
+                setUserRole('');
+                setUserToken('');
                 setAuthStatus(true);
             }
         }
@@ -92,7 +93,7 @@ const AuthContextProvider = (props) => {
     }
 
     return (
-        <AuthContext.Provider value={{ userName, userRole, userToken, authStatus, setAuthStatus, signUpStatus, authenticateAccount, createAccount }}>
+        <AuthContext.Provider value={{ userRole, userToken, authStatus, setAuthStatus, signUpStatus, authenticateAccount, createAccount }}>
             {props.children}
         </AuthContext.Provider>
     )

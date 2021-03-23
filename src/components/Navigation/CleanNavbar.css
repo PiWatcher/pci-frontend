@@ -1,0 +1,40 @@
+.clean-navbar-component {
+   display: flex;
+   width: 100vw;
+   height: 80px;
+   background-color: #003466;
+   align-items: center;
+}
+
+.clean-logo-div {
+   display: flex;
+   margin-left: 10px;
+}
+
+.clean-logo-div img {
+   width: 115px;
+   padding: 5px;
+}
+
+.clean-sign-out-div {
+   display: flex;
+   color: white;
+   font-size: 1.4em;
+   margin: 0 20px 0 auto;
+}
+
+.clean-sign-out-div:hover {
+   color: gray;
+   cursor: pointer;
+}
+
+@media screen and (max-width: 700px) {
+   .clean-logo-div img {
+      width: 75px;
+      padding: 0px;
+   }
+
+   .clean-sign-out-div {
+      font-size: 1.2em;
+   }
+}

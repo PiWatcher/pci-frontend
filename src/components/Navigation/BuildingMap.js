@@ -41,13 +41,11 @@ const BuildingMap = () => {
 
   L.Marker.prototype.options.icon = DefaultIcon;
 
-
   // pulls selection text from dropdown and passes it back to context
   const handleMapSelection = (building) => {
     setSelectedBuilding(building);
     setSelectedRooms([]);
   }
-
 
   // returns a map container with markers of listed building coordinates
   return (
