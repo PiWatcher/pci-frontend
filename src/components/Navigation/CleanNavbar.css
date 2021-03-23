@@ -9,6 +9,7 @@
 .clean-logo-div {
    display: flex;
    margin-left: 10px;
+   margin-top: 5px;
 }
 
 .clean-logo-div img {

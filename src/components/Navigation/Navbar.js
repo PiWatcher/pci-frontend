@@ -41,10 +41,10 @@ const Navbar = () => {
             <div className="search-div">
                <SearchBar />
             </div>
-
+            {/* 
             <div className="map-icon-div">
                <img className="map" onClick={onMapClick} src={mapIcon} alt="Map Icon" />
-            </div>
+            </div> */}
 
 
             <Link to="/admin">
@@ -69,9 +69,9 @@ const Navbar = () => {
 
          </div>
 
-         <div className="map-div">
+         {/* <div className="map-div">
             {showMap ? <BuildingMap /> : null}
-         </div>
+         </div> */}
 
       </div>
    );

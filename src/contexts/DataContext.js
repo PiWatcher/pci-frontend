@@ -3,7 +3,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
-
 // context that pulls data from backend and parses
 export const DataContext = createContext();
 
@@ -36,7 +35,7 @@ const DataContextProvider = (props) => {
          if (response.status === 200) {
 
             // sets state list of buildings and their information
-            setBuildingList(response.data);
+            setBuildingList(response.data.data);
          }
       }
 

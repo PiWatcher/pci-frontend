@@ -12,7 +12,7 @@ const BuildingUsage = (props) => {
    const { building, rooms } = props;
 
    // state for building usage
-   const [buildingUsage, setBuildingUsage] = useState(0);
+   const [buildingUsage, setBuildingUsage] = useState(60);
 
    // state for trend symbol
    const [usageColor, setUsageColor] = useState('');
@@ -31,7 +31,9 @@ const BuildingUsage = (props) => {
 
       }
 
-      let localUsage = Math.trunc((buildingCount / buildingCapacity) * 100);
+      //let localUsage = Math.trunc((buildingCount / buildingCapacity) * 100);
+
+      let localUsage = 30;
 
       if (localUsage <= 50) {
 
@@ -72,7 +74,7 @@ const BuildingUsage = (props) => {
 
          </div>
 
-         <div className="percent-container">
+         <div className={`percent-container ${usageColor}`}>
             {buildingUsage}%
          </div>
       </div>

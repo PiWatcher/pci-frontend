@@ -168,7 +168,7 @@ const Auth = () => {
                                 signUpStatus === false ?
 
                                     <form onSubmit={handleSubmit}>
-                                        <input type="name" id="name" placeholder="full name" pattern="^[a-z]([-']?[a-z]+)*( [a-z]([-']?[a-z]+)*)+$"
+                                        <input type="name" id="name" placeholder="full name" pattern="^[A-Z][a-z]* [A-Z][a-z]*( [A-Z])?"
                                             onChange={handleInputChange} required />
                                         <input type="login" id="email" placeholder="email"
                                             pattern="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@nau.edu$" onChange={handleInputChange} required />

@@ -12,11 +12,11 @@ import UserList from '../Admin/UserList';
 
 const AdminSettings = () => {
 
-    const [pulledUsers, setPulledUsers] = useState([{ name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Seth Burchfield', email: 'test@nau.edu', role: 'admin' }, { name: 'Duane Booher', email: 'email@nau.edu', role: 'public' }]);
+    const [pulledUsers, setPulledUsers] = useState([]);
 
-    const [pulledRoles, setPulledRoles] = useState([{ role_name: 'Admin', is_admin: true, can_view_raw: true }, { role_name: 'Public', is_admin: false, can_view_raw: false }]);
+    const [pulledRoles, setPulledRoles] = useState([]);
 
-    const { userName, userToken, baseURL } = useContext(AuthContext);
+    const { userToken, baseURL } = useContext(AuthContext);
 
     // API pull and parse logic for rooms in selected building
     const pullUsers = async () => {
@@ -34,16 +34,19 @@ const AdminSettings = () => {
             // successfully connected to endpoint and pulled data
             if (response.status === 200) {
 
-                let userData = response.data.data;
+                let responseData = response.data;
+
+                let userList = responseData.users;
 
                 // sets state to sorted list of rooms
-                setPulledUsers(userData);
+                setPulledUsers(userList);
             }
         }
 
         // failed to sign in
         catch {
             console.log("Failed to pull users.")
+
         }
     };
 
@@ -63,10 +66,12 @@ const AdminSettings = () => {
             // successfully connected to endpoint and pulled data
             if (response.status === 200) {
 
-                let roleData = response.data.data;
+                let responseData = response.data;
+
+                let roleList = responseData.roles;
 
                 // sets state to sorted list of rooms
-                setPulledRoles(roleData);
+                setPulledRoles(roleList);
             }
         }
 
@@ -79,7 +84,7 @@ const AdminSettings = () => {
     useEffect(() => {
         pullUsers();
         pullRoles();
-    })
+    }, [])
 
 
     // returns the entire dashboard and its child components
@@ -87,7 +92,7 @@ const AdminSettings = () => {
         <div className="admin-container">
             <CleanNavbar />
             <div className="admin-user-list">
-                <UserList users={pulledUsers} roles={pulledRoles} pullUsers={pullUsers} />
+                <UserList users={pulledUsers} roles={pulledRoles} />
             </div>
         </div >
     );

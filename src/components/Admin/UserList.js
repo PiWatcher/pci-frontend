@@ -13,7 +13,7 @@ const UserList = (props) => {
 
 
     // consume props
-    const { users, roles, pullUsers } = props;
+    const { users, roles } = props;
 
     const [search, setSearch] = useState('');
 
@@ -30,7 +30,7 @@ const UserList = (props) => {
     const userFilter = (filter) => {
 
         let filteredUsers = users.filter(function (item) {
-            return item['name'].indexOf(filter) !== -1;
+            return item['full_name'].toLowerCase().indexOf(filter.toLowerCase()) !== -1;
         })
 
         // maps only rooms that match search query
@@ -38,11 +38,10 @@ const UserList = (props) => {
             filteredUsers.map((user) =>
                 <User
                     key={user.email}
-                    name={user.name}
+                    name={user.full_name}
                     email={user.email}
                     role={user.role}
                     roles={roles}
-                    pullUsers={pullUsers}
                 />)
 
         setFilteredUserList(filtered);
@@ -54,7 +53,7 @@ const UserList = (props) => {
 
         userFilter(search);
 
-    }, [search])
+    }, [users, search])
 
 
     // returns parsed rooms in unordered list

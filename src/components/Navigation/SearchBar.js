@@ -31,9 +31,9 @@ const SearchBar = () => {
          selection
          options={buildingList.map(item => {
             return {
-               key: item.buildingName,
-               text: item.buildingName,
-               value: item.buildingName
+               key: item,
+               text: item,
+               value: item
             }
          })}
          selectOnBlur={false}

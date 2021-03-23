@@ -1,36 +1,22 @@
 .building-usage-component {
-   margin-top: 5px;
    margin-bottom: 5px;
    border-bottom: 2px solid rgba(236, 236, 236, 1);
-   width: 100%;
 }
 
 .building-container {
    display: flex;
    justify-content: center;
    align-items: center;
-   font-size: 1.8em;
-   width: 100%;
+   font-size: 2.25em;
    min-height: 100%;
    height: 100px;
 }
 
-.count-row {
+.percent-container {
+   font-size: 1.75em;
    display: flex;
    justify-content: center;
-   align-items: center;
-   margin-bottom: 20px;
-   height: 100px;
-}
-
-.per-container {
-   font-size: 2.75em;
-   display: flex;
-   border-right: 2px solid rgba(236, 236, 236, 1);
-   width: 50%;
-   height: 100%;
-   justify-content: center;
-   align-items: center;
+   margin-bottom: 25px;
 }
 
 .low-usage {

@@ -86,10 +86,8 @@ const Room = (props) => {
                     </p>
                 </div>
 
-                <div className="usage">
-                    <p className={`${usageColor}`}>
-                        {roomUsage}%
-                    </p>
+                <div className={`usage ${usageColor}`}>
+                    {roomUsage} %
                 </div>
             </div>
         </li>

@@ -1,3 +1,5 @@
+//styling
+import "./SideSelection.css"
 
 // page imports
 import React, { useContext, useState, useEffect } from 'react';
@@ -22,6 +24,7 @@ const SideSelection = () => {
 
         // tries to pull and parse building data
         try {
+
             const response = await axios({
                 method: 'get',
                 url: `${baseURL}:5000/api/data/building/rooms`,
@@ -35,6 +38,9 @@ const SideSelection = () => {
 
                 // sets state to list of rooms
                 setPulledRooms(response.data.data);
+            }
+            else {
+                console.log(response);
             }
         }
 

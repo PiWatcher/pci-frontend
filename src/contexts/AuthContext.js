@@ -13,7 +13,7 @@ const AuthContextProvider = (props) => {
     const baseURL = process.env.REACT_APP_BASE_URL;
 
     // current authentication status
-    const [authStatus, setAuthStatus] = useState(null);
+    const [authStatus, setAuthStatus] = useState(true);
 
     // current sign up status
     const [signUpStatus, setSignUpStatus] = useState(false);
@@ -22,7 +22,7 @@ const AuthContextProvider = (props) => {
     const [userRole, setUserRole] = useState('admin');
 
     // submitted user name
-    const [userName, setUserName] = useState('Seth');
+    const [userName, setUserName] = useState('');
 
     // user token returned from the backend
     const [userToken, setUserToken] = useState('');
@@ -31,13 +31,13 @@ const AuthContextProvider = (props) => {
     // sends given user data to backend for authentication
     const authenticateAccount = async (email, password) => {
 
-        const signInUrl = `${baseURL}:5000/api/auth/signin`;
+        const signInURL = `${baseURL}:5000/api/auth/signin`;
 
         // tries to connect to database and verify account information
         try {
             const response = await axios({
                 method: 'post',
-                url: signInUrl,
+                url: signInURL,
                 data: {
                     email: email,
                     password: password
@@ -47,10 +47,15 @@ const AuthContextProvider = (props) => {
             // successfully verified
             if (response.status === 200) {
 
+
+                let responseData = response.data;
+
                 // set user information from response
-                setUserName('');
-                setUserRole('');
-                setUserToken('');
+                setUserName(responseData.full_name);
+                setUserRole(responseData.role);
+                setUserToken(responseData.jwt_token);
+
+                console.log(response);
                 setAuthStatus(true);
             }
         }
@@ -65,7 +70,7 @@ const AuthContextProvider = (props) => {
     // sends given user data to backend for acccount creation
     const createAccount = async (name, email, password) => {
 
-        const signUpURL = `${baseURL}:5000/api/auth/signup`;
+        const signUpURL = `${baseURL}5000/api/auth/signup`;
 
         // tries to connect to database and post new account information
         try {
@@ -73,12 +78,13 @@ const AuthContextProvider = (props) => {
                 method: 'post',
                 url: signUpURL,
                 data: {
-                    name: name,
                     email: email,
                     password: password,
-                    user_type: userRole
+                    full_name: name
                 }
             });
+
+            console.log(response);
 
             // successfully signed up
             if (response.status === 201) {
@@ -93,7 +99,7 @@ const AuthContextProvider = (props) => {
     }
 
     return (
-        <AuthContext.Provider value={{ userRole, userToken, authStatus, setAuthStatus, signUpStatus, authenticateAccount, createAccount }}>
+        <AuthContext.Provider value={{ userRole, userToken, authStatus, setAuthStatus, signUpStatus, authenticateAccount, createAccount, baseURL }}>
             {props.children}
         </AuthContext.Provider>
     )
