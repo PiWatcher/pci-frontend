@@ -2,12 +2,13 @@
 import "./User.css"
 
 // page imports
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import axios from 'axios';
 import { unstable_createMuiStrictModeTheme as createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import axios from 'axios';
+import _ from 'lodash'
 
 // contexts
 import { DataContext } from '../../contexts/DataContext';
@@ -80,6 +81,7 @@ const User = (props) => {
     // open role menu
     const handleClick = (e) => {
         setAnchorEl(e.currentTarget);
+        console.log(roles);
     };
 
     const handleClose = (e) => {
@@ -99,12 +101,6 @@ const User = (props) => {
         // close menu
         setAnchorEl(null);
     };
-
-    const menuItems = roles.map((item) => {
-        return (
-            <MenuItem key={item.role_name} onClick={handleClose}>{item.role_name}</MenuItem>
-        );
-    });
 
     return (
         <li>
@@ -131,7 +127,10 @@ const User = (props) => {
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >
-                            {menuItems}
+
+                            {/* mapping list of roles to menu selection options */}
+                            {_.map(roles, item => <MenuItem key={item.role_name} onClick={handleClose}>{item.role_name}</MenuItem>)}
+
                         </Menu>
                     </MuiThemeProvider>
                 </div>

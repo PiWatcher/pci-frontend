@@ -26,7 +26,6 @@
 .usage {
    font-size: 1.25em;
    display: flex;
-   border-right: 2px solid rgba(236, 236, 236, 1);
    width: 50%;
    height: 40px;
    justify-content: center;

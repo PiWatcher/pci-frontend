@@ -23,13 +23,13 @@ const TimeSeries = (props) => {
 
 
    // consume data from DataContext
-   const { baseURL, selectedRooms, setSelectedRooms } = useContext(DataContext);
+   const { baseURL, selectedCharts, setSelectedRooms } = useContext(DataContext);
 
    // consume data from AuthContext
    const { userRole } = useContext(AuthContext);
 
    // consume props
-   const { building, room } = props;
+   const { building, room, key } = props;
 
    // 
    const [graphList, setGraphList] = useState([]);
@@ -51,12 +51,17 @@ const TimeSeries = (props) => {
             url: `${baseURL}:5000/api/data/building/room/${currentQuery}`,
             params: {
                building_name: building,
-               room_name: room
+               room: room
             }
          });
 
          // successfully connected to endpoint and pulled data
          if (response.status === 200) {
+
+            console.log(building);
+            console.log(room);
+
+            console.log(response);
 
             setGraphList(response.data.data);
 
@@ -71,8 +76,8 @@ const TimeSeries = (props) => {
 
    // add zero to the time if single digit
    const removeChart = () => {
-      let array = [...selectedRooms];
-      let index = array.indexOf(room)
+      let array = [...selectedCharts];
+      let index = array.indexOf(key)
       if (index !== -1) {
          array.splice(index, 1);
          setSelectedRooms(array);

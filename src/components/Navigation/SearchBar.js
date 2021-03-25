@@ -11,13 +11,12 @@ import 'semantic-ui-css/semantic.min.css'
 const SearchBar = () => {
 
    // consumes data from DataContext
-   const { buildingList, selectedBuilding, setSelectedBuilding, setSelectedRooms } = useContext(DataContext);
+   const { buildingList, selectedBuilding, setSelectedBuilding } = useContext(DataContext);
 
 
    // pulls selection text from dropdown and passes it back to context
    const handleSelectChange = (e, { value }) => {
       setSelectedBuilding(value);
-      setSelectedRooms([]);
    }
 
 

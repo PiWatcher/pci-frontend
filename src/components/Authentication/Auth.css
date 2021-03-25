@@ -88,6 +88,7 @@ input[type=button], input[type=submit], input[type=reset]  {
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
+  font-family: 'Open Sans', sans-serif;
 }
 
 input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover  {
@@ -126,6 +127,7 @@ input[type=name] {
   transition: all 0.5s ease-in-out;
   -webkit-border-radius: 5px 5px 5px 5px;
   border-radius: 5px 5px 5px 5px;
+  font-family: "Open Sans", sans-serif;
 }
 
 input[type=name]:focus {
@@ -162,6 +164,7 @@ input[type=login] {
   transition: all 0.5s ease-in-out;
   -webkit-border-radius: 5px 5px 5px 5px;
   border-radius: 5px 5px 5px 5px;
+  font-family: "Open Sans", sans-serif;
 }
 
 input[type=login]:focus {
@@ -197,6 +200,7 @@ input[type=password] {
     transition: all 0.5s ease-in-out;
     -webkit-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
+    font-family: "Open Sans", sans-serif;
   }
   
   input[type=password]:focus {

@@ -15,7 +15,7 @@ const DataContextProvider = (props) => {
    const [selectedBuilding, setSelectedBuilding] = useState('');
 
    // creates state: selected room
-   const [selectedRooms, setSelectedRooms] = useState([]);
+   const [selectedCharts, setSelectedCharts] = useState([]);
 
    // creates state: list of buildings pulled from endpoint
    const [buildingList, setBuildingList] = useState([]);
@@ -52,7 +52,7 @@ const DataContextProvider = (props) => {
 
    return (
       <DataContext.Provider value={{
-         buildingList, selectedBuilding, setSelectedBuilding, selectedRooms, setSelectedRooms, baseURL
+         buildingList, selectedBuilding, setSelectedBuilding, selectedCharts, setSelectedCharts, baseURL
       }}>
          { props.children}
       </DataContext.Provider>

@@ -9,10 +9,10 @@ import React, { useState, useEffect } from 'react';
 const BuildingUsage = (props) => {
 
    // consume props
-   const { building, rooms } = props;
+   const { building, buildingInfo } = props;
 
    // state for building usage
-   const [buildingUsage, setBuildingUsage] = useState(60);
+   const [buildingUsage, setBuildingUsage] = useState(0);
 
    // state for trend symbol
    const [usageColor, setUsageColor] = useState('');
@@ -21,19 +21,7 @@ const BuildingUsage = (props) => {
    // calculates room percentage without decimals
    const getBuildingUsage = () => {
 
-      let buildingCount = 0;
-      let buildingCapacity = 0;
-
-      for (let roomIndex = 0; roomIndex < rooms.length; roomIndex++) {
-
-         buildingCount += rooms[roomIndex].count;
-         buildingCapacity += rooms[roomIndex].capacity;
-
-      }
-
-      //let localUsage = Math.trunc((buildingCount / buildingCapacity) * 100);
-
-      let localUsage = 30;
+      let localUsage = (buildingInfo.count / buildingUsage.capacity);
 
       if (localUsage <= 50) {
 
@@ -58,9 +46,7 @@ const BuildingUsage = (props) => {
 
    // updates components with pulled rooms after building selection
    useEffect(() => {
-
       getBuildingUsage();
-
    })
 
    // returns the count and percentage card

@@ -18,7 +18,7 @@ const AuthContextProvider = (props) => {
     // current sign up status
     const [signUpStatus, setSignUpStatus] = useState(false);
 
-    //  current user type
+    //  current user type 
     const [userRole, setUserRole] = useState('admin');
 
     // submitted user name
@@ -32,6 +32,10 @@ const AuthContextProvider = (props) => {
     const authenticateAccount = async (email, password) => {
 
         const signInURL = `${baseURL}:5000/api/auth/signin`;
+
+
+
+        console.log(baseURL);
 
         // tries to connect to database and verify account information
         try {
@@ -55,7 +59,8 @@ const AuthContextProvider = (props) => {
                 setUserRole(responseData.role);
                 setUserToken(responseData.jwt_token);
 
-                console.log(response);
+                // set cookie (expires 7 days)
+
                 setAuthStatus(true);
             }
         }
@@ -70,7 +75,11 @@ const AuthContextProvider = (props) => {
     // sends given user data to backend for acccount creation
     const createAccount = async (name, email, password) => {
 
-        const signUpURL = `${baseURL}5000/api/auth/signup`;
+        const signUpURL = `${baseURL}:5000/api/auth/signup`;
+
+
+
+        console.log(baseURL);
 
         // tries to connect to database and post new account information
         try {
@@ -94,9 +103,19 @@ const AuthContextProvider = (props) => {
 
         // failed to sign up
         catch {
+
             setAuthStatus(false);
         }
     }
+
+    // useEffect(() => {
+
+    //     // check for cookie
+    //     // if cookie
+    //     // set token
+    //     // authenticateAccount()
+
+    // }, [])
 
     return (
         <AuthContext.Provider value={{ userRole, userToken, authStatus, setAuthStatus, signUpStatus, authenticateAccount, createAccount, baseURL }}>

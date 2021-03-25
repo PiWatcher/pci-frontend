@@ -4,7 +4,7 @@ import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 
 // page imports
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import TimeSeries from './TimeSeries';
 
@@ -16,26 +16,39 @@ const ChartLayout = () => {
     const ResponsiveGridLayout = WidthProvider(Responsive);
 
     // consume data from DataContext
-    const { selectedBuilding, selectedRooms } = useContext(DataContext);
+    const { selectedCharts } = useContext(DataContext);
 
-    let gridLayout = ([
-        { i: '0', x: 0, y: 0, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2, },
-        { i: '1', x: 1, y: 0, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2, },
-        { i: '2', x: 0, y: 1, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2, },
-        { i: '3', x: 1, y: 1, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2, }
+    const [gridLayout, setGridLayout] = useState([
+        {
+            i: '0', isBounded: true, isDraggable: true, isResizable: true, resizeHandles: [['se']],
+            x: 0, y: 0, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2,
+        },
+        {
+            i: '1', isBounded: false, isDraggable: true, isResizable: true, resizeHandles: [['se']],
+            x: 1, y: 0, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2,
+        },
+        {
+            i: '2', isBounded: false, isDraggable: true, isResizable: true, resizeHandles: [['se']],
+            x: 0, y: 1, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2,
+        },
+        {
+            i: '3', isBounded: false, isDraggable: true, isResizable: true, resizeHandles: [['se']],
+            x: 1, y: 1, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2,
+        }
     ]);
 
     // constructed charts
-    const charts = selectedRooms.map((room, index) => {
-        return (<div className="time-series" data-grid={gridLayout[index]} key={index.toString()}><TimeSeries building={selectedBuilding} room={room} /></div>)
+    const charts = selectedCharts.map((chart) => {
+        return (<div className="time-series" data-grid={gridLayout[chart.chartID]} key={chart.chartID}><TimeSeries building={chart.building} room={chart.room} /></div>)
     });
 
 
     // sets but doesn't save
     const onLayoutChange = (layout) => {
-        console.log(layout)
-        gridLayout = layout;
-        console.log(gridLayout);
+        // console.log(gridLayout);
+        //console.log(layout);
+        //setGridLayout(layout);
+
     };
 
 
@@ -46,7 +59,6 @@ const ChartLayout = () => {
             cols={{ lg: 2, md: 2, sm: 1, xs: 1, xxs: 1 }}
             rowHeight={500}
             compactType={"vertical"}
-            resizeHandles={['se']}
             useCSSTransforms={false}
             measureBeforeMount={true}
             onLayoutChange={onLayoutChange}

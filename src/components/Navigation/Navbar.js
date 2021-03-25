@@ -5,9 +5,9 @@ import './Navbar.css';
 // page imports
 import React, { useContext, useState } from 'react';
 import SearchBar from './SearchBar';
-import BuildingMap from './BuildingMap';
+//import BuildingMap from './BuildingMap';
 import nauLogo from '../../images/nauLogoDash.svg';
-import mapIcon from '../../images/mapIcon.svg';
+//import mapIcon from '../../images/mapIcon.svg';
 import adminIcon from '../../images/adminIcon.svg';
 import { Link } from 'react-router-dom';
 
@@ -20,10 +20,10 @@ const Navbar = () => {
    const { userRole, setAuthStatus } = useContext(AuthContext);
 
    // flag to show map or not on dashboard
-   const [showMap, setShowMap] = useState(false);
+   //const [showMap, setShowMap] = useState(false);
 
    // flip flag for showing map div
-   const onMapClick = () => setShowMap(!showMap);
+   //const onMapClick = () => setShowMap(!showMap);
 
    // sign out of dashboard, clear all data and reset auth status
    const signOut = () => {

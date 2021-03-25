@@ -35,7 +35,7 @@ const Auth = () => {
         }
 
         else if (e.target.id === "email") {
-            setLocalEmail(e.target.value);
+            setLocalEmail(e.target.value.toLowerCase());
         }
 
         else if (e.target.id === "password") {

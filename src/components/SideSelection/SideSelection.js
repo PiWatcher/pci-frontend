@@ -19,6 +19,8 @@ const SideSelection = () => {
     // creates state: list of rooms pulled from endpoint
     const [pulledRooms, setPulledRooms] = useState([]);
 
+    const [buildingInfo, setBuildingInfo] = useState({});
+
     // API pull logic for rooms in selected building
     const pullRoomData = async () => {
 
@@ -38,14 +40,15 @@ const SideSelection = () => {
 
                 // sets state to list of rooms
                 setPulledRooms(response.data.data);
+
+                setBuildingInfo({ count: response.data.count_total, capacity: 1 })
             }
-            else {
-                console.log(response);
-            }
+
         }
 
         // failed to sign in
         catch {
+
             console.log("Failed to pull rooms.")
         }
     };
@@ -70,7 +73,7 @@ const SideSelection = () => {
     // returns parsed rooms in unordered list
     return (
         <div className="room-list-container">
-            <BuildingUsage building={selectedBuilding} rooms={pulledRooms} />
+            <BuildingUsage building={selectedBuilding} buildingInfo={buildingInfo} />
             <RoomList building={selectedBuilding} rooms={pulledRooms} />
         </div>
     )

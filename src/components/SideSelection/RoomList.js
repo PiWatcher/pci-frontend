@@ -26,7 +26,7 @@ const RoomList = (props) => {
    const roomFilter = (filter) => {
 
       let filteredRooms = rooms.filter(function (item) {
-         return item['id'].toLowerCase().indexOf(filter.toLowerCase()) !== -1;
+         return item['_id'].toLowerCase().indexOf(filter.toLowerCase()) !== -1;
       })
 
       // maps only rooms that match search query
@@ -34,9 +34,9 @@ const RoomList = (props) => {
          filteredRooms.map((item, index) =>
             <Room
                key={index}
-               room={item.id}
+               room={item._id}
                count={item.current_count}
-               capacity={item.capacity}
+               capacity={0}
             />)
 
       setFilteredRoomList(filtered);

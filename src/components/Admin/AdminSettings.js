@@ -6,7 +6,8 @@ import { AuthContext } from '../../contexts/AuthContext';
 import axios from 'axios';
 
 import CleanNavbar from '../Navigation/CleanNavbar';
-import UserList from '../Admin/UserList';
+import UserList from './UserList';
+import RoleCreation from './RoleCreation';
 
 
 
@@ -16,16 +17,19 @@ const AdminSettings = () => {
 
     const [pulledRoles, setPulledRoles] = useState([]);
 
+
     const { userToken, baseURL } = useContext(AuthContext);
 
-    // API pull and parse logic for rooms in selected building
+    const userEndpoint = `${baseURL}:5000/api/auth/users`;
+
+    // API pull logic for user information
     const pullUsers = async () => {
 
-        // tries to pull and parse building data
+        // tries to pull users and their information in database
         try {
             const response = await axios({
                 method: 'get',
-                url: `${baseURL}:5000/api/auth/users`,
+                url: userEndpoint,
                 params: {
                     jwt_token: userToken
                 }
@@ -38,22 +42,21 @@ const AdminSettings = () => {
 
                 let userList = responseData.users;
 
-                // sets state to sorted list of rooms
+                // sets state pulled users
                 setPulledUsers(userList);
             }
         }
 
-        // failed to sign in
+        // failed to pull users
         catch {
             console.log("Failed to pull users.")
-
         }
     };
 
-    // API pull and parse logic for rooms in selected building
+    // API pull logic for available user roles
     const pullRoles = async () => {
 
-        // tries to pull and parse building data
+        // tries to pull available roles
         try {
             const response = await axios({
                 method: 'get',
@@ -70,12 +73,15 @@ const AdminSettings = () => {
 
                 let roleList = responseData.roles;
 
-                // sets state to sorted list of rooms
+                console.log(roleList);
+
+                // sets state to list of roles
                 setPulledRoles(roleList);
+
             }
         }
 
-        // failed to sign in
+        // failed to pull roles
         catch {
             console.log("Failed to pull users.")
         }
@@ -92,7 +98,9 @@ const AdminSettings = () => {
         <div className="admin-container">
             <CleanNavbar />
             <div className="admin-user-list">
+                <RoleCreation />
                 <UserList users={pulledUsers} roles={pulledRoles} />
+
             </div>
         </div >
     );

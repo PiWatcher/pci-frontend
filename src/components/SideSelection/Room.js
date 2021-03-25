@@ -16,7 +16,7 @@ const Room = (props) => {
     const { room, count, capacity } = props;
 
     // consume data from DataContext
-    const { selectedRooms, setSelectedRooms } = useContext(DataContext);
+    const { selectedBuilding, selectedCharts, setSelectedCharts } = useContext(DataContext);
 
     // state of room usage
     const [roomUsage, setRoomUsage] = useState(0);
@@ -63,9 +63,9 @@ const Room = (props) => {
 
         const MAX_SELECTED_ROOMS = 4;
 
-        if (selectedRooms.length < MAX_SELECTED_ROOMS) {
+        if (selectedCharts.length < MAX_SELECTED_ROOMS) {
 
-            setSelectedRooms([...selectedRooms, room])
+            setSelectedCharts([...selectedCharts, { chartID: selectedCharts.length, building: selectedBuilding, room: room }])
         }
     }
 

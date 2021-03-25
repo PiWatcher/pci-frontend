@@ -20,7 +20,7 @@ const QueryButtons = (props) => {
         },
         props: {
             MuiButton: {
-                disableRipple: true,
+                disableRipple: true
             }
         },
         palette: {
