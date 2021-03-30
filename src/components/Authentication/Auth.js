@@ -5,15 +5,16 @@ import './Auth.css';
 // page imports
 import React, { useContext, useState } from 'react';
 import nauLogo from '../../images/nauLogoLogin.svg';
+import { Link } from 'react-router-dom';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
 
-
+// authentication page
 const Auth = () => {
 
     // consume data from AuthContext
-    const { authStatus, setAuthStatus, signUpStatus, authenticateAccount, createAccount } = useContext(AuthContext);
+    const { authenticateAccount, createAccount } = useContext(AuthContext);
 
     // local variable for user password during text input
     const [localUserName, setLocalUserName] = useState('');
@@ -24,8 +25,11 @@ const Auth = () => {
     // local variable for user password during text input
     const [localPassword, setLocalPassword] = useState('');
 
-    // local variable for user password during text input
+    // state for auth type management
     const [localSelectedAuth, setLocalSelectedAuth] = useState("Sign In");
+
+    // current sign up status
+    const [signUpStatus, setSignUpStatus] = useState(false);
 
 
     // places user form input into local temp variables
@@ -47,27 +51,23 @@ const Auth = () => {
     // passes temp variables to AuthContext state after submit
     const handleSubmit = (e) => {
 
+        // prevent page refresh after submit
         e.preventDefault();
 
-        // sets if user log in
+        // authenticates account 
         if (localSelectedAuth === "Sign In") {
 
             authenticateAccount(localEmail, localPassword);
-
         }
 
-        // sets if user sign up
+        // creates user in database
         else if (localSelectedAuth === "Sign Up") {
 
-            createAccount(localUserName, localEmail, localPassword);
-
-        }
-
-        else {
-            console.log("Error setting user information to context")
+            if (createAccount(localUserName, localEmail, localPassword)) {
+                setSignUpStatus(true);
+            };
         }
     }
-
 
     // sets css for sign in tab and sets local variable to sign in
     const selectSignIn = () => {
@@ -75,13 +75,11 @@ const Auth = () => {
         // sets auth choice to sign in
         setLocalSelectedAuth("Sign In");
 
-        // resets auth status to null to restore original values on tab change
-        setAuthStatus(null);
-
         // sets css for log in tab selection
         let signIn = document.getElementById("sign-in-id");
         let signUp = document.getElementById("sign-up-id");
 
+        // swaps active classes
         if (signUp.classList.contains("activeLoginType")) {
 
             signUp.classList.remove("activeLoginType");
@@ -99,13 +97,11 @@ const Auth = () => {
         // sets auth choice to sign up
         setLocalSelectedAuth("Sign Up");
 
-        // resets auth status to null to restore original values on tab change
-        setAuthStatus(null);
-
         // sets css for sign up tab selection
         let signIn = document.getElementById("sign-in-id");
         let signUp = document.getElementById("sign-up-id");
 
+        // swaps active classes
         if (signIn.classList.contains("activeLoginType")) {
 
             signIn.classList.remove("activeLoginType");
@@ -132,7 +128,6 @@ const Auth = () => {
                 </div>
 
                 {
-
                     // ternary for selecting log in or sign up forms
                     localSelectedAuth === "Sign In" ?
 
@@ -142,22 +137,14 @@ const Auth = () => {
                                     <input type="hidden" />
                                     <input type="login" id="email" placeholder="email" onChange={handleInputChange} required />
                                     <input type="password" id="password" placeholder="password" onChange={handleInputChange} required />
-                                    {
-                                        // ternary for displaying failed auth verification (wrong email or password)
-                                        authStatus === false ?
-
-                                            <div className="failure-text">
-                                                Authentication failure. Please check your credentials.
-                                            </div>
-
-                                            :
-
-                                            null
-                                    }
-
                                     <input type="submit" value="Sign In" />
                                 </form>
                             }
+                            <div className="forgot-password-div">
+                                <Link to="/authforgot">
+                                    Forgot password?
+                                </Link>
+                            </div>
                         </div>
 
                         :
@@ -174,20 +161,7 @@ const Auth = () => {
                                             pattern="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@nau.edu$" onChange={handleInputChange} required />
                                         <input type="password" id="password" placeholder="password"
                                             pattern="^(?![a-z]*$)(?![A-Z]*$)(?!\d*$)(?!\p{P}*$)(?![^a-zA-Z\d\p{P}]*$).{6,}$" onChange={handleInputChange} required />
-                                        <p>Password must include at least two types of characters and be six characters long.</p>
-                                        {
-                                            // ternary for displaying failed sign up (based on failed connection to endpoint)
-                                            authStatus === false ?
-
-                                                <div className="failure-text">
-                                                    Sign up failure. Please contact your administrator.
-                                            </div>
-
-                                                :
-
-                                                null
-                                        }
-
+                                        {/* <p>Password must include at least two types of characters and be six characters long.</p> */}
                                         <input type="submit" value="Sign Up" />
                                     </form>
 

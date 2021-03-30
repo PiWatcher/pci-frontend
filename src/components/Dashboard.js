@@ -16,9 +16,8 @@ import ChartLayout from './Graph/ChartLayout';
 
 const Dashboard = () => {
 
-   // consume data from DataContext
+   // consume context
    const { selectedBuilding } = useContext(DataContext);
-
 
    // returns the entire dashboard and its child components
    return (
@@ -33,6 +32,7 @@ const Dashboard = () => {
 
             </div>
 
+            {/* hidden until building is selected */}
             {selectedBuilding !== '' ?
                <SideSelection />
                : null

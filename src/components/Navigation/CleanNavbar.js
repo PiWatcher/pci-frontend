@@ -5,23 +5,31 @@ import './CleanNavbar.css';
 // page imports
 import React, { useContext } from 'react';
 import nauLogo from '../../images/nauLogoDash.svg';
+import { Link } from 'react-router-dom';
+import Cookies from 'universal-cookie';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
-import { Link } from 'react-router-dom';
-
 
 
 const CleanNavbar = () => {
 
+   // consume context
    const { setAuthStatus } = useContext(AuthContext);
 
-   // sign out of dashboard, clear all data and reset auth status
+   const cookies = new Cookies();
+
+   // sign out of dashboard reset auth status
    const signOut = () => {
-      setAuthStatus(null);
+
+      // remove cookie
+      cookies.remove('piWatcher Auth');
+
+      // swap auth flag
+      setAuthStatus(false);
    }
 
-   // returns navbar component (includes logo and search bar)
+   // returns navbar component (includes logo and and sign out)
    return (
       <div className="clean-navbar-component">
          <div className="clean-logo-div">

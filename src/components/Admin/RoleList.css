@@ -1,24 +1,25 @@
-.user-list-component {
+.role-list-component {
    text-align: center;
    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
    border-radius: 8px;
+   margin: 50px auto 50px auto;
    width: 500px;
    padding-top: 20px;
    font-family: "Open Sans", sans-serif;
 }
 
-.user-list-component p {
+.role-list-component p {
    font-size: 2.75em;
    margin-bottom: 20px;
 }
 
-.user-list {
+.role-list {
    margin-top: 10px;
    overflow: auto;
    height: 600px;
 }
 
-.user-list ul {
+.role-list ul {
    list-style-type: none;
    padding-left: 0;
 }
@@ -34,16 +35,16 @@ input[type="text"] {
 }
 
 @media screen and (max-width: 700px) {
-   .user-list-component {
+   .role-list-component {
       width: 375px;
       margin: 25px auto 25px auto;
    }
 
-   .user-list {
+   .role-list {
       height: 400px;
    }
 
-   .user-list-component p {
+   .role-list-component p {
       font-size: 2.5em;
       margin-top: 10px;
    }

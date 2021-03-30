@@ -1,25 +1,29 @@
 
 // page imports
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 // context that manages user login and authentication
-
 export const AuthContext = createContext();
 
 const AuthContextProvider = (props) => {
 
     // production base url
-    const baseURL = process.env.REACT_APP_BASE_URL;
+    // const baseURL = process.env.REACT_APP_BASE_URL;
+    const baseURL = "http://localhost"
 
     // current authentication status
     const [authStatus, setAuthStatus] = useState(true);
 
-    // current sign up status
-    const [signUpStatus, setSignUpStatus] = useState(false);
+    //  current user type 
+    const [userRoleName, setUserRoleName] = useState('admin');
 
     //  current user type 
-    const [userRole, setUserRole] = useState('admin');
+    const [userAdminPermissions, setUserAdminPermissions] = useState(true);
+
+    //  current user type 
+    const [userViewRawData, setUserViewRawData] = useState('');
 
     // submitted user name
     const [userName, setUserName] = useState('');
@@ -27,24 +31,24 @@ const AuthContextProvider = (props) => {
     // user token returned from the backend
     const [userToken, setUserToken] = useState('');
 
+    // cookie functionality
+    const cookies = new Cookies();
+
 
     // sends given user data to backend for authentication
     const authenticateAccount = async (email, password) => {
 
-        const signInURL = `${baseURL}:5000/api/auth/signin`;
-
-
-
-        console.log(baseURL);
+        const signInEndpoint = `${baseURL}:5000/api/auth/signin`;
 
         // tries to connect to database and verify account information
         try {
             const response = await axios({
                 method: 'post',
-                url: signInURL,
+                url: signInEndpoint,
                 data: {
                     email: email,
-                    password: password
+                    password: password,
+                    user_token: userToken
                 }
             });
 
@@ -56,36 +60,80 @@ const AuthContextProvider = (props) => {
 
                 // set user information from response
                 setUserName(responseData.full_name);
-                setUserRole(responseData.role);
+                setUserRoleName(responseData.role);
+                setUserAdminPermissions(responseData.isAdmin);
+                setUserViewRawData(responseData.canVewRaw);
                 setUserToken(responseData.jwt_token);
 
-                // set cookie (expires 7 days)
+
+                // set cookie with expiration date (7 days)
+                cookies.set('piWatcher Auth', userToken, { path: '/', expires: new Date(Date.now() + 604800) });
 
                 setAuthStatus(true);
             }
         }
 
         // failed to sign in
-        catch {
-            setAuthStatus(false);
+        catch (error) {
+            alert(error.response.data['description']);
+
+            console.error('Error', error.response);
+        }
+    };
+
+
+    // sends given user data to backend for authentication
+    const authenticateCookie = async () => {
+
+        const signInEndpoint = `${baseURL}:5000/api/auth/signin`;
+
+        // tries to connect to database and verify account information
+        try {
+            const response = await axios({
+                method: 'post',
+                url: signInEndpoint,
+                data: {
+                    email: null,
+                    password: null,
+                    user_token: userToken
+                }
+            });
+
+            // successfully verified
+            if (response.status === 200) {
+
+
+                let responseData = response.data;
+
+                // set user information from response
+
+                setUserName(responseData.full_name);
+                setUserRoleName(responseData.role);
+                setUserAdminPermissions(responseData.isAdmin);
+                setUserViewRawData(responseData.canVewRaw);
+
+                setAuthStatus(true);
+            }
+        }
+
+        // failed to sign in
+        catch (error) {
+            alert(error.response.data['description']);
+            console.error('Error', error.response);
         }
     }
 
 
-    // sends given user data to backend for acccount creation
+    // sends given user data to backend for account creation
     const createAccount = async (name, email, password) => {
 
-        const signUpURL = `${baseURL}:5000/api/auth/signup`;
-
-
-
-        console.log(baseURL);
+        const signUpEndpoint = `${baseURL}:5000/api/auth/signup`;
 
         // tries to connect to database and post new account information
         try {
             const response = await axios({
                 method: 'post',
-                url: signUpURL,
+                url: signUpEndpoint,
                 data: {
                     email: email,
                     password: password,
@@ -93,32 +141,36 @@ const AuthContextProvider = (props) => {
                 }
             });
 
-            console.log(response);
-
             // successfully signed up
             if (response.status === 201) {
-                setSignUpStatus(true);
+                return true;
             }
         }
 
         // failed to sign up
-        catch {
+        catch (error) {
 
-            setAuthStatus(false);
+            alert(error.response.data['description'])
+            console.log(error.response.data['description'])
         }
     }
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     // check for cookie
-    //     // if cookie
-    //     // set token
-    //     // authenticateAccount()
+        // check for cookie
+        if (cookies.get('piWatcher Auth')) {
 
-    // }, [])
+            // if cookie, set token
+            setUserToken(cookies.get('piWatcher Auth'));
+
+            authenticateCookie();
+        }
+
+    }, [])
+
 
     return (
-        <AuthContext.Provider value={{ userRole, userToken, authStatus, setAuthStatus, signUpStatus, authenticateAccount, createAccount, baseURL }}>
+        <AuthContext.Provider value={{ userName, userRoleName, userToken, userAdminPermissions, userViewRawData, authStatus, setAuthStatus, authenticateAccount, createAccount, baseURL }}>
             {props.children}
         </AuthContext.Provider>
     )

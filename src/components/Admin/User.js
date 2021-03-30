@@ -1,3 +1,4 @@
+
 // styling
 import "./User.css"
 
@@ -9,19 +10,21 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { unstable_createMuiStrictModeTheme as createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import axios from 'axios';
 import _ from 'lodash'
+import { IconButton } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 
 // contexts
 import { DataContext } from '../../contexts/DataContext';
 import { AuthContext } from '../../contexts/AuthContext';
 
+// component for handling each user
 const User = (props) => {
 
     // consume props from parent component
     const { name, email, role, roles } = props;
 
-    // consumes data from DataContext
+    // consumes contexts
     const { baseURL } = useContext(DataContext);
-
     const { userToken } = useContext(AuthContext);
 
     // user role in state
@@ -30,7 +33,9 @@ const User = (props) => {
     // Material UI menu state
     const [anchorEl, setAnchorEl] = useState(null);
 
-    // custom material theme for role menu
+    const [alertStatus, setAlertStatus] = useState(false);
+
+    // custom material theme
     const roleButtonTheme = createMuiTheme({
         typography: {
             fontFamily: 'Open Sans',
@@ -46,16 +51,16 @@ const User = (props) => {
         }
     });
 
-    // API pull and parse logic for rooms in selected building
+    // API logic for updating user role
     const updateRole = async (role) => {
+
+        const roleUpdateEndpoint = `${baseURL}:5000/api/auth/users/update`
 
         // tries to update user information
         try {
-
-            console.log(email);
             const response = await axios({
                 method: 'post',
-                url: `${baseURL}:5000/api/auth/users/update`,
+                url: roleUpdateEndpoint,
                 params: {
                     jwt_token: userToken
                 },
@@ -67,28 +72,28 @@ const User = (props) => {
 
             // successfully connected to endpoint and updated user
             if (response.status === 200) {
-                console.log(response);
-                console.log("Successfully updated user role.")
+                alert(`${name} was updated to the role of ${role}.`)
             }
         }
 
         // caught failure
-        catch {
-            console.log("Failed to update user role.")
+        catch (error) {
+            alert(error.response.data['description'])
+            console.log(error.response.data['description'])
         }
     };
 
     // open role menu
     const handleClick = (e) => {
         setAnchorEl(e.currentTarget);
-        console.log(roles);
     };
 
+    // close role menu
     const handleClose = (e) => {
 
         let newRole = e.currentTarget.textContent;
 
-        // checks for that role has been selected
+        // checks if role has been selected
         if (newRole !== '') {
 
             // set role for user
@@ -102,10 +107,27 @@ const User = (props) => {
         setAnchorEl(null);
     };
 
+    // open role menu
+    const handleUserDelete = (e) => {
+        alert(`${name} has been deleted as a user.`);
+
+        //check with alert
+
+        //if yes, delete with delete function
+        // repull users
+
+        //if no, 
+    };
+
+    // returns user list item component
     return (
         <li>
             <div className="user-list-option">
                 <div className="user-info">
+
+
+
+
                     <div className="user-name">
                         {name}
                     </div>
@@ -114,8 +136,11 @@ const User = (props) => {
                     </div>
                 </div>
 
-                <div className="user-role">
-                    <MuiThemeProvider theme={roleButtonTheme}>
+                <MuiThemeProvider theme={roleButtonTheme}>
+
+                    <div className="user-role">
+
+
                         <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
                             {userRole}
                         </Button>
@@ -132,8 +157,18 @@ const User = (props) => {
                             {_.map(roles, item => <MenuItem key={item.role_name} onClick={handleClose}>{item.role_name}</MenuItem>)}
 
                         </Menu>
-                    </MuiThemeProvider>
-                </div>
+
+
+                    </div>
+
+                    <div className="user-delete">
+                        <IconButton className="delete-button" aria-label="delete" onClick={handleUserDelete} >
+                            <CloseIcon color="secondary" />
+                        </IconButton>
+                    </div>
+
+                </MuiThemeProvider>
+
             </div>
         </li>
     );

@@ -3,13 +3,14 @@
 import './Navbar.css';
 
 // page imports
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import SearchBar from './SearchBar';
 //import BuildingMap from './BuildingMap';
 import nauLogo from '../../images/nauLogoDash.svg';
 //import mapIcon from '../../images/mapIcon.svg';
 import adminIcon from '../../images/adminIcon.svg';
 import { Link } from 'react-router-dom';
+import Cookies from 'universal-cookie';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
@@ -17,7 +18,10 @@ import { AuthContext } from '../../contexts/AuthContext';
 const Navbar = () => {
 
 
-   const { userRole, setAuthStatus } = useContext(AuthContext);
+   // consume context
+   const { userAdminPermissions, setAuthStatus } = useContext(AuthContext);
+
+   const cookies = new Cookies();
 
    // flag to show map or not on dashboard
    //const [showMap, setShowMap] = useState(false);
@@ -27,10 +31,15 @@ const Navbar = () => {
 
    // sign out of dashboard, clear all data and reset auth status
    const signOut = () => {
-      setAuthStatus(null);
+
+      // remove cookie
+      cookies.remove('piWatcher Auth');
+
+      // swap auth flag
+      setAuthStatus(false);
    }
 
-   // returns navbar component (includes logo and search bar)
+   // returns navbar component (includes logo, search bar, admin settings, and sign out)
    return (
       <div>
          <div className="navbar-component">
@@ -46,13 +55,8 @@ const Navbar = () => {
                <img className="map" onClick={onMapClick} src={mapIcon} alt="Map Icon" />
             </div> */}
 
-
-            <Link to="/admin">
-               <img className="admin" src={adminIcon} alt=" Admin Icon" />
-            </Link>
-
             <div className="right-side-div">
-               {userRole === 'admin' ?
+               {userAdminPermissions === true ?
                   <div className="admin-icon-div">
                      <Link to="/admin">
                         <img src={adminIcon} alt=" Admin Icon" />

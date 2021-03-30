@@ -5,7 +5,6 @@ import './BuildingUsage.css';
 // page imports
 import React, { useState, useEffect } from 'react';
 
-
 const BuildingUsage = (props) => {
 
    // consume props
@@ -14,13 +13,13 @@ const BuildingUsage = (props) => {
    // state for building usage
    const [buildingUsage, setBuildingUsage] = useState(0);
 
-   // state for trend symbol
+   // state of usage color
    const [usageColor, setUsageColor] = useState('');
 
-
-   // calculates room percentage without decimals
+   // calculates room usage percentage without decimals
    const getBuildingUsage = () => {
 
+      // calculate usage
       let localUsage = (buildingInfo.count / buildingUsage.capacity);
 
       if (localUsage <= 50) {
@@ -31,25 +30,26 @@ const BuildingUsage = (props) => {
 
       else if (localUsage > 50 && localUsage <= 75) {
 
-         // set to red down arrow
+         // set to yellow text
          setUsageColor('moderate-usage');
       }
 
       else if (localUsage > 75 && localUsage <= 100) {
 
-         // set to horizontal line
+         // set to red text
          setUsageColor('high-usage');
       }
 
+      // set the usage
       setBuildingUsage(localUsage);
    }
 
-   // updates components with pulled rooms after building selection
+   // calculates usage on component load
    useEffect(() => {
       getBuildingUsage();
-   })
+   }, [])
 
-   // returns the count and percentage card
+   // returns the count and percentage component
    return (
       <div className="building-usage-component">
 

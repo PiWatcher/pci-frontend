@@ -1,22 +1,21 @@
+
 // styling
 import './UserList.css';
 
 // page imports
 import React, { useState, useEffect } from 'react';
-
-// contexts
 import User from '../Admin/User';
 
-
-
+// list for users
 const UserList = (props) => {
-
 
     // consume props
     const { users, roles } = props;
 
+    // state for user search
     const [search, setSearch] = useState('');
 
+    // state for list of users
     const [filteredUserList, setFilteredUserList] = useState([]);
 
     // pulls search text for processing
@@ -26,14 +25,15 @@ const UserList = (props) => {
         }
     }
 
-    // filters out rooms based on search text
+    // filters out users based on search text
     const userFilter = (filter) => {
 
+        // filters by name
         let filteredUsers = users.filter(function (item) {
             return item['full_name'].toLowerCase().indexOf(filter.toLowerCase()) !== -1;
         })
 
-        // maps only rooms that match search query
+        // maps only users that match search query
         let filtered =
             filteredUsers.map((user) =>
                 <User
@@ -44,19 +44,20 @@ const UserList = (props) => {
                     roles={roles}
                 />)
 
+        // sets list state
         setFilteredUserList(filtered);
     }
 
 
-    // filters rooms on room list change and query change
+    // refilters rooms on user list change, search change, or role list updates
     useEffect(() => {
 
         userFilter(search);
 
-    }, [users, search])
+    }, [users, search, roles])
 
 
-    // returns parsed rooms in unordered list
+    // returns parsed users in unordered list
     return (
         <div className="user-list-component">
             <p>Registered Users</p>

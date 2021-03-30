@@ -11,6 +11,7 @@ import TimeSeries from './TimeSeries';
 // contexts
 import { DataContext } from '../../contexts/DataContext';
 
+// component for the draggable chart grid
 const ChartLayout = () => {
 
     const ResponsiveGridLayout = WidthProvider(Responsive);
@@ -18,6 +19,7 @@ const ChartLayout = () => {
     // consume data from DataContext
     const { selectedCharts } = useContext(DataContext);
 
+    // initial layout for grid
     const [gridLayout, setGridLayout] = useState([
         {
             i: '0', isBounded: true, isDraggable: true, isResizable: true, resizeHandles: [['se']],
@@ -43,16 +45,15 @@ const ChartLayout = () => {
     });
 
 
-    // sets but doesn't save
+    // updates grid state on chart movement/resize
     const onLayoutChange = (layout) => {
         // console.log(gridLayout);
         //console.log(layout);
         //setGridLayout(layout);
-
     };
 
 
-    // returns the entire dashboard and its child components
+    // returns the grid and its charts
     return (
         <ResponsiveGridLayout className="layout"
             breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}

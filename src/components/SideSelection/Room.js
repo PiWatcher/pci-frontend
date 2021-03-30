@@ -7,7 +7,7 @@ import React, { useState, useEffect, useContext } from 'react';
 
 // contexts
 import { DataContext } from '../../contexts/DataContext';
-
+import { AuthContext } from '../../contexts/AuthContext';
 
 
 const Room = (props) => {
@@ -15,13 +15,14 @@ const Room = (props) => {
     // consume props
     const { room, count, capacity } = props;
 
-    // consume data from DataContext
+    // consume context
+    const { userAdminPermissions } = useContext(AuthContext);
     const { selectedBuilding, selectedCharts, setSelectedCharts } = useContext(DataContext);
 
     // state of room usage
     const [roomUsage, setRoomUsage] = useState(0);
 
-    // state of usage coloring
+    // state of usage color
     const [usageColor, setUsageColor] = useState('low-usage');
 
     // calculates usage from given data
@@ -35,7 +36,9 @@ const Room = (props) => {
     // constructs room data for packaging
     const createRoom = () => {
 
+        // calculates usage
         let localUsage = getUsage(count, capacity);
+
 
         if (localUsage <= 50) {
 
@@ -45,23 +48,32 @@ const Room = (props) => {
 
         else if (localUsage > 50 && localUsage <= 75) {
 
-            // set to red down arrow
+            // set to yellow text
             setUsageColor('moderate-usage');
         }
 
         else if (localUsage > 75 && localUsage <= 100) {
 
-            // set to horizontal line
+            // set to red text
             setUsageColor('high-usage');
         }
 
+        // sets usage
         setRoomUsage(localUsage);
     }
 
-    // constructs room data for packaging
+    // manages list of selected rooms
     const selectRoom = () => {
 
-        const MAX_SELECTED_ROOMS = 4;
+        let MAX_SELECTED_ROOMS = 0;
+
+        if (userAdminPermissions === true) {
+            MAX_SELECTED_ROOMS = 4;
+        }
+
+        else {
+            MAX_SELECTED_ROOMS = 1;
+        }
 
         if (selectedCharts.length < MAX_SELECTED_ROOMS) {
 
@@ -69,7 +81,7 @@ const Room = (props) => {
         }
     }
 
-    // updates on data change (new room to create)
+    // updates on data change (new room selected)
     useEffect(() => {
 
         createRoom();
@@ -77,6 +89,7 @@ const Room = (props) => {
     }, [count])
 
 
+    // returns room component
     return (
         <li key={room} onClick={() => selectRoom(room)}>
             <div className="list-option">

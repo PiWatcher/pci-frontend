@@ -18,24 +18,25 @@ import { CSVLink } from "react-csv";
 import { DataContext } from '../../contexts/DataContext';
 import { AuthContext } from '../../contexts/AuthContext';
 
-
+// chart component
 const TimeSeries = (props) => {
-
 
    // consume data from DataContext
    const { baseURL, selectedCharts, setSelectedRooms } = useContext(DataContext);
 
-   // consume data from AuthContext
-   const { userRole } = useContext(AuthContext);
+   // consume context
+   const { userAdminPermissions } = useContext(AuthContext);
 
    // consume props
    const { building, room, key } = props;
 
-   // 
+   // state for chart data
    const [graphList, setGraphList] = useState([]);
 
+   // state for current query of query buttons
    const [currentQuery, setCurrentQuery] = useState('live');
 
+   // settings for auto resize of chart
    const { width, height, ref } = useResizeDetector({
       refreshMode: 'debounce',
       refreshRate: 10
@@ -44,11 +45,13 @@ const TimeSeries = (props) => {
    // // API pull and parse logic for counts and timestamps
    const pullGraphData = async () => {
 
-      // tries to pull and parse selected room data
+      const graphDataEndpoint = `${baseURL}:5000/api/data/building/room/live`
+
+      // tries to pull chart data
       try {
          const response = await axios({
             method: 'get',
-            url: `${baseURL}:5000/api/data/building/room/${currentQuery}`,
+            url: graphDataEndpoint,
             params: {
                building_name: building,
                room: room
@@ -58,23 +61,22 @@ const TimeSeries = (props) => {
          // successfully connected to endpoint and pulled data
          if (response.status === 200) {
 
-            console.log(building);
-            console.log(room);
+            // set state for chart data
+            setGraphList(response.data.data);
 
             console.log(response);
-
-            setGraphList(response.data.data);
 
          }
       }
 
-      // failed to sign in
-      catch {
-         console.log("Failed to pull counts.")
+      // failed to pull chart data
+      catch (error) {
+         //alert(error.response.data['description']);
+         console.error('Error', error.response);
       }
    };
 
-   // add zero to the time if single digit
+   // remove chart from grid
    const removeChart = () => {
       let array = [...selectedCharts];
       let index = array.indexOf(key)
@@ -84,6 +86,7 @@ const TimeSeries = (props) => {
       }
    }
 
+   // set data for display
    const data = [{
       type: "scatter",
       mode: "lines",
@@ -92,6 +95,7 @@ const TimeSeries = (props) => {
       line: { color: '#003466' }
    }];
 
+   // set chart layout settings
    const layout = {
       title: `${building} ${room}`,
       xaxis: { fixedrange: true },
@@ -104,6 +108,7 @@ const TimeSeries = (props) => {
       paper_bgcolor: "rgba(0,0,0,0)",
    };
 
+   // on room change or query change, resets pull timer
    useEffect(() => {
 
       pullGraphData();
@@ -118,7 +123,7 @@ const TimeSeries = (props) => {
 
    }, [room, currentQuery]);
 
-   // returns the graph with the passed down state
+   // returns the chart with the passed down state and data
    return (
       useMemo(() =>
 
@@ -128,15 +133,15 @@ const TimeSeries = (props) => {
                <CloseIcon color="secondary" />
             </IconButton>
 
-            {userRole === 'admin' ?
+            {userAdminPermissions === true ?
                <IconButton className="download-button" aria-label="download" onClick={() => removeChart()}>
-                  <CSVLink
+                  {/* <CSVLink
                      data={_.map(graphList, data => data.count)}
                      header={_.map(graphList, data => data.timestamp)}
                      filename={`${building}_${room}_${currentQuery}.csv`}
                   >
                      <GetAppIcon color="primary" />
-                  </CSVLink>
+                  </CSVLink> */}
                </IconButton>
                :
                null
