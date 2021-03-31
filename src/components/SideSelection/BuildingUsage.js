@@ -59,11 +59,7 @@ const BuildingUsage = (props) => {
             </p>
 
          </div>
-
-         <div className={`percent-container ${usageColor}`}>
-            {buildingUsage}%
-         </div>
-      </div>
+      </div >
    )
 }
 

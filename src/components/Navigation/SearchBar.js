@@ -38,8 +38,18 @@ const SearchBar = () => {
          // successfully connected to endpoint and pulled data
          if (response.status === 200) {
 
+            let responseData = response.data.data;
+
+            // sort buildings alphabetically
+            let localBuildingList = responseData.sort(function (a, b) {
+               return a.localeCompare(b, undefined, {
+                  numeric: false,
+                  sensitivity: 'base'
+               });
+            });
+
             // sets state list of buildings and their information
-            setBuildingList(response.data.data);
+            setBuildingList(localBuildingList);
          }
       }
 

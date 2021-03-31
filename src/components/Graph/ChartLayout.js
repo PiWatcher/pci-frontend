@@ -22,26 +22,26 @@ const ChartLayout = () => {
     // initial layout for grid
     const [gridLayout, setGridLayout] = useState([
         {
-            i: '0', isBounded: true, isDraggable: true, isResizable: true, resizeHandles: [['se']],
+            i: '0', isBounded: true, isDraggable: true, isResizable: true, resizeHandles: [["se"]],
             x: 0, y: 0, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2,
         },
         {
-            i: '1', isBounded: false, isDraggable: true, isResizable: true, resizeHandles: [['se']],
+            i: '1', isBounded: false, isDraggable: true, isResizable: true, resizeHandles: [["se"]],
             x: 1, y: 0, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2,
         },
         {
-            i: '2', isBounded: false, isDraggable: true, isResizable: true, resizeHandles: [['se']],
+            i: '2', isBounded: false, isDraggable: true, isResizable: true, resizeHandles: [["se"]],
             x: 0, y: 1, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2,
         },
         {
-            i: '3', isBounded: false, isDraggable: true, isResizable: true, resizeHandles: [['se']],
+            i: '3', isBounded: false, isDraggable: true, isResizable: true, resizeHandles: [["se"]],
             x: 1, y: 1, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2,
         }
     ]);
 
     // constructed charts
     const charts = selectedCharts.map((chart) => {
-        return (<div className="time-series" data-grid={gridLayout[chart.chartID]} key={chart.chartID}><TimeSeries building={chart.building} room={chart.room} /></div>)
+        return (<div className="time-series" data-grid={gridLayout[chart.chartID]} key={chart.chartID}><TimeSeries chartID={chart.chartID} building={chart.building} room={chart.room} /></div>)
     });
 
 

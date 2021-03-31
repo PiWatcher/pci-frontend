@@ -44,32 +44,32 @@ const QueryButtons = (props) => {
 
             <div className="set-buttons">
                 <MuiThemeProvider theme={queryButtonTheme}>
-                    <Button variant={currentQuery === 'hour' ? "contained" : "text"} color="secondary"
+                    <Button variant={currentQuery === 'live' ? "contained" : "text"} color="primary"
                         onClick={() => setCurrentQuery('live')}>
                         Hour
                 </Button>
 
-                    <Button variant={currentQuery === 'day' ? "contained" : "text"} color="primary"
+                    <Button variant={currentQuery === 'daily' ? "contained" : "text"} color="primary"
                         onClick={() => setCurrentQuery('daily')}>
                         Day
                 </Button>
 
-                    <Button variant={currentQuery === 'week' ? "contained" : "text"} color="primary"
+                    <Button variant={currentQuery === 'weekly' ? "contained" : "text"} color="primary"
                         onClick={() => setCurrentQuery('weekly')}>
                         Week
                 </Button>
 
-                    <Button variant={currentQuery === 'month' ? "contained" : "text"} color="primary"
+                    <Button variant={currentQuery === 'monthly' ? "contained" : "text"} color="primary"
                         onClick={() => setCurrentQuery('monthly')}>
                         Month
                 </Button>
 
-                    <Button variant={currentQuery === 'quarter' ? "contained" : "text"} color="primary"
+                    <Button variant={currentQuery === 'quarterly' ? "contained" : "text"} color="primary"
                         onClick={() => setCurrentQuery('quarterly')}>
                         Quarter
                 </Button>
 
-                    <Button variant={currentQuery === 'year' ? "contained" : "text"} color="primary"
+                    <Button variant={currentQuery === 'yearly' ? "contained" : "text"} color="primary"
                         onClick={() => setCurrentQuery('yearly')}>
                         Year
                 </Button>
@@ -78,13 +78,13 @@ const QueryButtons = (props) => {
             :
             <div className="set-buttons">
                 <MuiThemeProvider theme={queryButtonTheme}>
-                    <Button variant={currentQuery === 'hour' ? "contained" : "text"} color="secondary"
-                        onClick={() => setCurrentQuery('hour')}>
+                    <Button variant={currentQuery === 'live' ? "contained" : "text"} color="primary"
+                        onClick={() => setCurrentQuery('live')}>
                         Hour
                     </Button>
 
-                    <Button variant={currentQuery === 'day' ? "contained" : "text"} color="primary"
-                        onClick={() => setCurrentQuery('day')}>
+                    <Button variant={currentQuery === 'daily' ? "contained" : "text"} color="primary"
+                        onClick={() => setCurrentQuery('daily')}>
                         Day
                     </Button>
                 </MuiThemeProvider>

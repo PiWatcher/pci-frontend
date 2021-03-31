@@ -40,16 +40,10 @@ const Room = (props) => {
         let localUsage = getUsage(count, capacity);
 
 
-        if (localUsage <= 50) {
+        if (localUsage <= 75) {
 
             // set to green text
             setUsageColor('low-usage');
-        }
-
-        else if (localUsage > 50 && localUsage <= 75) {
-
-            // set to yellow text
-            setUsageColor('moderate-usage');
         }
 
         else if (localUsage > 75 && localUsage <= 100) {

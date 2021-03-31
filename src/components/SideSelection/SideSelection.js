@@ -41,8 +41,18 @@ const SideSelection = () => {
             // successfully connected to endpoint and pulled rooms in building
             if (response.status === 200) {
 
+                let responseData = response.data.data;
+
+                // sorts rooms in order
+                let localRoomList = responseData.sort(function (a, b) {
+                    return a._id.localeCompare(b._id, undefined, {
+                        numeric: true,
+                        sensitivity: 'base'
+                    });
+                });
+
                 // sets state to list of rooms
-                setPulledRooms(response.data.data);
+                setPulledRooms(localRoomList);
 
                 console.log(response);
 
