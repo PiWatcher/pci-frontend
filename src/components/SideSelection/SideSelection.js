@@ -1,5 +1,5 @@
-// styling
-import './RoomList.css';
+//styling
+import "./SideSelection.css"
 
 // page imports
 import React, { useContext, useState, useEffect } from 'react';
@@ -13,78 +13,62 @@ import { DataContext } from '../../contexts/DataContext';
 
 const SideSelection = () => {
 
-    // consumes data from DataContext
+    // consumes context
     const { selectedBuilding, baseURL } = useContext(DataContext);
 
-    // creates state: list of rooms pulled from endpoint
+    // creates state for pulled rooms
     const [pulledRooms, setPulledRooms] = useState([]);
 
-    // API pull and parse logic for rooms in selected building
+    // creates state for building information
+    const [buildingInfo, setBuildingInfo] = useState({});
+
+    // API pull logic for rooms in selected building
     const pullRoomData = async () => {
 
-        let localRoomList = [];
+        const roomListEndpoint = `${baseURL}:5000/api/data/building/rooms`;
 
-        // tries to pull and parse building data
+        // tries to pull room data
         try {
+
             const response = await axios({
                 method: 'get',
-                url: `${baseURL}:5000/api/data/building`,
+                url: roomListEndpoint,
                 params: {
-                    building: selectedBuilding
+                    building_name: selectedBuilding
                 }
             });
 
-            // successfully connected to endpoint and pulled data
+            // successfully connected to endpoint and pulled rooms in building
             if (response.status === 200) {
 
-                let roomData = response.data.data;
-
-                // compiles list of rooms (from end of data source for latest count)
-                for (let roomIndex = roomData.length - 1; roomIndex >= 0; roomIndex--) {
-
-                    // console.log(localRoomList);
-
-                    let roomName = roomData[roomIndex]["endpoint"];
-
-                    if (roomName != null) {
-                        // adds room to list if not already within
-                        if (localRoomList.map(function (item) { return item.room; }).indexOf(roomName) === -1) {
-
-                            let roomCount = roomData[roomIndex]["count"];
-                            let roomCapacity = roomData[roomIndex]["room_capacity"];
-
-                            // creates building object and pushes to list 
-                            localRoomList.push({
-                                room: roomName,
-                                count: roomCount,
-                                capacity: roomCapacity
-                            });
-                        }
-                    }
-                }
+                let responseData = response.data.data;
 
                 // sorts rooms in order
-                localRoomList = localRoomList.sort(function (a, b) {
-                    return a.room.localeCompare(b.room, undefined, {
+                let localRoomList = responseData.sort(function (a, b) {
+                    return a._id.localeCompare(b._id, undefined, {
                         numeric: true,
                         sensitivity: 'base'
                     });
                 });
 
-                // sets state to sorted list of rooms
+                // sets state to list of rooms
                 setPulledRooms(localRoomList);
-            }
 
+                console.log(response);
+
+                // sets building info
+                setBuildingInfo({ count: response.data.count_total, capacity: 1 });
+            }
         }
 
-        // failed to sign in
-        catch {
-            console.log("Failed to pull rooms.")
+        // failed to pull room
+        catch (error) {
+            alert(error.response.data['description']);
+            console.log(error.response.data['description']);
         }
     };
 
-
-    // filters rooms on room list change and query change
+    // updates room list on selected building change
     useEffect(() => {
 
         pullRoomData();
@@ -99,11 +83,10 @@ const SideSelection = () => {
 
     }, [selectedBuilding])
 
-
-    // returns parsed rooms in unordered list
+    // returns side selection component and its children
     return (
         <div className="room-list-container">
-            <BuildingUsage building={selectedBuilding} rooms={pulledRooms} />
+            <BuildingUsage building={selectedBuilding} buildingInfo={buildingInfo} />
             <RoomList building={selectedBuilding} rooms={pulledRooms} />
         </div>
     )

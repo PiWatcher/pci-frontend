@@ -1,0 +1,24 @@
+.room-list-container {
+   height: 1010px;
+   width: 300px;
+   box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
+   border-radius: 8px;
+   margin: 10px 0 0 15px;
+}
+
+@media (max-width: 768px) {
+   .room-list-container {
+      width: 75vw;
+      min-width: 300px;
+      margin: 0 auto 0 auto;
+   }
+}
+
+@media screen and (max-width: 700px) {
+   .room-list-container {
+      width: 350px;
+      height: 550px;
+      margin: 0 auto 25px auto;
+   }
+}
+

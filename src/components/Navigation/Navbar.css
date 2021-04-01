@@ -1,83 +1,89 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
-
 .navbar-component {
-    display: flex;
-    width: 100vw;
-    height: 80px;
-    background-color: #003466;
-    font-family: 'Open Sans', sans-serif;
+   display: flex;
+   width: 100vw;
+   height: 80px;
+   background-color: #003466;
+   align-items: center;
 }
 
-.image-div {
-    display: flex;
-    width: 125px;
-    padding: 5px;
+.logo-div {
+   display: flex;
+   margin-left: 10px;
 }
 
-.logo {
-    width: 125px;
-    padding: 5px;
+.logo-div img {
+   width: 115px;
+   padding: 5px;
 }
 
 .search-div {
-    margin-top: 20px;
-    margin-left: 40px;
-    width: 400px;
-    height: 800px;
+   display: flex;
+   margin: 0 0 0 20px;
+   width: 400px;
 }
 
-.mapIcon-div {                 
-    width: 55px;
-    margin-top: 12px;
-    margin-left: 0px;
+.map-icon-div {
+   display: flex;
+   width: 30px;
+   margin: 0 0 0 20px;
 }
 
-.mapIcon-div:hover {
-    color: grey;
+.map-icon-div img {
+   width: 28px;
 }
 
-.sign-out{
-    margin-top: 28px;
-    margin-left: auto;
-    margin-right: 20px;
-    width: 100px;
-    height: 40px;
-    color: white;
-    font-size: 1.25em;
+.map-icon-div img:hover {
+   color: grey;
+   cursor: pointer;
 }
 
-.sign-out:hover {
-    color: grey;
-  }
-
-.map-div {      
-    width: 85vw;
-    max-width: 2000px;
-    margin: 0 auto;
+.right-side-div {
+   display: flex;
+   align-items: center;
+   margin: 0 0 0 auto;
 }
 
+.admin-icon-div img {
+   width: 35px;
+}
 
-@media screen and (max-width: 600px) {
+.sign-out-div {
+   margin: 0 20px 0 15px;
+   color: white;
+   font-size: 1.4em;
+}
 
-    .image-div {
-        width: 75px;
-    }
+.sign-out-div:hover {
+   color: gray;
+   cursor: pointer;
+}
 
-    .logo {
-        width: 75px;
-    }
-    
-    .search-div {
-        margin-left: 15px;
-    }
+.map-div {
+   width: 85vw;
+   max-width: 2000px;
+   margin: 0 auto;
+}
 
-    .mapIcon-div{
-        width: 8em;
-    }
+@media screen and (max-width: 750px) {
+   .logo-div img {
+      width: 75px;
+   }
 
-    .sign-out {
-        margin-top: 20px;
-        margin-right: 10px;
-    }
+   .search-div {
+      margin-left: 10px;
+   }
 
-  }
+   .map-icon-div img {
+      width: 25px;
+   }
+
+   .admin-icon-div img {
+      width: 35px;
+      margin-left: 15px;
+   }
+
+   .sign-out-div {
+      margin-right: 10px;
+      font-size: 1.15em;
+   }
+}

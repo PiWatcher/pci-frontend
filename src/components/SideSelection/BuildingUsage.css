@@ -1,50 +1,13 @@
-
-.count-card-component {
-  margin-top: 5px;
-  margin-bottom: 5px;
-  border-bottom: 2px solid rgba(236, 236, 236, 1);
-  width: 100%;
-  }
-
-
-.bldg-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.8em;
-  width: 100%;
-  min-height: 100%;
-  height: 100px;
+.building-usage-component {
+   margin-bottom: 5px;
+   border-bottom: 2px solid rgba(236, 236, 236, 1);
 }
 
-
-.count-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-  height: 100px;
-}
-
-
-.per-container {
-  font-size: 2.75em;
-  display: flex;
-  border-right: 2px solid rgba(236, 236, 236, 1);
-  width: 50%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-}
-
-.trend-container {
-  display: flex;
-  width: 50%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-}
-
-.trend-container img {
-  width: 100px;
+.building-container {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   font-size: 2.5em;
+   min-height: 100%;
+   height: 150px;
 }

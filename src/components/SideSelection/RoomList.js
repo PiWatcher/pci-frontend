@@ -11,8 +11,10 @@ const RoomList = (props) => {
    // consume props
    const { building, rooms } = props;
 
+   // state for search value
    const [search, setSearch] = useState('');
 
+   // state for filtered room list
    const [filteredRoomList, setFilteredRoomList] = useState([]);
 
    // pulls search text for processing
@@ -25,25 +27,27 @@ const RoomList = (props) => {
    // filters out rooms based on search text
    const roomFilter = (filter) => {
 
+      // filters room list
       let filteredRooms = rooms.filter(function (item) {
-         return item['room'].indexOf(filter) !== -1;
+         return item['_id'].toLowerCase().indexOf(filter.toLowerCase()) !== -1;
       })
 
-      // maps only rooms that match search query
+      // maps filtered rooms to room components
       let filtered =
          filteredRooms.map((item, index) =>
             <Room
                key={index}
-               room={item.room}
-               count={item.count}
-               capacity={item.capacity}
+               room={item._id}
+               count={item.current_count}
+               capacity={50}
             />)
 
+      // sets the state
       setFilteredRoomList(filtered);
    }
 
 
-   // filters rooms on room list change and query change
+   // on building change, resets filter to empty
    useEffect(() => {
 
       setSearch('');
@@ -59,7 +63,7 @@ const RoomList = (props) => {
    }, [rooms, search])
 
 
-   // returns parsed rooms in unordered list
+   // returns filtered rooms in unordered list
    return (
       <div>
          <input type="text" id="roomSearch" onChange={searchHandler} placeholder="Search for a room" value={search} />

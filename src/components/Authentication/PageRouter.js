@@ -1,23 +1,26 @@
 
 // page imports
 import React, { useContext, useEffect } from 'react';
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
-
 
 // components
 import Auth from './Auth';
 import Dashboard from '../Dashboard';
+import AdminSettings from '../Admin/AdminSettings';
+import AuthForgot from '../Authentication/AuthForgot';
+import AuthReset from '../Authentication/AuthReset';
+
+// component that redirects based on authentication status
 
 const PageRouter = () => {
 
-   // consumes current authentication status from AuthContext
-   const { authStatus } = useContext(AuthContext);
+   // consumes current user information from AuthContext
+   const { userAdminPermissions, authStatus } = useContext(AuthContext);
 
-
-   // updates components with pulled rooms after building selection
+   // redirects after successful login on authentication page
    useEffect(() => {
 
       if (authStatus === true) {
@@ -33,13 +36,14 @@ const PageRouter = () => {
 
    // if not authenticated, displays login screen
    // if authenticated, displays dashboard
+   // anything else redirects back to the login page
    return (
       <div className="PageRouter">
          {
             <BrowserRouter >
                <Switch>
 
-                  <Route path="/auth" component={Auth}>
+                  <Route exact path="/auth" component={Auth}>
                      {authStatus === true ?
                         <Redirect to="/dashboard" component={Dashboard} /> :
                         null
@@ -47,9 +51,19 @@ const PageRouter = () => {
                   </Route>
 
                   {authStatus === true ?
-                     <Route path="/dashboard" component={Dashboard} /> :
-                     null
+                     <Route exact path="/dashboard" component={Dashboard} /> :
+                     <Redirect to="/auth" component={Auth} />
                   }
+
+                  {/* admin settings */}
+                  {authStatus === true && userAdminPermissions === true ?
+                     <Route exact path="/admin" component={AdminSettings} /> :
+                     <Redirect to="/dashboard" component={Dashboard} />
+                  }
+
+                  <Route exact path="/authforgot" component={AuthForgot} />
+
+                  <Route exact path="/authreset" component={AuthReset} />
 
                   <Route path="*">
                      <Redirect to="/auth" component={Auth} />

@@ -1,15 +1,11 @@
 
 // styling
 import './Dashboard.css';
-import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
 
 // page imports
 import React, { useContext } from 'react';
 
-
 // contexts
-
 import { DataContext } from '../contexts/DataContext';
 
 // components
@@ -20,9 +16,8 @@ import ChartLayout from './Graph/ChartLayout';
 
 const Dashboard = () => {
 
-   // consume data from DataContext
+   // consume context
    const { selectedBuilding } = useContext(DataContext);
-
 
    // returns the entire dashboard and its child components
    return (
@@ -30,13 +25,14 @@ const Dashboard = () => {
 
          <Navbar />
 
-         <div className="data-row">
-            <div className="line-graph-container">
+         <div className="dashboard-row">
+            <div className="chart-container">
 
                <ChartLayout />
 
             </div>
 
+            {/* hidden until building is selected */}
             {selectedBuilding !== '' ?
                <SideSelection />
                : null

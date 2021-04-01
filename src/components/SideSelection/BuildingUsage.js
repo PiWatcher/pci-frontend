@@ -4,89 +4,62 @@ import './BuildingUsage.css';
 
 // page imports
 import React, { useState, useEffect } from 'react';
-import upArrow from '../../images/Green_Arrow_Up.svg';
-import downArrow from '../../images/Red_Arrow_Down.svg'
-import horizontalLine from '../../images/Horizontal_Line.svg';
-
 
 const BuildingUsage = (props) => {
 
    // consume props
-   const { building, rooms } = props;
+   const { building, buildingInfo } = props;
 
    // state for building usage
    const [buildingUsage, setBuildingUsage] = useState(0);
 
-   // state for trend symbol
-   const [trendIcon, setTrendIcon] = useState(horizontalLine);
+   // state of usage color
+   const [usageColor, setUsageColor] = useState('');
 
-
-   // calculates room percentage without decimals
+   // calculates room usage percentage without decimals
    const getBuildingUsage = () => {
 
-      let buildingCount = 0;
-      let buildingCapacity = 0;
+      // calculate usage
+      let localUsage = (buildingInfo.count / buildingUsage.capacity);
 
-      for (let roomIndex = 0; roomIndex < rooms.length; roomIndex++) {
+      if (localUsage <= 50) {
 
-         buildingCount += rooms[roomIndex].count;
-         buildingCapacity += rooms[roomIndex].capacity;
-
+         // set to green text
+         setUsageColor('low-usage');
       }
 
-      let localUsage = Math.trunc((buildingCount / buildingCapacity) * 100);
+      else if (localUsage > 50 && localUsage <= 75) {
 
-      if (localUsage > buildingUsage) {
-
-         // set to green up arrow
-         setTrendIcon(upArrow);
-
+         // set to yellow text
+         setUsageColor('moderate-usage');
       }
 
-      else if (localUsage < buildingUsage) {
+      else if (localUsage > 75 && localUsage <= 100) {
 
-         // set to red down arrow
-         setTrendIcon(downArrow);
-
+         // set to red text
+         setUsageColor('high-usage');
       }
 
-      else {
-
-         // set to horizontal line
-         setTrendIcon(horizontalLine);
-      }
-
+      // set the usage
       setBuildingUsage(localUsage);
    }
 
-   // updates components with pulled rooms after building selection
+   // calculates usage on component load
    useEffect(() => {
-
       getBuildingUsage();
+   }, [])
 
-   })
-
-   // returns the count and percentage card
+   // returns the count and percentage component
    return (
-      <div className="count-card-component">
+      <div className="building-usage-component">
 
-         <div className="bldg-container">
+         <div className="building-container">
             <p>
                {building}
             </p>
 
          </div>
-
-         <div className="count-row">
-            <div className="per-container">
-               {buildingUsage}%
-            </div>
-
-            <div className="trend-container">
-               <img className="logo" src={trendIcon} alt="Current trend of building" />
-            </div>
-         </div>
-      </div>
+      </div >
    )
 }
 

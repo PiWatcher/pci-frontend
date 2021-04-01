@@ -4,8 +4,8 @@
     display: flex;
     justify-content: center;
     align-items: center; 
-    height: 50px;
-    margin-top: 5px;
+    height: 20px;
+    margin-top: 0px;
 }
 
 .set-buttons Button {

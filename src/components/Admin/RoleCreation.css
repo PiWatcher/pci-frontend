@@ -1,0 +1,39 @@
+.role-creation-component {
+    text-align: center;
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 500px;
+    padding-top: 20px;
+    font-family: "Open Sans", sans-serif;
+    height: 325px;
+ }
+ 
+ .role-creation-component p {
+    font-size: 2.75em;
+    margin-bottom: 20px;
+ }
+ 
+ input[type="text"] {
+    width: 90%;
+    padding: 12px 20px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+ }
+
+ .role-submit-button {
+     margin-top: 10px;
+ }
+
+ .checkbox-div-creation {
+     margin-top: 10px;
+ }
+ 
+ @media screen and (max-width: 700px) {
+    .role-creation-component {
+       width: 375px;
+       margin: 25px auto 25px auto;
+    }
+ }

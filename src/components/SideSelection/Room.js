@@ -4,13 +4,10 @@ import './Room.css';
 
 // page imports
 import React, { useState, useEffect, useContext } from 'react';
-import upArrow from '../../images/Green_Arrow_Up.svg';
-import downArrow from '../../images/Red_Arrow_Down.svg'
-import horizontalLine from '../../images/Horizontal_Line.svg';
 
 // contexts
 import { DataContext } from '../../contexts/DataContext';
-
+import { AuthContext } from '../../contexts/AuthContext';
 
 
 const Room = (props) => {
@@ -18,14 +15,15 @@ const Room = (props) => {
     // consume props
     const { room, count, capacity } = props;
 
-    // consume data from DataContext
-    const { selectedRooms, setSelectedRooms } = useContext(DataContext);
+    // consume context
+    const { userAdminPermissions } = useContext(AuthContext);
+    const { selectedBuilding, selectedCharts, setSelectedCharts } = useContext(DataContext);
 
     // state of room usage
     const [roomUsage, setRoomUsage] = useState(0);
 
-    // state of trend
-    const [trendIcon, setTrendIcon] = useState(horizontalLine);
+    // state of usage color
+    const [usageColor, setUsageColor] = useState('low-usage');
 
     // calculates usage from given data
     const getUsage = (count, capacity) => {
@@ -38,39 +36,46 @@ const Room = (props) => {
     // constructs room data for packaging
     const createRoom = () => {
 
+        // calculates usage
         let localUsage = getUsage(count, capacity);
 
-        if (localUsage > roomUsage) {
-            // set to green up arrow
-            setTrendIcon(upArrow);
+
+        if (localUsage <= 75) {
+
+            // set to green text
+            setUsageColor('low-usage');
         }
 
-        else if (localUsage < roomUsage) {
+        else if (localUsage > 75 && localUsage <= 100) {
 
-            // set to red down arrow
-            setTrendIcon(downArrow);
+            // set to red text
+            setUsageColor('high-usage');
         }
 
-        else {
-            // set to horizontal line
-            setTrendIcon(horizontalLine);
-        }
-
+        // sets usage
         setRoomUsage(localUsage);
     }
 
-    // constructs room data for packaging
+    // manages list of selected rooms
     const selectRoom = () => {
 
-        const MAX_SELECTED_ROOMS = 4;
+        let MAX_SELECTED_ROOMS = 0;
 
-        if (selectedRooms.length < MAX_SELECTED_ROOMS) {
+        if (userAdminPermissions === true) {
+            MAX_SELECTED_ROOMS = 4;
+        }
 
-            setSelectedRooms([...selectedRooms, room])
+        else {
+            MAX_SELECTED_ROOMS = 1;
+        }
+
+        if (selectedCharts.length < MAX_SELECTED_ROOMS) {
+
+            setSelectedCharts([...selectedCharts, { chartID: selectedCharts.length, building: selectedBuilding, room: room }])
         }
     }
 
-    // updates on data change (new room to create)
+    // updates on data change (new room selected)
     useEffect(() => {
 
         createRoom();
@@ -78,6 +83,7 @@ const Room = (props) => {
     }, [count])
 
 
+    // returns room component
     return (
         <li key={room} onClick={() => selectRoom(room)}>
             <div className="list-option">
@@ -87,16 +93,8 @@ const Room = (props) => {
                     </p>
                 </div>
 
-                <div className="usage">
-                    <p>
-                        {roomUsage}%
-                    </p>
-                </div>
-
-                <div className="trend">
-                    <p>
-                        <img className="logo" src={trendIcon} alt="Current trend of room" />
-                    </p>
+                <div className={`usage ${usageColor}`}>
+                    {roomUsage} %
                 </div>
             </div>
         </li>
