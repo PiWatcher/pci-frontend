@@ -28,14 +28,10 @@
     width: 75vw;
 }
 
-
-
 .chart-div {
     border-radius: 10px;
     box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
 }
-
-
 
 .room-list-container {
     height: 1000px;
@@ -45,14 +41,14 @@
     margin-left: 15px;
 }
 
-/* @media display and (min-width:600px)  {
+@media (max-width:768px)  {
     
-    .line-graph {
+    .line-graph-container {
         display: none;
     }
 
-    .room-list {
-        margin-left: 0px;
-        width: 80vw;
+    .room-list-container {
+        width: 75vw;
+        min-width: 300px;
     }
-} */
+}
