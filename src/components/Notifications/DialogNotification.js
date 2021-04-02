@@ -15,76 +15,26 @@ import _ from 'lodash'
 const DialogNotification = (props) => {
 
     // consume props from parent component
-    const { setAlertConfirmed, showAlert, title, description } = props;
-
-    const [open, setOpen] = useState(showAlert);
+    const { deleteRole, showAlert, setShowAlert, title, description } = props;
 
     const [promiseInfo, setPromiseInfo] = useState({});
 
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     const handleConfirm = () => {
 
-        setOpen(false);
+        //deleteRole();
 
-        return Promise.resolve();
+        setShowAlert(false);
+
+        console.log(showAlert)
     }
-
-    const handleDeny = () => {
-
-        setOpen(false);
-
-        return Promise.reject();
-    }
-
-    const showDialog = async () => {
-        return new Promise((resolve, reject) => {
-            setPromiseInfo({ resolve, reject });
-            setOpen(true);
-        });
-    };
-
-
-    // // open role menu
-    // const handleAlertConfirm = (e) => {
-    //     alert(`${name} has been deleted as a role.`);
-
-    //     //check with alert
-
-    //     //if yes, delete with delete function
-    //     // repull users
-
-    //     //if no, 
-    // };
-
-    // const handleAlertDeny = (e) => {
-    //     alert(`${name} has been deleted as a role.`);
-
-    //     //check with alert
-
-    //     //if yes, delete with delete function
-    //     // repull users
-
-    //     //if no, 
-    // };
-
-    useEffect(() => {
-        setTimeout(function () { }, 10000);
-        setOpen(false);
-    }, [])
 
     // returns user list item component
     return (
         <div>
             <Dialog
-                open={open}
-                onClose={handleClose}
+                open={showAlert}
+                onClose={() => setShowAlert(false)}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
                 PaperProps={{
@@ -103,7 +53,7 @@ const DialogNotification = (props) => {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleDeny} color="primary">
+                    <Button onClick={setShowAlert(false)} color="primary">
                         Deny
                     </Button>
                     <Button onClick={handleConfirm} color="primary" autoFocus>

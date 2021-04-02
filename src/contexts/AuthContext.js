@@ -75,7 +75,7 @@ const AuthContextProvider = (props) => {
 
         // failed to sign in
         catch (error) {
-            alert(error.response.data['description']);
+            //alert(error.response.data['description']);
 
             console.error('Error', error.response);
         }

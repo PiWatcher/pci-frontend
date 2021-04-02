@@ -10,7 +10,7 @@ import Role from './Role';
 const RoleList = (props) => {
 
     // consume props
-    const { roles } = props;
+    const { roles, pullRoles } = props;
 
     // state for user search
     const [search, setSearch] = useState('');
@@ -41,6 +41,7 @@ const RoleList = (props) => {
                     name={role.role_name}
                     isAdmin={role.is_admin}
                     canViewRaw={role.can_view_raw}
+                    pullRoles={pullRoles}
                 />)
 
         // sets list state

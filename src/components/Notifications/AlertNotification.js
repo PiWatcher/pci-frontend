@@ -15,60 +15,14 @@ import _ from 'lodash'
 const AlertNotification = (props) => {
 
     // consume props from parent component
-    const { showAlert, title, description } = props;
-
-    const [open, setOpen] = useState(showAlert);
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleConfirm = () => {
-        setOpen(false);
-
-        return true;
-    }
-
-    const handleDeny = () => {
-        setOpen(false);
-
-        return false;
-    }
-
-
-    // // open role menu
-    // const handleAlertConfirm = (e) => {
-    //     alert(`${name} has been deleted as a role.`);
-
-    //     //check with alert
-
-    //     //if yes, delete with delete function
-    //     // repull users
-
-    //     //if no, 
-    // };
-
-    // const handleAlertDeny = (e) => {
-    //     alert(`${name} has been deleted as a role.`);
-
-    //     //check with alert
-
-    //     //if yes, delete with delete function
-    //     // repull users
-
-    //     //if no, 
-    // };
+    const { open, setStatusAlert, title, description } = props;
 
     // returns user list item component
     return (
         <div>
             <Dialog
                 open={open}
-                onClose={handleClose}
+                onClose={setStatusAlert(false)}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
                 PaperProps={{
@@ -88,11 +42,8 @@ const AlertNotification = (props) => {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleDeny} color="primary">
-                        Deny
-                    </Button>
-                    <Button onClick={handleConfirm} color="primary" autoFocus>
-                        Confirm
+                    <Button onClick={setStatusAlert(false)} color="primary" autoFocus>
+                        Close
                     </Button>
                 </DialogActions>
             </Dialog>

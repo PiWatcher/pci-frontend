@@ -10,7 +10,7 @@ import User from '../Admin/User';
 const UserList = (props) => {
 
     // consume props
-    const { users, roles } = props;
+    const { users, roles, pullUsers } = props;
 
     // state for user search
     const [search, setSearch] = useState('');
@@ -42,6 +42,7 @@ const UserList = (props) => {
                     email={user.email}
                     role={user.role}
                     roles={roles}
+                    pullUsers={pullUsers}
                 />)
 
         // sets list state

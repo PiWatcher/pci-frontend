@@ -49,8 +49,6 @@ const TimeSeries = (props) => {
    // // API pull and parse logic for counts and timestamps
    const pullGraphData = async () => {
 
-      console.log(chartID);
-
       const graphDataEndpoint = `${baseURL}:5000/api/data/building/room/${currentQuery}`
 
       // tries to pull chart data
@@ -209,7 +207,15 @@ const TimeSeries = (props) => {
                <Plot
                   useResizeHandler={true}
                   style={{ width: "100%", height: "100%" }}
-                  config={{ responsive: true, displayModeBar: false }}
+                  config={{
+                     responsive: true, displayModeBar: false
+                     // modeBarButtonsToRemove: [“zoom2d”, “pan2d”, “select2d”, “lasso2d”, “zoomIn2d”, “zoomOut2d”,
+                     //    “autoScale2d”, “resetScale2d”, “hoverClosestCartesian”, “hoverCompareCartesian”, “zoom3d”,
+                     //    “pan3d”, “resetCameraDefault3d”, “resetCameraLastSave3d”, “hoverClosest3d”, “orbitRotation”,
+                     //    “tableRotation”, “zoomInGeo”, “zoomOutGeo”, “resetGeo”, “hoverClosestGeo”, “toImage”,
+                     //    “sendDataToCloud”, “hoverClosestGl2d”, “hoverClosestPie”, “toggleHover”, “resetViews”,
+                     //    “toggleSpikelines”, “resetViewMapbox”] 
+                  }}
                   data={data}
                   layout={layout}
                />

@@ -12,6 +12,13 @@ import axios from 'axios';
 import _ from 'lodash'
 import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogNotification from '../Notifications/DialogNotification'
+import AlertNotification from '../Notifications/AlertNotification'
 
 // contexts
 import { DataContext } from '../../contexts/DataContext';
@@ -21,7 +28,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 const User = (props) => {
 
     // consume props from parent component
-    const { name, email, role, roles } = props;
+    const { name, email, role, roles, pullUsers } = props;
 
     // consumes contexts
     const { baseURL } = useContext(DataContext);
@@ -33,7 +40,7 @@ const User = (props) => {
     // Material UI menu state
     const [anchorEl, setAnchorEl] = useState(null);
 
-    const [alertStatus, setAlertStatus] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
 
     // custom material theme
     const roleButtonTheme = createMuiTheme({
@@ -108,15 +115,39 @@ const User = (props) => {
     };
 
     // open role menu
-    const handleUserDelete = (e) => {
-        alert(`${name} has been deleted as a user.`);
+    const deleteUser = async () => {
 
-        //check with alert
+        setShowAlert(false);
 
-        //if yes, delete with delete function
-        // repull users
+        alert(`success`)
+        // const deleteRoleEndpoint = `${baseURL}:5000/api/auth/`;
 
-        //if no, 
+        // // tries to delete role
+        // try {
+        //     const response = await axios({
+        //         method: 'post',
+        //         url: deleteRoleEndpoint,
+        //         params: {
+        //             name: name,
+        //             jwt_token: userToken
+        //         }
+        //     });
+
+        //     // successfully connected to endpoint and delete role
+        //     if (response.status === 200) {
+
+        //         setStatusAlert(true);
+
+        //     }
+        // }
+
+        // // failed to pull chart data
+        // catch (error) {
+        //     console.error('Error', error.response);
+        //     setStatusAlert(false);
+        // }
+
+        pullUsers();
     };
 
     // returns user list item component
@@ -162,10 +193,42 @@ const User = (props) => {
                     </div>
 
                     <div className="user-delete">
-                        <IconButton className="delete-button" aria-label="delete" onClick={handleUserDelete} >
+                        <IconButton className="delete-button" aria-label="delete" onClick={() => setShowAlert(true)} >
                             <CloseIcon color="secondary" />
                         </IconButton>
                     </div>
+
+                    <Dialog
+                        open={showAlert}
+                        onClose={() => setShowAlert(false)}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                        maxWidth='sm'
+                        fullWidth={true}
+                        PaperProps={{
+                            style: {
+                                borderRadius: 8,
+                                boxShadow: 1,
+                                display: 'flex',
+                                alignItems: "center"
+                            }
+                        }}
+                    >
+                        <DialogTitle className="alert-dialog-title">{`Delete User`}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText className="alert-dialog-description">
+                                {`Are you sure you want to delete "${name}"?`}
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => setShowAlert(false)} color="primary">
+                                Cancel
+                            </Button>
+                            <Button onClick={() => deleteUser()} color="primary" autoFocus>
+                                Confirm
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
 
                 </MuiThemeProvider>
 

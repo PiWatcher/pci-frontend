@@ -51,12 +51,14 @@ const AdminSettings = () => {
 
                 // sets state pulled users
                 setPulledUsers(userList);
+
+                console.log("pulled users")
+
             }
         }
 
         // failed to pull users
         catch (error) {
-            alert('test');
             //alert(error.response.data['description']);
             console.error('Error', error.response);
         }
@@ -89,6 +91,7 @@ const AdminSettings = () => {
 
                 console.log(response);
 
+
             }
         }
 
@@ -113,11 +116,11 @@ const AdminSettings = () => {
 
                 <div className="role-column">
                     <RoleCreation />
-                    <RoleList roles={pulledRoles} />
+                    <RoleList roles={pulledRoles} pullRoles={pullRoles} />
                 </div>
 
                 <div className="user-column">
-                    <UserList users={pulledUsers} roles={pulledRoles} />
+                    <UserList users={pulledUsers} roles={pulledRoles} pullUsers={pullUsers} />
                 </div>
             </div>
         </div >

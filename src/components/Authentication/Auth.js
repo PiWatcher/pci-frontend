@@ -120,10 +120,10 @@ const Auth = () => {
 
                 <div className="auth-functions fadeIn second">
                     <div className="sign-in">
-                        <h2 id="sign-in-id" className="activeLoginType" onClick={() => selectSignIn()}> Sign In </h2>
+                        <h2 id="auth-type" className="activeLoginType" onClick={() => selectSignIn()}> Sign In </h2>
                     </div>
                     <div className="sign-up">
-                        <h2 id="sign-up-id" className="nonActiveLoginType" onClick={() => selectSignUp()}> Sign Up </h2>
+                        <h2 id="auth-type" className="nonActiveLoginType" onClick={() => selectSignUp()}> Sign Up </h2>
                     </div>
                 </div>
 
