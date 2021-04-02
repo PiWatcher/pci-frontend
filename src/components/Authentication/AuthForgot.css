@@ -12,30 +12,6 @@ body {
   height: 100vh;
 }
 
-a {
-  color: #92badd;
-  display:inline-block;
-  text-decoration: none;
-  font-weight: 400;
-}
-
-#auth-type {
-  text-align: center;
-  font-size: 16px;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: #cccccc;
-  cursor: pointer;
-}
-
-#auth-type:hover {
-  color: #003466;
-  -webkit-transition: color .5s;
-  -moz-transition: color .5s;
-  -o-transition: color .5s;
-  transition: color .5s;
-}
-
 
 /* STRUCTURE */
 
@@ -48,30 +24,20 @@ a {
   padding: 20px;
   box-shadow: 0 4px 12px 0 rgba(0,0,0,0.2);
   border-radius: 8px;
-  -webkit-transition: height 2s ease-in-out;
-  -moz-transition: height 2s ease-in-out;
-  -ms-transition: height 2s ease-in-out;
-  -o-transition: height 2s ease-in-out;
-  transition: height 2s ease-in-out;
 }
-
-.sign-in {
-  display: inline-block;
-  margin: 20px;
-}
-
-.sign-up {
-  display: inline-block;
-  margin: 20px;
-}
-
-.forgot-password-div {
-  font-size: 1.10em;
-}
-
 
 
 /* FORM TYPOGRAPHY*/
+
+.reset-text {
+  margin-top: 20px;
+  margin-bottom: 30px;
+  font-size: 2.25em;
+}
+
+.return-link {
+  font-size: 1.25em;
+}
 
 input[type=button], input[type=submit], input[type=reset]  {
   background-color: #003466;
@@ -89,11 +55,6 @@ input[type=button], input[type=submit], input[type=reset]  {
   -webkit-border-radius: 5px 5px 5px 5px;
   border-radius: 5px 5px 5px 5px;
   margin: 20px 20px 20px 20px;
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -ms-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
   font-family: 'Open Sans', sans-serif;
   cursor: pointer;
 }
@@ -110,46 +71,9 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active  
   transform: scale(0.95);
 }
 
-/* name */
-
-input[type=name] {
-  background-color: #f6f6f6;
-  border: none;
-  color: #0d0d0d;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 5px;
-  width: 600px;
-  border: 2px solid #f6f6f6;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -ms-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-  -webkit-border-radius: 5px 5px 5px 5px;
-  border-radius: 5px 5px 5px 5px;
-  font-family: "Open Sans", sans-serif;
-}
-
-input[type=name]:focus {
-  background-color: #fff;
-  border-bottom: 2px solid gold;
-}
-
-input[type=name]:placeholder {
-  color: #cccccc;
-}
-
-
 /* email */
 
-input[type=login] {
+input[type=email] {
   background-color: #f6f6f6;
   border: none;
   color: #0d0d0d;
@@ -174,15 +98,51 @@ input[type=login] {
   font-family: "Open Sans", sans-serif;
 }
 
-input[type=login]:focus {
+input[type=email]:focus {
   background-color: #fff;
   border-bottom: 2px solid gold;
 }
 
-input[type=login]:placeholder {
+input[type=email]:placeholder {
   color: #cccccc;
 }
 
+
+/* auth code */
+
+input[type=auth-code] {
+  background-color: #f6f6f6;
+  border: none;
+  color: #0d0d0d;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 5px;
+  width: 600px;
+  border: 2px solid #f6f6f6;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+  font-family: "Open Sans", sans-serif;
+}
+
+input[type=auth-code]:focus {
+  background-color: #fff;
+  border-bottom: 2px solid gold;
+}
+
+input[type=auth-code]:placeholder {
+  color: #cccccc;
+}
 
 /* password */
 input[type=password] {
@@ -219,109 +179,6 @@ input[type=password] {
     color: #cccccc;
   }
 
-/* auth failure */
-.failure-text {
-  margin-top: 15px;
-  margin-bottom: 5px;
-  font-size: 1.1em;
-  color: red;
-}
-
-/* sign up success */
-.sign-up-success {
-  padding: 60px;
-  font-size: 1.4em;
-}
-
-/* ANIMATIONS */
-
-/* Simple CSS3 Fade-in-down Animation */
-.fadeInDown {
-  -webkit-animation-name: fadeInDown;
-  animation-name: fadeInDown;
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-}
-
-@-webkit-keyframes fadeInDown {
-  0% {
-    opacity: 0;
-    -webkit-transform: translate3d(0, -100%, 0);
-    transform: translate3d(0, -100%, 0);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: none;
-    transform: none;
-  }
-}
-
-@keyframes fadeInDown {
-  0% {
-    opacity: 0;
-    -webkit-transform: translate3d(0, -100%, 0);
-    transform: translate3d(0, -100%, 0);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: none;
-    transform: none;
-  }
-}
-
-/* Simple CSS3 Fade-in Animation */
-@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-
-.fadeIn {
-  opacity:0;
-  -webkit-animation:fadeIn ease-in 1;
-  -moz-animation:fadeIn ease-in 1;
-  animation:fadeIn ease-in 1;
-
-  -webkit-animation-fill-mode:forwards;
-  -moz-animation-fill-mode:forwards;
-  animation-fill-mode:forwards;
-
-  -webkit-animation-duration: 1s;
-  -moz-animation-duration: 1s;
-  animation-duration: 1s;
-}
-
-.fadeIn.first {
-  -webkit-animation-delay: 0.3s;
-  -moz-animation-delay: 0.3s;
-  animation-delay: 0.3s;
-}
-
-.fadeIn.second {
-  -webkit-animation-delay: 0.4s;
-  -moz-animation-delay: 0.4s;
-  animation-delay: 0.4s;
-}
-
-.fadeIn.third {
-  -webkit-animation-delay: 0.5s;
-  -moz-animation-delay: 0.5s;
-  animation-delay: 0.5s;
-}
-
-.activeLoginType {
-  color: #003466;
-  border-bottom: 2px solid gold;
-}
-
-.nonActiveLoginType {
-  color: #cccccc;
-  -webkit-transition: color .5s;
-  -moz-transition: color .5s;
-  -o-transition: color .5s;
-  transition: color .5s;
-}
-
 /* OTHERS */
 
 *:focus {
@@ -344,11 +201,11 @@ input[type=password] {
     margin-top: 75px;
   }
 
-  input[type=name] {
+  input[type=email] {
     width: 300px;
   }
 
-  input[type=login] {
+  input[type=auth-code] {
     width: 300px;
   }
 

@@ -168,7 +168,7 @@ const Auth = () => {
                                     :
 
                                     <div className="sign-up-success">
-                                        Sign up success! Please wait for administrator approval.
+                                        Sign up success!
                                 </div>
                             }
                         </div>
