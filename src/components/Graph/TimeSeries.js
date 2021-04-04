@@ -15,6 +15,9 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import { CSVLink } from "react-csv";
 import html2canvas from 'html2canvas';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
+import { css } from "@emotion/core";
+import PulseLoader from "react-spinners/PulseLoader";
+
 
 
 // contexts
@@ -39,6 +42,14 @@ const TimeSeries = (props) => {
    // state for current query of query buttons
    const [currentQuery, setCurrentQuery] = useState('live');
 
+   const [loading, setLoading] = useState(true);
+
+   const override = css`
+      display: block;
+      margin: 0 auto;
+      border-color: red;
+      `;
+
    // settings for auto resize of chart
    const { width, height, ref } = useResizeDetector({
       refreshMode: 'debounce',
@@ -50,6 +61,8 @@ const TimeSeries = (props) => {
    const pullGraphData = async () => {
 
       const graphDataEndpoint = `${baseURL}:5000/api/data/building/room/${currentQuery}`
+
+      setLoading(true);
 
       // tries to pull chart data
       try {
@@ -68,6 +81,8 @@ const TimeSeries = (props) => {
             // set state for chart data
             setGraphList(response.data.data);
 
+            setLoading(false);
+
             console.log(response);
 
          }
@@ -80,9 +95,9 @@ const TimeSeries = (props) => {
       }
    };
 
-   const createTime = (isodate) => {
+   const createTime = (isoDate) => {
 
-      let parsedDate = new Date(isodate);
+      let parsedDate = new Date(isoDate);
 
       let dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()}/${parsedDate.getFullYear()} ${addZero(parsedDate.getHours())}:${addZero(parsedDate.getMinutes())}:${addZero(parsedDate.getSeconds())}`;
 
@@ -203,23 +218,27 @@ const TimeSeries = (props) => {
                null
             }
 
-            <div id="chart">
-               <Plot
-                  useResizeHandler={true}
-                  style={{ width: "100%", height: "100%" }}
-                  config={{
-                     responsive: true, displayModeBar: false
-                     // modeBarButtonsToRemove: [“zoom2d”, “pan2d”, “select2d”, “lasso2d”, “zoomIn2d”, “zoomOut2d”,
-                     //    “autoScale2d”, “resetScale2d”, “hoverClosestCartesian”, “hoverCompareCartesian”, “zoom3d”,
-                     //    “pan3d”, “resetCameraDefault3d”, “resetCameraLastSave3d”, “hoverClosest3d”, “orbitRotation”,
-                     //    “tableRotation”, “zoomInGeo”, “zoomOutGeo”, “resetGeo”, “hoverClosestGeo”, “toImage”,
-                     //    “sendDataToCloud”, “hoverClosestGl2d”, “hoverClosestPie”, “toggleHover”, “resetViews”,
-                     //    “toggleSpikelines”, “resetViewMapbox”] 
-                  }}
-                  data={data}
-                  layout={layout}
-               />
-            </div>
+            {loading === false ?
+               <div id="chart">
+                  <Plot
+                     useResizeHandler={true}
+                     style={{ width: "100%", height: "100%" }}
+                     config={{
+                        responsive: true, displayModeBar: false
+                        // modeBarButtonsToRemove: [“zoom2d”, “pan2d”, “select2d”, “lasso2d”, “zoomIn2d”, “zoomOut2d”,
+                        //    “autoScale2d”, “resetScale2d”, “hoverClosestCartesian”, “hoverCompareCartesian”, “zoom3d”,
+                        //    “pan3d”, “resetCameraDefault3d”, “resetCameraLastSave3d”, “hoverClosest3d”, “orbitRotation”,
+                        //    “tableRotation”, “zoomInGeo”, “zoomOutGeo”, “resetGeo”, “hoverClosestGeo”, “toImage”,
+                        //    “sendDataToCloud”, “hoverClosestGl2d”, “hoverClosestPie”, “toggleHover”, “resetViews”,
+                        //    “toggleSpikelines”, “resetViewMapbox”] 
+                     }}
+                     data={data}
+                     layout={layout}
+                  />
+               </div>
+               :
+               <PulseLoader color={'#003466'} loading={true} css={override} size={150} />
+            }
 
             <QueryButtons currentQuery={currentQuery} setCurrentQuery={setCurrentQuery} />
          </div >

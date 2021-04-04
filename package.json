@@ -22,6 +22,7 @@
     "react-resize-detector": "^6.6.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
+    "react-spinners": "^0.10.6",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.3",
     "universal-cookie": "^4.0.4",
