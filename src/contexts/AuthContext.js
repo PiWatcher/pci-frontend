@@ -70,14 +70,14 @@ const AuthContextProvider = (props) => {
                 cookies.set('piWatcher Auth', userToken, { path: '/', expires: new Date(Date.now() + 604800) });
 
                 setAuthStatus(true);
+
+                return true;
             }
         }
 
         // failed to sign in
         catch (error) {
-            //alert(error.response.data['description']);
-
-            console.error('Error', error.response);
+            return (false)
         }
     };
 
@@ -113,13 +113,14 @@ const AuthContextProvider = (props) => {
                 setUserViewRawData(responseData.canVewRaw);
 
                 setAuthStatus(true);
+
+                return true;
             }
         }
 
         // failed to sign in
         catch (error) {
-            alert(error.response.data['description']);
-            console.error('Error', error.response);
+            return false;
         }
     }
 
@@ -150,8 +151,7 @@ const AuthContextProvider = (props) => {
         // failed to sign up
         catch (error) {
 
-            alert(error.response.data['description'])
-            console.log(error.response.data['description'])
+            return false;
         }
     }
 

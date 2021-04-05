@@ -7,6 +7,7 @@ import axios from 'axios';
 // contexts
 import { DataContext } from '../../contexts/DataContext';
 import 'semantic-ui-css/semantic.min.css'
+import AlertNotification from '../Notification/AlertNotification';
 
 
 const SearchBar = () => {
@@ -16,6 +17,9 @@ const SearchBar = () => {
 
    // creates state: list of buildings pulled from endpoint
    const [buildingList, setBuildingList] = useState([]);
+
+   // state for alert
+   const [showAlert, setShowAlert] = useState(false);
 
 
    // pulls selection text from dropdown and passes it back to context
@@ -55,7 +59,7 @@ const SearchBar = () => {
 
       // failed to pull and parse the building list
       catch {
-         console.log("Failed to pull buildings.");
+         setShowAlert(true);
       }
    };
 
@@ -67,21 +71,29 @@ const SearchBar = () => {
 
    // returns searchbar component
    return (
-      <Dropdown className="dropdown"
-         onChange={handleSelectChange}
-         placeholder={selectedBuilding === "" ? "Search for a building" : selectedBuilding}
-         fluid
-         search
-         selection
-         options={buildingList.map(item => {
-            return {
-               key: item,
-               text: item,
-               value: item
-            }
-         })}
-         selectOnBlur={false}
-      />
+      <div>
+         <Dropdown className="dropdown"
+            onChange={handleSelectChange}
+            placeholder={selectedBuilding === "" ? "Search for a building" : selectedBuilding}
+            fluid
+            search
+            selection
+            options={buildingList.map(item => {
+               return {
+                  key: item,
+                  text: item,
+                  value: item
+               }
+            })}
+            selectOnBlur={false}
+         />
+
+         {showAlert === true ?
+            <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
+               description={`Failed to pull data from endpoint: building list`} />
+            :
+            null}
+      </div>
    );
 }
 

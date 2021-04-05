@@ -43,6 +43,16 @@
    margin: 0 0 0 auto;
 }
 
+.settings-icon-div {
+   margin: 0 0 0 20px;
+   color: white;
+   font-size: 1.4em;
+}
+
+.settings-icon-div img {
+   width: 35px;
+}
+
 .admin-icon-div img {
    width: 35px;
 }

@@ -59,19 +59,14 @@ const Room = (props) => {
     // manages list of selected rooms
     const selectRoom = () => {
 
-        let MAX_SELECTED_ROOMS = 0;
+        let MAX_SELECTED_ROOMS = 1;
 
         if (userAdminPermissions === true) {
             MAX_SELECTED_ROOMS = 4;
         }
 
-        else {
-            MAX_SELECTED_ROOMS = 1;
-        }
-
         if (selectedCharts.length < MAX_SELECTED_ROOMS) {
-
-            setSelectedCharts([...selectedCharts, { chartID: selectedCharts.length, building: selectedBuilding, room: room }])
+            setSelectedCharts([...selectedCharts, { chartID: selectedCharts.length, building: selectedBuilding, room: room }]);
         }
     }
 
@@ -94,7 +89,7 @@ const Room = (props) => {
                 </div>
 
                 <div className={`usage ${usageColor}`}>
-                    {roomUsage} %
+                    {roomUsage}%
                 </div>
             </div>
         </li>

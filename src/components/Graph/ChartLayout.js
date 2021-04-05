@@ -40,8 +40,9 @@ const ChartLayout = () => {
     ]);
 
     // constructed charts
-    const charts = selectedCharts.map((chart) => {
-        return (<div className="time-series" data-grid={gridLayout[chart.chartID]} key={chart.chartID}><TimeSeries chartID={chart.chartID} building={chart.building} room={chart.room} /></div>)
+    const charts = selectedCharts.map((chart, index) => {
+
+        return (<div className="time-series" data-grid={gridLayout[index]} key={index}><TimeSeries chartID={chart.chartID} building={chart.building} room={chart.room} /></div>)
     });
 
 

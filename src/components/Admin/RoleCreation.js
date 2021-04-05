@@ -11,15 +11,19 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { Button } from '@material-ui/core';
 import { unstable_createMuiStrictModeTheme as createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import axios from 'axios';
+import AlertNotification from '../Notification/AlertNotification';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
 
 // component for creating new user roles
-const RoleCreation = () => {
+const RoleCreation = (props) => {
 
     // consume context
     const { userToken, baseURL } = useContext(AuthContext);
+
+    // consume props from parent component
+    const { pullRoles } = props;
 
     // state for new role
     const [newRoleName, setNewRoleName] = useState('');
@@ -29,6 +33,11 @@ const RoleCreation = () => {
 
     const { isAdmin, canViewRaw } = newRolePermissions;
 
+    // state for new role
+    const [showAlert, setShowAlert] = useState('');
+
+    // state for new role
+    const [alertType, setAlertType] = useState('');
 
     // pulls role name text
     const formHandler = (e) => {
@@ -83,14 +92,20 @@ const RoleCreation = () => {
 
                 // successfully connected to endpoint and created role
                 if (response.status === 200) {
-                    alert(`${newRoleName} role was created successfully.`)
+
+                    pullRoles();
+
+                    setAlertType('success');
+
+                    setShowAlert(true);
                 }
             }
 
             // failed to create new role
             catch (error) {
-                alert(error.response.data['description'])
-                console.log(error.response.data['description'])
+                setAlertType('failure');
+
+                setShowAlert(true);
             }
         }
     };
@@ -123,6 +138,12 @@ const RoleCreation = () => {
                     </div>
                 </MuiThemeProvider>
             </div>
+
+            {showAlert === true ?
+                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
+                    description={`Role creation ${alertType}`} />
+                :
+                null}
         </div>
     )
 }

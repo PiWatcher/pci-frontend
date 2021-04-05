@@ -6,6 +6,7 @@ import './Auth.css';
 import React, { useContext, useState } from 'react';
 import nauLogo from '../../images/nauLogoLogin.svg';
 import { Link } from 'react-router-dom';
+import AlertNotification from '../Notification/AlertNotification';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
@@ -30,6 +31,12 @@ const Auth = () => {
 
     // current sign up status
     const [signUpStatus, setSignUpStatus] = useState(false);
+
+    // state for alert
+    const [showAlert, setShowAlert] = useState(false);
+
+    // state for alert
+    const [alertType, setAlertType] = useState('');
 
 
     // places user form input into local temp variables
@@ -57,15 +64,36 @@ const Auth = () => {
         // authenticates account 
         if (localSelectedAuth === "Sign In") {
 
-            authenticateAccount(localEmail, localPassword);
+            let signInStatus = null;
+
+            authenticateAccount(localEmail, localPassword).then(function (result) {
+                signInStatus = result;
+            });
+
+            console.log(signInStatus);
+
+            if (!signInStatus) {
+                setAlertType('Sign-in');
+                setShowAlert(true);
+            }
+
+
+
         }
 
         // creates user in database
         else if (localSelectedAuth === "Sign Up") {
 
-            if (createAccount(localUserName, localEmail, localPassword)) {
-                setSignUpStatus(true);
-            };
+            createAccount(localUserName, localEmail, localPassword).then(function (result) {
+                setSignUpStatus(result);
+
+            });
+
+            if (!signUpStatus) {
+                setAlertType('Sign-up');
+                setShowAlert(true);
+            }
+
         }
     }
 
@@ -120,10 +148,10 @@ const Auth = () => {
 
                 <div className="auth-functions fadeIn second">
                     <div className="sign-in">
-                        <h2 id="auth-type" className="activeLoginType" onClick={() => selectSignIn()}> Sign In </h2>
+                        <h2 id="sign-in-id" className="activeLoginType" onClick={() => selectSignIn()}> Sign In </h2>
                     </div>
                     <div className="sign-up">
-                        <h2 id="auth-type" className="nonActiveLoginType" onClick={() => selectSignUp()}> Sign Up </h2>
+                        <h2 id="sign-up-id" className="nonActiveLoginType" onClick={() => selectSignUp()}> Sign Up </h2>
                     </div>
                 </div>
 
@@ -174,6 +202,12 @@ const Auth = () => {
                         </div>
                 }
             </div>
+
+            {showAlert === true ?
+                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`${alertType} Failure`}
+                    description={`Failed to ${alertType}`} />
+                :
+                null}
         </div>
     )
 }

@@ -9,6 +9,7 @@ import SearchBar from './SearchBar';
 import nauLogo from '../../images/nauLogoDash.svg';
 //import mapIcon from '../../images/mapIcon.svg';
 import adminIcon from '../../images/adminIcon.svg';
+import settingsIcon from '../../images/settingsIcon.svg';
 import { Link } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 
@@ -65,6 +66,12 @@ const Navbar = () => {
                   :
                   null
                }
+
+               <div className="settings-icon-div">
+                  <Link to="/settings">
+                     <img src={settingsIcon} alt="Settings Icon" />
+                  </Link>
+               </div>
 
                <div className="sign-out-div" onClick={signOut}>
                   Sign Out

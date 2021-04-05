@@ -6,6 +6,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import RoomList from './RoomList';
 import BuildingUsage from './BuildingUsage';
 import axios from 'axios';
+import AlertNotification from '../Notification/AlertNotification';
 
 // contexts
 import { DataContext } from '../../contexts/DataContext';
@@ -21,6 +22,9 @@ const SideSelection = () => {
 
     // creates state for building information
     const [buildingInfo, setBuildingInfo] = useState({});
+
+    // state for alert
+    const [showAlert, setShowAlert] = useState(false);
 
     // API pull logic for rooms in selected building
     const pullRoomData = async () => {
@@ -63,8 +67,9 @@ const SideSelection = () => {
 
         // failed to pull room
         catch (error) {
-            alert(error.response.data['description']);
+            setShowAlert(true);
             console.log(error.response.data['description']);
+
         }
     };
 
@@ -88,6 +93,12 @@ const SideSelection = () => {
         <div className="room-list-container">
             <BuildingUsage building={selectedBuilding} buildingInfo={buildingInfo} />
             <RoomList building={selectedBuilding} rooms={pulledRooms} />
+
+            {showAlert === true ?
+                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
+                    description={`Failed to pull data from endpoint: List of rooms within ${selectedBuilding}`} />
+                :
+                null}
         </div>
     )
 }

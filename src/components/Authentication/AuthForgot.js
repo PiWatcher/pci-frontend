@@ -115,8 +115,10 @@ const Auth = () => {
                             <div className="reset-text">Password Reset</div>
                             {codeVerified === true ?
                                 <form onSubmit={confirmReset}>
-                                    <input type="password" id="new-password" placeholder="new password" onChange={handleInputChange} required />
-                                    <input type="password" id="new-password-conf" placeholder="confirm new password" onChange={handleInputChange} required />
+                                    <input type="password" id="new-password" placeholder="new password"
+                                        pattern="^(?![a-z]*$)(?![A-Z]*$)(?!\d*$)(?!\p{P}*$)(?![^a-zA-Z\d\p{P}]*$).{6,}$" onChange={handleInputChange} required />
+                                    <input type="password" id="new-password-conf" placeholder="confirm new password"
+                                        pattern="^(?![a-z]*$)(?![A-Z]*$)(?!\d*$)(?!\p{P}*$)(?![^a-zA-Z\d\p{P}]*$).{6,}$" onChange={handleInputChange} required />
                                     <input type="submit" value="Submit reset" />
                                 </form>
                                 :
@@ -128,7 +130,7 @@ const Auth = () => {
                                         </form>
                                         :
                                         <form onSubmit={getResetCode}>
-                                            <input type="email" id="email" placeholder="email" onChange={handleInputChange} required />
+                                            <input type="email" id="email" placeholder="email" pattern="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@nau.edu$" onChange={handleInputChange} required />
                                             <input type="submit" value="Get reset code" />
                                         </form>
                                     }

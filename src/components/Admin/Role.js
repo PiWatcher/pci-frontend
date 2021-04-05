@@ -58,7 +58,7 @@ const Role = (props) => {
             primary: {
                 main: '#003466'
             }
-        },
+        }
     });
 
     // open role menu

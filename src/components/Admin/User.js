@@ -17,8 +17,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogNotification from '../Notifications/DialogNotification'
-import AlertNotification from '../Notifications/AlertNotification'
+import AlertNotification from '../Notification/AlertNotification';
+
 
 // contexts
 import { DataContext } from '../../contexts/DataContext';
@@ -41,6 +41,8 @@ const User = (props) => {
     const [anchorEl, setAnchorEl] = useState(null);
 
     const [showAlert, setShowAlert] = useState(false);
+
+    const [userUpdateAlert, setUserUpdateAlert] = useState(false);
 
     // custom material theme
     const roleButtonTheme = createMuiTheme({
@@ -79,13 +81,19 @@ const User = (props) => {
 
             // successfully connected to endpoint and updated user
             if (response.status === 200) {
-                alert(`${name} was updated to the role of ${role}.`)
+                setShowAlert(true);
+
+                setUserUpdateAlert('success');
             }
         }
 
         // caught failure
         catch (error) {
-            alert(error.response.data['description'])
+
+            setShowAlert(true);
+
+            setUserUpdateAlert('failure');
+
             console.log(error.response.data['description'])
         }
     };
@@ -117,7 +125,6 @@ const User = (props) => {
     // open role menu
     const deleteUser = async () => {
 
-        setShowAlert(false);
 
         alert(`success`)
         // const deleteRoleEndpoint = `${baseURL}:5000/api/auth/`;
@@ -144,7 +151,7 @@ const User = (props) => {
         // // failed to pull chart data
         // catch (error) {
         //     console.error('Error', error.response);
-        //     setStatusAlert(false);
+        //     setShowAlert(true);
         // }
 
         pullUsers();
@@ -231,6 +238,19 @@ const User = (props) => {
                     </Dialog>
 
                 </MuiThemeProvider>
+
+
+                {showAlert === true && userUpdateAlert === 'success' ?
+                    <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'User Role Update'}
+                        description={`${name} successfully updated to ${role}`} />
+                    :
+                    null}
+
+                {showAlert === true && userUpdateAlert === 'failure' ?
+                    <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
+                        description={`${name} failed to update to role of ${role}`} />
+                    :
+                    null}
 
             </div>
         </li>

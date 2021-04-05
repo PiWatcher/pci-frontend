@@ -15,14 +15,12 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import { CSVLink } from "react-csv";
 import html2canvas from 'html2canvas';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
-import { css } from "@emotion/core";
 import PulseLoader from "react-spinners/PulseLoader";
-
-
 
 // contexts
 import { DataContext } from '../../contexts/DataContext';
 import { AuthContext } from '../../contexts/AuthContext';
+import AlertNotification from '../Notification/AlertNotification';
 
 // chart component
 const TimeSeries = (props) => {
@@ -39,16 +37,13 @@ const TimeSeries = (props) => {
    // state for chart data
    const [graphList, setGraphList] = useState([]);
 
+   // state for alert
+   const [showAlert, setShowAlert] = useState(false);
+
    // state for current query of query buttons
    const [currentQuery, setCurrentQuery] = useState('live');
 
-   const [loading, setLoading] = useState(true);
-
-   const override = css`
-      display: block;
-      margin: 0 auto;
-      border-color: red;
-      `;
+   const [loading, setLoading] = useState(false);
 
    // settings for auto resize of chart
    const { width, height, ref } = useResizeDetector({
@@ -61,8 +56,6 @@ const TimeSeries = (props) => {
    const pullGraphData = async () => {
 
       const graphDataEndpoint = `${baseURL}:5000/api/data/building/room/${currentQuery}`
-
-      setLoading(true);
 
       // tries to pull chart data
       try {
@@ -90,6 +83,7 @@ const TimeSeries = (props) => {
 
       // failed to pull chart data
       catch (error) {
+         setShowAlert(true);
          //alert(error.response.data['description']);
          console.error('Error', error.response);
       }
@@ -120,6 +114,10 @@ const TimeSeries = (props) => {
          chartID: chartID
       });
 
+      for (let index = 0; index < array.length; index++) {
+         array[index].chartID = index;
+      }
+
       setSelectedCharts(array);
    }
 
@@ -136,7 +134,7 @@ const TimeSeries = (props) => {
    // set chart layout settings
    const layout = {
       title: `${building} ${room}`,
-      xaxis: { visible: false },
+      xaxis: { visible: false, fixedrange: true },
       yaxis: { zeroline: false, fixedrange: true },
       autosize: true,
       width: width,
@@ -176,6 +174,9 @@ const TimeSeries = (props) => {
    // on room change or query change, resets pull timer
    useEffect(() => {
 
+      // initial load spinner (show)
+      setLoading(true);
+
       pullGraphData();
 
       // five seconds interval for data refresh 
@@ -198,7 +199,7 @@ const TimeSeries = (props) => {
                <CloseIcon color="secondary" />
             </IconButton>
 
-            {userAdminPermissions === true ?
+            {userAdminPermissions === true && loading === false ?
                <div>
                   <IconButton className="download-button" aria-label="download">
                      <CSVLink
@@ -224,21 +225,24 @@ const TimeSeries = (props) => {
                      useResizeHandler={true}
                      style={{ width: "100%", height: "100%" }}
                      config={{
-                        responsive: true, displayModeBar: false
-                        // modeBarButtonsToRemove: [“zoom2d”, “pan2d”, “select2d”, “lasso2d”, “zoomIn2d”, “zoomOut2d”,
-                        //    “autoScale2d”, “resetScale2d”, “hoverClosestCartesian”, “hoverCompareCartesian”, “zoom3d”,
-                        //    “pan3d”, “resetCameraDefault3d”, “resetCameraLastSave3d”, “hoverClosest3d”, “orbitRotation”,
-                        //    “tableRotation”, “zoomInGeo”, “zoomOutGeo”, “resetGeo”, “hoverClosestGeo”, “toImage”,
-                        //    “sendDataToCloud”, “hoverClosestGl2d”, “hoverClosestPie”, “toggleHover”, “resetViews”,
-                        //    “toggleSpikelines”, “resetViewMapbox”] 
+                        responsive: true,
+                        displayModeBar: false
                      }}
                      data={data}
                      layout={layout}
                   />
                </div>
                :
-               <PulseLoader color={'#003466'} loading={true} css={override} size={150} />
+               <div className="spinner-div">
+                  <PulseLoader color={'#003466'} loading={true} size={20} />
+               </div>
             }
+
+            {showAlert === true ?
+               <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
+                  description={`Failed to pull data from endpoint: building: ${building}, room: ${room}, query: ${currentQuery}`} />
+               :
+               null}
 
             <QueryButtons currentQuery={currentQuery} setCurrentQuery={setCurrentQuery} />
          </div >

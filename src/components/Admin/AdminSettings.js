@@ -14,6 +14,7 @@ import CleanNavbar from '../Navigation/CleanNavbar';
 import UserList from './UserList';
 import RoleCreation from './RoleCreation';
 import RoleList from './RoleList';
+import AlertNotification from '../Notification/AlertNotification';
 
 // administrator settings
 const AdminSettings = () => {
@@ -27,10 +28,16 @@ const AdminSettings = () => {
     // state for pulled roles and permissions
     const [pulledRoles, setPulledRoles] = useState([]);
 
+    // state for pulled roles and permissions
+    const [errorCause, setErrorCause] = useState('');
+
+    // state for pulled roles and permissions
+    const [showAlert, setShowAlert] = useState(false);
+
     // API pull logic for user information
     const pullUsers = async () => {
 
-        const userEndpoint = `${baseURL}:5000/api/auth/users`;
+        const userEndpoint = `${baseURL}:5000/api/auth/user`;
 
         // tries to pull users and their information in database
         try {
@@ -59,6 +66,8 @@ const AdminSettings = () => {
 
         // failed to pull users
         catch (error) {
+            setErrorCause('users');
+            setShowAlert(true);
             //alert(error.response.data['description']);
             console.error('Error', error.response);
         }
@@ -97,7 +106,8 @@ const AdminSettings = () => {
 
         // failed to pull roles
         catch (error) {
-            alert("failed to pull roles");
+            setErrorCause('roles');
+            setShowAlert(true);
             console.error('Error', error.response);
         }
     };
@@ -115,7 +125,7 @@ const AdminSettings = () => {
             <div className="admin-settings-row">
 
                 <div className="role-column">
-                    <RoleCreation />
+                    <RoleCreation pullRoles={pullRoles} />
                     <RoleList roles={pulledRoles} pullRoles={pullRoles} />
                 </div>
 
@@ -123,6 +133,12 @@ const AdminSettings = () => {
                     <UserList users={pulledUsers} roles={pulledRoles} pullUsers={pullUsers} />
                 </div>
             </div>
+
+            {showAlert === true ?
+                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
+                    description={`Failed to pull data from endpoint: List of ${errorCause}`} />
+                :
+                null}
         </div >
     );
 }

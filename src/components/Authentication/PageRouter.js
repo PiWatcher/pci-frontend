@@ -11,6 +11,7 @@ import Auth from './Auth';
 import Dashboard from '../Dashboard';
 import AdminSettings from '../Admin/AdminSettings';
 import AuthForgot from '../Authentication/AuthForgot';
+import Settings from '../Settings/Settings';
 
 // component that redirects based on authentication status
 
@@ -53,6 +54,11 @@ const PageRouter = () => {
 
                   {authStatus === true ?
                      <Route exact path="/dashboard" component={Dashboard} /> :
+                     <Redirect to="/auth" component={Auth} />
+                  }
+
+                  {authStatus === true ?
+                     <Route exact path="/settings" component={Settings} /> :
                      <Redirect to="/auth" component={Auth} />
                   }
 
