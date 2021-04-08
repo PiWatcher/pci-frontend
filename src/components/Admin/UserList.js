@@ -3,7 +3,7 @@
 import './UserList.css';
 
 // page imports
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import User from '../Admin/User';
 
 // list for users
@@ -26,7 +26,7 @@ const UserList = (props) => {
     }
 
     // filters out users based on search text
-    const userFilter = (filter) => {
+    const userFilter = useCallback((filter) => {
 
         // filters by name
         let filteredUsers = users.filter(function (item) {
@@ -47,7 +47,7 @@ const UserList = (props) => {
 
         // sets list state
         setFilteredUserList(filtered);
-    }
+    }, [pullUsers, roles, users]);
 
 
     // refilters rooms on user list change, search change, or role list updates
@@ -55,10 +55,9 @@ const UserList = (props) => {
 
         userFilter(search);
 
-    }, [users, search, roles])
+    }, [users, search, roles, userFilter])
 
 
-    // returns parsed users in unordered list
     return (
         <div className="user-list-component">
             <p>Registered Users</p>

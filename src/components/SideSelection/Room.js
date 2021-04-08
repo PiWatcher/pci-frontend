@@ -3,19 +3,19 @@
 import './Room.css';
 
 // page imports
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 
 // contexts
 import { DataContext } from '../../contexts/DataContext';
 import { AuthContext } from '../../contexts/AuthContext';
 
-
+// component for room information
 const Room = (props) => {
 
     // consume props
     const { room, count, capacity } = props;
 
-    // consume context
+    // consume contexts
     const { userAdminPermissions } = useContext(AuthContext);
     const { selectedBuilding, selectedCharts, setSelectedCharts } = useContext(DataContext);
 
@@ -34,7 +34,7 @@ const Room = (props) => {
     }
 
     // constructs room data for packaging
-    const createRoom = () => {
+    const createRoom = useCallback(() => {
 
         // calculates usage
         let localUsage = getUsage(count, capacity);
@@ -54,31 +54,33 @@ const Room = (props) => {
 
         // sets usage
         setRoomUsage(localUsage);
-    }
 
-    // manages list of selected rooms
+    }, [capacity, count]);
+
+    // manages list of selected rooms for chart creation
     const selectRoom = () => {
 
+        // public viewer limit
         let MAX_SELECTED_ROOMS = 1;
 
+        // admin viewer limit
         if (userAdminPermissions === true) {
             MAX_SELECTED_ROOMS = 4;
         }
 
+        // construct building/room object and add to list
         if (selectedCharts.length < MAX_SELECTED_ROOMS) {
             setSelectedCharts([...selectedCharts, { chartID: selectedCharts.length, building: selectedBuilding, room: room }]);
         }
-    }
+    };
 
-    // updates on data change (new room selected)
+    // updates on data change (count)
     useEffect(() => {
 
         createRoom();
 
-    }, [count])
+    }, [count, createRoom]);
 
-
-    // returns room component
     return (
         <li key={room} onClick={() => selectRoom(room)}>
             <div className="list-option">

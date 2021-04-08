@@ -13,7 +13,6 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { unstable_createMuiStrictModeTheme as createMuiTheme, MuiThemeProvider } from '@material-ui/core';
-
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -21,26 +20,23 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+// components
+import ConfirmNotification from '../Notification/ConfirmNotification';
+
 // contexts
-import { DataContext } from '../../contexts/DataContext';
 import { AuthContext } from '../../contexts/AuthContext';
 
-// component for handling each user
+// user information component
 const Role = (props) => {
 
     // consume props from parent component
     const { name, isAdmin, canViewRaw, pullRoles } = props;
 
-    // consumes contexts
-    const { baseURL } = useContext(DataContext);
-    const { userToken } = useContext(AuthContext);
+    // consumes context
+    const { userToken, baseURL } = useContext(AuthContext);
 
+    // alert state
     const [showAlert, setShowAlert] = useState(false);
-
-    // state for role permissions
-    const [newRolePermissions, setNewRolePermissions] = useState({ isAdmin: false, canViewRaw: false });
-
-    const { localIsAdmin, localCanViewRaw } = newRolePermissions;
 
     // custom material theme
     const checkBoxTheme = createMuiTheme({
@@ -61,12 +57,16 @@ const Role = (props) => {
         }
     });
 
-    // open role menu
+
+    // delete user role from database
     const deleteRole = async () => {
 
+        alert(`success`)
+
+        // close confirmation dialog
         setShowAlert(false);
 
-        alert(`success`)
+
         // const deleteRoleEndpoint = `${baseURL}:5000/api/auth/`;
 
         // // tries to delete role
@@ -94,10 +94,10 @@ const Role = (props) => {
         //     setStatusAlert(false);
         // }
 
+        // repull list of roles
         pullRoles();
     };
 
-    // returns user list item component
     return (
         <li>
             <div className="role-list-option">
@@ -130,39 +130,10 @@ const Role = (props) => {
                         </IconButton>
                     </div>
 
-                    <Dialog
-                        open={showAlert}
-                        onClose={() => setShowAlert(false)}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                        maxWidth='sm'
-                        fullWidth={true}
-                        PaperProps={{
-                            style: {
-                                borderRadius: 8,
-                                boxShadow: 1,
-                                display: 'flex',
-                                alignItems: "center"
-                            }
-                        }}
-                    >
-                        <DialogTitle className="alert-dialog-title">{`Delete Role`}</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText className="alert-dialog-description">
-                                {`Are you sure you want to delete "${name}" role?`}
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={() => setShowAlert(false)} color="primary">
-                                Cancel
-                        </Button>
-                            <Button onClick={() => deleteRole()} color="primary" autoFocus>
-                                Confirm
-                        </Button>
-                        </DialogActions>
-                    </Dialog>
-
                 </MuiThemeProvider>
+
+                <ConfirmNotification showAlert={showAlert} setShowAlert={setShowAlert} onConfirm={deleteRole} title={'Role Delete'}
+                    description={`Are you sure you want to delete the "${name}" role?`} />
             </div>
         </li>
     );

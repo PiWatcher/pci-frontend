@@ -3,7 +3,7 @@
 import './TimeSeries.css';
 
 // page imports
-import React, { useContext, useState, useEffect, useMemo } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Plot from 'react-plotly.js';
 import { useResizeDetector } from 'react-resize-detector';
@@ -16,11 +16,15 @@ import { CSVLink } from "react-csv";
 import html2canvas from 'html2canvas';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import PulseLoader from "react-spinners/PulseLoader";
+import { unstable_createMuiStrictModeTheme as createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import Tooltip from '@material-ui/core/Tooltip';
+
+// components
+import AlertNotification from '../Notification/AlertNotification';
 
 // contexts
 import { DataContext } from '../../contexts/DataContext';
 import { AuthContext } from '../../contexts/AuthContext';
-import AlertNotification from '../Notification/AlertNotification';
 
 // chart component
 const TimeSeries = (props) => {
@@ -43,18 +47,42 @@ const TimeSeries = (props) => {
    // state for current query of query buttons
    const [currentQuery, setCurrentQuery] = useState('live');
 
+   // state for displaying spinner
    const [loading, setLoading] = useState(false);
 
-   // settings for auto resize of chart
+   // state for holding CSV data
+   const [csvData, setCSVData] = useState([]);
+
+   // settings for auto resize of chart to fit container
    const { width, height, ref } = useResizeDetector({
       refreshMode: 'debounce',
       refreshRate: 10
    })
 
+   // custom material theme
+   const timeSeriesButtonTheme = createMuiTheme({
+      typography: {
+         fontFamily: 'Open Sans',
+         fontSize: 16
+      },
+      props: {
+         MuiIconButton: {
+            disableRipple: true
+         }
+      },
+      overrides: {
+         MuiTooltip: {
+            tooltip: {
+               fontSize: "1em"
+            }
+         }
+      }
+   });
 
    // // API pull and parse logic for counts and timestamps
-   const pullGraphData = async () => {
+   const pullGraphData = useCallback(async () => {
 
+      // endpoint URL
       const graphDataEndpoint = `${baseURL}:5000/api/data/building/room/${currentQuery}`
 
       // tries to pull chart data
@@ -71,24 +99,28 @@ const TimeSeries = (props) => {
          // successfully connected to endpoint and pulled data
          if (response.status === 200) {
 
-            // set state for chart data
+            // set state for puled chart data
             setGraphList(response.data.data);
 
+            // hide spinner
             setLoading(false);
-
-            console.log(response);
 
          }
       }
 
       // failed to pull chart data
       catch (error) {
+
+         // display failure alert
          setShowAlert(true);
-         //alert(error.response.data['description']);
+
+         // display error to console for debugging
          console.error('Error', error.response);
       }
-   };
+   }, [baseURL, building, currentQuery, room]);
 
+
+   // converts isoDate to a string for display 
    const createTime = (isoDate) => {
 
       let parsedDate = new Date(isoDate);
@@ -98,7 +130,8 @@ const TimeSeries = (props) => {
       return dateString;
    }
 
-   // add zero to the time if single digit
+
+   // add zero to the time if single digit for formatting
    const addZero = (time) => {
       if (time < 10) {
          time = "0" + time;
@@ -106,18 +139,22 @@ const TimeSeries = (props) => {
       return time;
    }
 
+
    // remove chart from grid
    const removeChart = () => {
       let array = [...selectedCharts];
 
+      // removes chart with matching ID
       _.remove(array, {
          chartID: chartID
       });
 
+      // shifts all charts to new ID positions
       for (let index = 0; index < array.length; index++) {
          array[index].chartID = index;
       }
 
+      // sets updated list to display
       setSelectedCharts(array);
    }
 
@@ -144,6 +181,7 @@ const TimeSeries = (props) => {
       paper_bgcolor: "rgba(0,0,0,0)",
    };
 
+   // create CSV file with pulled data
    const createCSVData = () => {
 
       let index;
@@ -158,7 +196,7 @@ const TimeSeries = (props) => {
          data.push({ count: counts[index], timestamp: timestamps[index] });
       }
 
-      return data;
+      setCSVData(data);
    }
 
    // saves image of chart
@@ -181,72 +219,80 @@ const TimeSeries = (props) => {
 
       // five seconds interval for data refresh 
       const interval = setInterval(() => {
-         console.log('grabbing counts');
          pullGraphData();
       }, 5000);
 
       return () => clearInterval(interval);
 
-   }, [room, currentQuery]);
+   }, [currentQuery, pullGraphData]);
 
-   // returns the chart with the passed down state and data
+
    return (
-      useMemo(() =>
 
-         <div ref={ref} style={{ height: '90%', width: "100%" }}>
+      <div ref={ref} style={{ height: '90%', width: "100%" }}>
 
-            <IconButton className="delete-button" aria-label="delete" onClick={() => removeChart()}>
-               <CloseIcon color="secondary" />
-            </IconButton>
+         <MuiThemeProvider theme={timeSeriesButtonTheme}>
+            <Tooltip title="Remove Chart" arrow>
+               <IconButton className="delete-button" aria-label="delete" onClick={() => removeChart()} onTouchStart={() => removeChart()}>
+                  <CloseIcon color="secondary" />
+               </IconButton>
+            </Tooltip>
 
             {userAdminPermissions === true && loading === false ?
                <div>
-                  <IconButton className="download-button" aria-label="download">
-                     <CSVLink
-                        data={createCSVData()}
-                        header={[{ label: "Footfall Count", key: "count" }, { label: "Timestamp", key: "timestamp" }]}
-                        filename={`${building}_${room}_${currentQuery}.csv`}
-                     >
-                        <GetAppIcon color="primary" />
-                     </CSVLink>
-                  </IconButton>
+                  <Tooltip title="Download Raw Data" arrow>
+                     <IconButton className="download-button" aria-label="download">
+                        <CSVLink
+                           data={csvData}
+                           header={[{ label: "Footfall Count", key: "count" }, { label: "Timestamp", key: "timestamp" }]}
+                           filename={`${building}_${room}_${currentQuery}.csv`}
+                           target=""
+                           className="csv-anchor-link"
+                           onClick={() => createCSVData()}
+                           onTouchStart={() => createCSVData()}
+                        >
+                           <GetAppIcon color="primary" />
+                        </CSVLink>
+                     </IconButton>
+                  </Tooltip>
 
-                  <IconButton onClick={() => saveChart()} className="download-button" aria-label="download">
-                     <CameraAltIcon />
-                  </IconButton>
+                  <Tooltip title="Download Screenshot" arrow>
+                     <IconButton onClick={() => saveChart()} onTouchStart={() => saveChart()} className="screenshot-button" aria-label="screenshot">
+                        <CameraAltIcon />
+                     </IconButton>
+                  </Tooltip>
                </div>
                :
                null
             }
+         </MuiThemeProvider>
+         {loading === false ?
+            <div id="chart">
+               <Plot
+                  useResizeHandler={true}
+                  style={{ width: "100%", height: "100%" }}
+                  config={{
+                     responsive: true,
+                     displayModeBar: false
+                  }}
+                  data={data}
+                  layout={layout}
+               />
+            </div>
+            :
+            <div className="spinner-div">
+               <PulseLoader color={'#003466'} loading={true} size={20} />
+            </div>
+         }
 
-            {loading === false ?
-               <div id="chart">
-                  <Plot
-                     useResizeHandler={true}
-                     style={{ width: "100%", height: "100%" }}
-                     config={{
-                        responsive: true,
-                        displayModeBar: false
-                     }}
-                     data={data}
-                     layout={layout}
-                  />
-               </div>
-               :
-               <div className="spinner-div">
-                  <PulseLoader color={'#003466'} loading={true} size={20} />
-               </div>
-            }
+         {showAlert === true ?
+            <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
+               description={`Failed to pull data from endpoint: building: ${building}, room: ${room}, query: ${currentQuery}`} />
+            :
+            null}
 
-            {showAlert === true ?
-               <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
-                  description={`Failed to pull data from endpoint: building: ${building}, room: ${room}, query: ${currentQuery}`} />
-               :
-               null}
-
-            <QueryButtons currentQuery={currentQuery} setCurrentQuery={setCurrentQuery} />
-         </div >
-      )
+         <QueryButtons currentQuery={currentQuery} setCurrentQuery={setCurrentQuery} />
+      </div >
    );
 }
 

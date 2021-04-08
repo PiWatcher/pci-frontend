@@ -2,14 +2,14 @@
 // page imports
 import React, { createContext, useState } from 'react';
 
-// context that pulls data from backend and parses
+// context that stores selected building and rooms
 export const DataContext = createContext();
 
 const DataContextProvider = (props) => {
 
    // production base url
    // const baseURL = process.env.REACT_APP_BASE_URL;
-   const baseURL = "http://localhost"
+   const baseURL = "http://192.168.0.155"
 
    // creates state: selected building
    const [selectedBuilding, setSelectedBuilding] = useState('');

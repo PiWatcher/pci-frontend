@@ -37,7 +37,6 @@ const QueryButtons = (props) => {
         },
     });
 
-    // returns the entire dashboard and its child components
     return (
 
         userAdminPermissions === true ?
@@ -45,32 +44,32 @@ const QueryButtons = (props) => {
             <div className="set-buttons">
                 <MuiThemeProvider theme={queryButtonTheme}>
                     <Button variant={currentQuery === 'live' ? "contained" : "text"} color="primary"
-                        onClick={() => setCurrentQuery('live')}>
+                        onClick={() => setCurrentQuery('live')} onTouchStart={() => setCurrentQuery('live')}>
                         Hour
                 </Button>
 
                     <Button variant={currentQuery === 'daily' ? "contained" : "text"} color="primary"
-                        onClick={() => setCurrentQuery('daily')}>
+                        onClick={() => setCurrentQuery('daily')} onTouchStart={() => setCurrentQuery('daily')}>
                         Day
                 </Button>
 
                     <Button variant={currentQuery === 'weekly' ? "contained" : "text"} color="primary"
-                        onClick={() => setCurrentQuery('weekly')}>
+                        onClick={() => setCurrentQuery('weekly')} onTouchStart={() => setCurrentQuery('weekly')}>
                         Week
                 </Button>
 
                     <Button variant={currentQuery === 'monthly' ? "contained" : "text"} color="primary"
-                        onClick={() => setCurrentQuery('monthly')}>
+                        onClick={() => setCurrentQuery('monthly')} onTouchStart={() => setCurrentQuery('monthly')}>
                         Month
                 </Button>
 
                     <Button variant={currentQuery === 'quarterly' ? "contained" : "text"} color="primary"
-                        onClick={() => setCurrentQuery('quarterly')}>
+                        onClick={() => setCurrentQuery('quarterly')} onTouchStart={() => setCurrentQuery('quarterly')}>
                         Quarter
                 </Button>
 
                     <Button variant={currentQuery === 'yearly' ? "contained" : "text"} color="primary"
-                        onClick={() => setCurrentQuery('yearly')}>
+                        onClick={() => setCurrentQuery('yearly')} onTouchStart={() => setCurrentQuery('yearly')}>
                         Year
                 </Button>
                 </MuiThemeProvider>

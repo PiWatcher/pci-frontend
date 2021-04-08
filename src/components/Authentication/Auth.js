@@ -6,6 +6,8 @@ import './Auth.css';
 import React, { useContext, useState } from 'react';
 import nauLogo from '../../images/nauLogoLogin.svg';
 import { Link } from 'react-router-dom';
+
+// components
 import AlertNotification from '../Notification/AlertNotification';
 
 // contexts
@@ -29,13 +31,16 @@ const Auth = () => {
     // state for auth type management
     const [localSelectedAuth, setLocalSelectedAuth] = useState("Sign In");
 
+    // current sign in status
+    const [signInStatus, setSignInStatus] = useState(false);
+
     // current sign up status
     const [signUpStatus, setSignUpStatus] = useState(false);
 
-    // state for alert
+    // state for alert display
     const [showAlert, setShowAlert] = useState(false);
 
-    // state for alert
+    // state for alert type
     const [alertType, setAlertType] = useState('');
 
 
@@ -52,7 +57,7 @@ const Auth = () => {
         else if (e.target.id === "password") {
             setLocalPassword(e.target.value);
         }
-    }
+    };
 
 
     // passes temp variables to AuthContext state after submit
@@ -64,38 +69,39 @@ const Auth = () => {
         // authenticates account 
         if (localSelectedAuth === "Sign In") {
 
-            let signInStatus = null;
-
+            // await authentication
             authenticateAccount(localEmail, localPassword).then(function (result) {
-                signInStatus = result;
+
+                // set state based on response
+                result === false && setSignInStatus(result);
             });
 
-            console.log(signInStatus);
-
+            // if failure, display alert
             if (!signInStatus) {
                 setAlertType('Sign-in');
                 setShowAlert(true);
             }
-
-
 
         }
 
         // creates user in database
         else if (localSelectedAuth === "Sign Up") {
 
+            // await creation
             createAccount(localUserName, localEmail, localPassword).then(function (result) {
-                setSignUpStatus(result);
 
+                // set state based on response
+                setSignUpStatus(result);
             });
 
+            // if failure, display alert
             if (!signUpStatus) {
                 setAlertType('Sign-up');
                 setShowAlert(true);
             }
 
         }
-    }
+    };
 
     // sets css for sign in tab and sets local variable to sign in
     const selectSignIn = () => {
@@ -116,7 +122,7 @@ const Auth = () => {
             signIn.classList.remove("nonActiveLoginType");
             signIn.classList.add("activeLoginType");
         }
-    }
+    };
 
 
     // sets css for register tab and sets local variables to sing in
@@ -138,7 +144,7 @@ const Auth = () => {
             signUp.classList.remove("nonActiveLoginType");
             signUp.classList.add("activeLoginType");
         }
-    }
+    };
 
     // returns the login page with input form
     return (
@@ -169,7 +175,7 @@ const Auth = () => {
                                 </form>
                             }
                             <div className="forgot-password-div">
-                                <Link to="/authforgot">
+                                <Link to="/authforgot" className="forgot-password-link">
                                     Forgot password?
                                 </Link>
                             </div>

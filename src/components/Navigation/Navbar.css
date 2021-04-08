@@ -1,3 +1,4 @@
+
 .navbar-component {
    display: flex;
    width: 100vw;
@@ -16,49 +17,30 @@
    padding: 5px;
 }
 
-.search-div {
-   display: flex;
-   margin: 0 0 0 20px;
-   width: 400px;
-}
-
-.map-icon-div {
-   display: flex;
-   width: 30px;
-   margin: 0 0 0 20px;
-}
-
-.map-icon-div img {
-   width: 28px;
-}
-
-.map-icon-div img:hover {
-   color: grey;
-   cursor: pointer;
-}
-
 .right-side-div {
    display: flex;
    align-items: center;
    margin: 0 0 0 auto;
 }
 
-.settings-icon-div {
-   margin: 0 0 0 20px;
-   color: white;
-   font-size: 1.4em;
-}
-
-.settings-icon-div img {
-   width: 35px;
+.admin-icon-div {
+   margin: 0 0 0 15px;
 }
 
 .admin-icon-div img {
    width: 35px;
 }
 
+.settings-icon-div {
+   margin: 0 0 0 15px;
+}
+
+.settings-icon-div img {
+   width: 35px;
+}
+
 .sign-out-div {
-   margin: 0 20px 0 15px;
+   margin: -5px 15px 0 15px;
    color: white;
    font-size: 1.4em;
 }
@@ -68,32 +50,24 @@
    cursor: pointer;
 }
 
-.map-div {
-   width: 85vw;
-   max-width: 2000px;
-   margin: 0 auto;
-}
-
 @media screen and (max-width: 750px) {
    .logo-div img {
-      width: 75px;
+      width: 80px;
+      padding: 0 0 0 0;
    }
 
-   .search-div {
-      margin-left: 10px;
-   }
-
-   .map-icon-div img {
-      width: 25px;
-   }
-
-   .admin-icon-div img {
-      width: 35px;
+   .admin-icon-div {
+      margin-top: 5px;
       margin-left: 15px;
    }
 
+   .settings-icon-div {
+      margin-top: 5px;
+      margin-left: 10px;
+   }
+
    .sign-out-div {
-      margin-right: 10px;
+      margin: 0 0 0 5px;
       font-size: 1.15em;
    }
 }

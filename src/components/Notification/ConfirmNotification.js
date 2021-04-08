@@ -1,5 +1,4 @@
 
-
 // page imports
 import React from 'react';
 import Button from '@material-ui/core/Button';
@@ -11,14 +10,14 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import _ from 'lodash'
 import { unstable_createMuiStrictModeTheme as createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 
-// component for non selection alerts
-const AlertNotification = (props) => {
+// component for selection alerts
+const ConfirmNotification = (props) => {
 
     // consume props from parent component
-    const { showAlert, setShowAlert, title, description } = props;
+    const { showAlert, setShowAlert, onConfirm, title, description } = props;
 
     // custom material theme
-    const alertTheme = createMuiTheme({
+    const confirmTheme = createMuiTheme({
         typography: {
             fontFamily: 'Open Sans',
             fontSize: 16
@@ -38,7 +37,7 @@ const AlertNotification = (props) => {
 
     return (
         <div>
-            <MuiThemeProvider theme={alertTheme}>
+            <MuiThemeProvider theme={confirmTheme}>
                 <Dialog
                     open={showAlert}
                     onClose={() => setShowAlert(false)}
@@ -63,8 +62,11 @@ const AlertNotification = (props) => {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={() => setShowAlert(false)}>
-                            Close
-                        </Button>
+                            Cancel
+                            </Button>
+                        <Button onClick={() => onConfirm()} autoFocus>
+                            Confirm
+                            </Button>
                     </DialogActions>
                 </Dialog>
             </MuiThemeProvider >
@@ -72,4 +74,4 @@ const AlertNotification = (props) => {
     );
 }
 
-export default AlertNotification;
+export default ConfirmNotification;

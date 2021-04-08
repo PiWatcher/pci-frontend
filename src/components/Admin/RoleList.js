@@ -3,19 +3,19 @@
 import './RoleList.css';
 
 // page imports
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Role from './Role';
 
-// list for users
+// list for user components
 const RoleList = (props) => {
 
     // consume props
     const { roles, pullRoles } = props;
 
-    // state for user search
+    // state for role search
     const [search, setSearch] = useState('');
 
-    // state for list of users
+    // state for list of roles
     const [filteredRoleList, setFilteredRoleList] = useState([]);
 
     // pulls search text for processing
@@ -25,8 +25,8 @@ const RoleList = (props) => {
         }
     }
 
-    // filters out users based on search text
-    const roleFilter = (filter) => {
+    // filters out roles based on search text
+    const roleFilter = useCallback((filter) => {
 
         // filters by role name
         let filteredRoles = roles.filter(function (item) {
@@ -46,18 +46,18 @@ const RoleList = (props) => {
 
         // sets list state
         setFilteredRoleList(filtered);
-    }
+
+    }, [pullRoles, roles]);
 
 
-    // refilters rooms on user list change, search change, or role list updates
+    // refilters rooms on role list change or search change
     useEffect(() => {
 
         roleFilter(search);
 
-    }, [roles, search])
+    }, [roles, search, roleFilter])
 
 
-    // returns parsed users in unordered list
     return (
         <div className="role-list-component">
             <p>Available Roles</p>

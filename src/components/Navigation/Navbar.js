@@ -5,30 +5,31 @@ import './Navbar.css';
 // page imports
 import React, { useContext } from 'react';
 import SearchBar from './SearchBar';
-//import BuildingMap from './BuildingMap';
 import nauLogo from '../../images/nauLogoDash.svg';
-//import mapIcon from '../../images/mapIcon.svg';
 import adminIcon from '../../images/adminIcon.svg';
 import settingsIcon from '../../images/settingsIcon.svg';
 import { Link } from 'react-router-dom';
-import Cookies from 'universal-cookie';
+import Tooltip from '@material-ui/core/Tooltip';
+import { unstable_createMuiStrictModeTheme as createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
 
 const Navbar = () => {
 
-
    // consume context
-   const { userAdminPermissions, setAuthStatus } = useContext(AuthContext);
+   const { userAdminPermissions, setAuthStatus, cookies } = useContext(AuthContext);
 
-   const cookies = new Cookies();
-
-   // flag to show map or not on dashboard
-   //const [showMap, setShowMap] = useState(false);
-
-   // flip flag for showing map div
-   //const onMapClick = () => setShowMap(!showMap);
+   // custom material ui them
+   const navLinkTheme = createMuiTheme({
+      overrides: {
+         MuiTooltip: {
+            tooltip: {
+               fontSize: "1em"
+            }
+         }
+      }
+   });
 
    // sign out of dashboard, clear all data and reset auth status
    const signOut = () => {
@@ -48,42 +49,36 @@ const Navbar = () => {
                <img src={nauLogo} alt="NAU Logo" />
             </div>
 
-            <div className="search-div">
-               <SearchBar />
-            </div>
-            {/* 
-            <div className="map-icon-div">
-               <img className="map" onClick={onMapClick} src={mapIcon} alt="Map Icon" />
-            </div> */}
+            <SearchBar />
 
             <div className="right-side-div">
-               {userAdminPermissions === true ?
-                  <div className="admin-icon-div">
-                     <Link to="/admin">
-                        <img src={adminIcon} alt=" Admin Icon" />
-                     </Link>
-                  </div>
-                  :
-                  null
-               }
+               <MuiThemeProvider theme={navLinkTheme}>
+                  {userAdminPermissions === true ?
+                     <div className="admin-icon-div">
+                        <Tooltip title="Admin Settings" arrow>
+                           <Link to="/admin">
+                              <img src={adminIcon} alt=" Admin Icon" />
+                           </Link>
+                        </Tooltip>
+                     </div>
+                     :
+                     null
+                  }
 
-               <div className="settings-icon-div">
-                  <Link to="/settings">
-                     <img src={settingsIcon} alt="Settings Icon" />
-                  </Link>
-               </div>
+                  <div className="settings-icon-div">
+                     <Tooltip title="Settings" arrow>
+                        <Link to="/settings">
+                           <img src={settingsIcon} alt="Settings Icon" />
+                        </Link>
+                     </Tooltip>
+                  </div>
+               </MuiThemeProvider>
 
                <div className="sign-out-div" onClick={signOut}>
                   Sign Out
                </div>
             </div>
-
          </div>
-
-         {/* <div className="map-div">
-            {showMap ? <BuildingMap /> : null}
-         </div> */}
-
       </div>
    );
 }

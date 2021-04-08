@@ -69,7 +69,13 @@ a {
   font-size: 1.10em;
 }
 
+.forgot-password-link {
+  color: #003466;
+}
 
+.forgot-password-link:hover {
+  color: gold;
+}
 
 /* FORM TYPOGRAPHY*/
 
@@ -218,14 +224,6 @@ input[type=password] {
   input[type=password]:placeholder {
     color: #cccccc;
   }
-
-/* auth failure */
-.failure-text {
-  margin-top: 15px;
-  margin-bottom: 5px;
-  font-size: 1.1em;
-  color: red;
-}
 
 /* sign up success */
 .sign-up-success {

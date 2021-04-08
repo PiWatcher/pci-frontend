@@ -13,13 +13,12 @@ import Navbar from './Navigation/Navbar';
 import SideSelection from './SideSelection/SideSelection';
 import ChartLayout from './Graph/ChartLayout';
 
-
+// entire dashboard and all children component
 const Dashboard = () => {
 
    // consume context
    const { selectedBuilding } = useContext(DataContext);
 
-   // returns the entire dashboard and its child components
    return (
       <div className="dashboard-container">
 

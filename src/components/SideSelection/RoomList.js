@@ -3,7 +3,7 @@
 import './RoomList.css';
 
 // page imports
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Room from './Room';
 
 const RoomList = (props) => {
@@ -25,7 +25,7 @@ const RoomList = (props) => {
    }
 
    // filters out rooms based on search text
-   const roomFilter = (filter) => {
+   const roomFilter = useCallback((filter) => {
 
       // filters room list
       let filteredRooms = rooms.filter(function (item) {
@@ -44,7 +44,7 @@ const RoomList = (props) => {
 
       // sets the state
       setFilteredRoomList(filtered);
-   }
+   }, [rooms]);
 
 
    // on building change, resets filter to empty
@@ -60,7 +60,7 @@ const RoomList = (props) => {
 
       roomFilter(search);
 
-   }, [rooms, search])
+   }, [rooms, search, roomFilter])
 
 
    // returns filtered rooms in unordered list

@@ -2,10 +2,13 @@
 // styling
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
+import './ChartLayout.css'
 
 // page imports
 import React, { useContext, useState } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
+
+// components
 import TimeSeries from './TimeSeries';
 
 // contexts
@@ -22,19 +25,19 @@ const ChartLayout = () => {
     // initial layout for grid
     const [gridLayout, setGridLayout] = useState([
         {
-            i: '0', isBounded: true, isDraggable: true, isResizable: true, resizeHandles: [["se"]],
-            x: 0, y: 0, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2,
+            i: '0', isBounded: true, isDraggable: true, isResizable: true, resizeHandles: ['se'],
+            x: 0, y: 0, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2
         },
         {
-            i: '1', isBounded: false, isDraggable: true, isResizable: true, resizeHandles: [["se"]],
+            i: '1', isBounded: false, isDraggable: true, isResizable: true, resizeHandles: ['se'],
             x: 1, y: 0, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2,
         },
         {
-            i: '2', isBounded: false, isDraggable: true, isResizable: true, resizeHandles: [["se"]],
+            i: '2', isBounded: false, isDraggable: true, isResizable: true, resizeHandles: ['se'],
             x: 0, y: 1, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2,
         },
         {
-            i: '3', isBounded: false, isDraggable: true, isResizable: true, resizeHandles: [["se"]],
+            i: '3', isBounded: false, isDraggable: true, isResizable: true, resizeHandles: ['se'],
             x: 1, y: 1, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2,
         }
     ]);
@@ -53,8 +56,6 @@ const ChartLayout = () => {
         //setGridLayout(layout);
     };
 
-
-    // returns the grid and its charts
     return (
         <ResponsiveGridLayout className="layout"
             breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}

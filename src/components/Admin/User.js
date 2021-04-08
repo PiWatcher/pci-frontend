@@ -12,27 +12,22 @@ import axios from 'axios';
 import _ from 'lodash'
 import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import AlertNotification from '../Notification/AlertNotification';
 
+// components
+import AlertNotification from '../Notification/AlertNotification';
+import ConfirmNotification from '../Notification/ConfirmNotification';
 
 // contexts
-import { DataContext } from '../../contexts/DataContext';
 import { AuthContext } from '../../contexts/AuthContext';
 
-// component for handling each user
+// role information component
 const User = (props) => {
 
     // consume props from parent component
     const { name, email, role, roles, pullUsers } = props;
 
     // consumes contexts
-    const { baseURL } = useContext(DataContext);
-    const { userToken } = useContext(AuthContext);
+    const { baseURL, userToken } = useContext(AuthContext);
 
     // user role in state
     const [userRole, setUserRole] = useState(role);
@@ -40,9 +35,14 @@ const User = (props) => {
     // Material UI menu state
     const [anchorEl, setAnchorEl] = useState(null);
 
-    const [showAlert, setShowAlert] = useState(false);
+    // alert state
+    const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
-    const [userUpdateAlert, setUserUpdateAlert] = useState(false);
+    // alert state
+    const [showUpdateAlert, setShowUpdateAlert] = useState(false);
+
+    // role update alert state
+    const [userUpdateAlert, setUserUpdateAlert] = useState('');
 
     // custom material theme
     const roleButtonTheme = createMuiTheme({
@@ -63,6 +63,7 @@ const User = (props) => {
     // API logic for updating user role
     const updateRole = async (role) => {
 
+        // endpoint URL
         const roleUpdateEndpoint = `${baseURL}:5000/api/auth/users/update`
 
         // tries to update user information
@@ -81,7 +82,10 @@ const User = (props) => {
 
             // successfully connected to endpoint and updated user
             if (response.status === 200) {
-                setShowAlert(true);
+
+                setUserRole(response.data.user['role']);
+
+                setShowUpdateAlert(true);
 
                 setUserUpdateAlert('success');
             }
@@ -90,11 +94,12 @@ const User = (props) => {
         // caught failure
         catch (error) {
 
-            setShowAlert(true);
+            setShowUpdateAlert(true);
 
             setUserUpdateAlert('failure');
 
-            console.log(error.response.data['description'])
+            // display error in console for debugging
+            console.error('Error', error.response);
         }
     };
 
@@ -110,9 +115,6 @@ const User = (props) => {
 
         // checks if role has been selected
         if (newRole !== '') {
-
-            // set role for user
-            setUserRole(newRole);
 
             // update user role in database
             updateRole(newRole);
@@ -154,6 +156,8 @@ const User = (props) => {
         //     setShowAlert(true);
         // }
 
+        setShowDeleteAlert(false);
+
         pullUsers();
     };
 
@@ -162,10 +166,6 @@ const User = (props) => {
         <li>
             <div className="user-list-option">
                 <div className="user-info">
-
-
-
-
                     <div className="user-name">
                         {name}
                     </div>
@@ -200,55 +200,26 @@ const User = (props) => {
                     </div>
 
                     <div className="user-delete">
-                        <IconButton className="delete-button" aria-label="delete" onClick={() => setShowAlert(true)} >
+                        <IconButton className="delete-button" aria-label="delete" onClick={() => setShowDeleteAlert(true)} >
                             <CloseIcon color="secondary" />
                         </IconButton>
                     </div>
 
-                    <Dialog
-                        open={showAlert}
-                        onClose={() => setShowAlert(false)}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                        maxWidth='sm'
-                        fullWidth={true}
-                        PaperProps={{
-                            style: {
-                                borderRadius: 8,
-                                boxShadow: 1,
-                                display: 'flex',
-                                alignItems: "center"
-                            }
-                        }}
-                    >
-                        <DialogTitle className="alert-dialog-title">{`Delete User`}</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText className="alert-dialog-description">
-                                {`Are you sure you want to delete "${name}"?`}
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={() => setShowAlert(false)} color="primary">
-                                Cancel
-                            </Button>
-                            <Button onClick={() => deleteUser()} color="primary" autoFocus>
-                                Confirm
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
-
                 </MuiThemeProvider>
 
+                <ConfirmNotification showAlert={showDeleteAlert} setShowAlert={setShowDeleteAlert} onConfirm={deleteUser} title={'User Delete'}
+                    description={`Are you sure you want to delete the account for ${name}?`} />
 
-                {showAlert === true && userUpdateAlert === 'success' ?
-                    <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'User Role Update'}
-                        description={`${name} successfully updated to ${role}`} />
+
+                {showUpdateAlert === true && userUpdateAlert === 'success' ?
+                    <AlertNotification showAlert={showUpdateAlert} setShowAlert={setShowUpdateAlert} title={'User Role Update'}
+                        description={`${name} successfully updated to "${userRole}" role.`} />
                     :
                     null}
 
-                {showAlert === true && userUpdateAlert === 'failure' ?
-                    <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
-                        description={`${name} failed to update to role of ${role}`} />
+                {showUpdateAlert === true && userUpdateAlert === 'failure' ?
+                    <AlertNotification showAlert={showUpdateAlert} setShowAlert={setShowUpdateAlert} title={'User Role Update'}
+                        description={`${name} failed to update to role.`} />
                     :
                     null}
 

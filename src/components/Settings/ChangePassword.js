@@ -9,7 +9,7 @@ import axios from 'axios';
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
 
-// authentication page
+// component for password change after login
 const ChangePassword = () => {
 
     // consume data from AuthContext
@@ -49,9 +49,11 @@ const ChangePassword = () => {
 
     // returns password reset component
     return (
-        <div className="change-password-div">
+        <div className="change-password-component">
             <p>Change Password</p>
             <form onSubmit={changePassword}>
+                <input type="password" id="current-password" placeholder="current password"
+                    pattern="^(?![a-z]*$)(?![A-Z]*$)(?!\d*$)(?!\p{P}*$)(?![^a-zA-Z\d\p{P}]*$).{6,}$" onChange={handleInputChange} required />
                 <input type="password" id="new-password" placeholder="new password"
                     pattern="^(?![a-z]*$)(?![A-Z]*$)(?!\d*$)(?!\p{P}*$)(?![^a-zA-Z\d\p{P}]*$).{6,}$" onChange={handleInputChange} required />
                 <input type="password" id="new-password-conf" placeholder="confirm new password"

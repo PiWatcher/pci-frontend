@@ -1,6 +1,6 @@
 
 // page imports
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 
@@ -11,7 +11,7 @@ const AuthContextProvider = (props) => {
 
     // production base url
     // const baseURL = process.env.REACT_APP_BASE_URL;
-    const baseURL = "http://localhost"
+    const baseURL = "http://192.168.0.155"
 
     // current authentication status
     const [authStatus, setAuthStatus] = useState(true);
@@ -19,10 +19,10 @@ const AuthContextProvider = (props) => {
     //  current user type 
     const [userRoleName, setUserRoleName] = useState('admin');
 
-    //  current user type 
+    //  current user permission
     const [userAdminPermissions, setUserAdminPermissions] = useState(true);
 
-    //  current user type 
+    //  current user permission 
     const [userViewRawData, setUserViewRawData] = useState('');
 
     // submitted user name
@@ -34,10 +34,10 @@ const AuthContextProvider = (props) => {
     // cookie functionality
     const cookies = new Cookies();
 
-
     // sends given user data to backend for authentication
     const authenticateAccount = async (email, password) => {
 
+        // endpoint URL
         const signInEndpoint = `${baseURL}:5000/api/auth/signin`;
 
         // tries to connect to database and verify account information
@@ -55,7 +55,6 @@ const AuthContextProvider = (props) => {
             // successfully verified
             if (response.status === 200) {
 
-
                 let responseData = response.data;
 
                 // set user information from response
@@ -64,7 +63,6 @@ const AuthContextProvider = (props) => {
                 setUserAdminPermissions(responseData.isAdmin);
                 setUserViewRawData(responseData.canVewRaw);
                 setUserToken(responseData.jwt_token);
-
 
                 // set cookie with expiration date (7 days)
                 cookies.set('piWatcher Auth', userToken, { path: '/', expires: new Date(Date.now() + 604800) });
@@ -77,14 +75,15 @@ const AuthContextProvider = (props) => {
 
         // failed to sign in
         catch (error) {
-            return (false)
+            return false;
         }
     };
 
 
     // sends given user data to backend for authentication
-    const authenticateCookie = async () => {
+    const authenticateCookie = useCallback(async () => {
 
+        // endpoint URL
         const signInEndpoint = `${baseURL}:5000/api/auth/signin`;
 
         // tries to connect to database and verify account information
@@ -102,11 +101,9 @@ const AuthContextProvider = (props) => {
             // successfully verified
             if (response.status === 200) {
 
-
                 let responseData = response.data;
 
                 // set user information from response
-
                 setUserName(responseData.full_name);
                 setUserRoleName(responseData.role);
                 setUserAdminPermissions(responseData.isAdmin);
@@ -120,14 +117,19 @@ const AuthContextProvider = (props) => {
 
         // failed to sign in
         catch (error) {
+
+            // display error to console for debugging
+            console.error('Error', error.response);
+
             return false;
         }
-    }
+    }, [userToken]);
 
 
     // sends given user data to backend for account creation
     const createAccount = async (name, email, password) => {
 
+        // endpoint URL
         const signUpEndpoint = `${baseURL}:5000/api/auth/signup`;
 
         // tries to connect to database and post new account information
@@ -151,6 +153,9 @@ const AuthContextProvider = (props) => {
         // failed to sign up
         catch (error) {
 
+            // display error to console for debugging
+            console.error('Error', error.response);
+
             return false;
         }
     }
@@ -166,15 +171,13 @@ const AuthContextProvider = (props) => {
             authenticateCookie();
         }
 
-    }, [])
-
+    }, [cookies, authenticateCookie])
 
     return (
-        <AuthContext.Provider value={{ userName, userRoleName, userToken, userAdminPermissions, userViewRawData, authStatus, setAuthStatus, authenticateAccount, createAccount, baseURL }}>
+        <AuthContext.Provider value={{ userName, userRoleName, userToken, userAdminPermissions, userViewRawData, authStatus, setAuthStatus, authenticateAccount, createAccount, baseURL, cookies }}>
             {props.children}
         </AuthContext.Provider>
     )
 }
-
 
 export default AuthContextProvider

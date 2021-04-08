@@ -14,7 +14,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 const Auth = () => {
 
     // consume data from AuthContext
-    const { } = useContext(AuthContext);
+    const { baseURL } = useContext(AuthContext);
 
     // local variable for user password during text input
     const [localEmail, setLocalEmail] = useState('');
@@ -29,13 +29,13 @@ const Auth = () => {
     const [localNewPasswordConf, setLocalNewPasswordConf] = useState('');
 
     // local variable for user password during text input
-    const [emailSent, setEmailSent] = useState(false);
+    const [emailSent, setEmailSent] = useState(true);
 
     // local variable for user password during text input
-    const [codeVerified, setCodeVerified] = useState(false);
+    const [codeVerified, setCodeVerified] = useState(true);
 
     // local variable for user password during text input
-    const [resetConfirmed, setResetConfirmed] = useState(false);
+    const [resetConfirmed, setResetConfirmed] = useState(true);
 
     // places user form input into local temp variables
     const handleInputChange = (e) => {
@@ -104,8 +104,8 @@ const Auth = () => {
                     {resetConfirmed === true ?
                         <div className="forgot-password-div">
                             <div className="reset-text">Password has been reset successfully!</div>
-                            <div className="return-link">
-                                <Link to="/auth">
+                            <div className="return-link-div">
+                                <Link to="/auth" className="return-link">
                                     Return to sign in page.
                                 </Link>
                             </div>

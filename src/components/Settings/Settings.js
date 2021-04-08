@@ -12,7 +12,7 @@ import ChangePassword from './ChangePassword';
 // administrator settings
 const Settings = () => {
 
-    // returns the the admin page and its child components
+    // returns the the settings page and its child components
     return (
         <div className="settings-container">
             <CleanNavbar />

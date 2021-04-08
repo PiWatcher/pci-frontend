@@ -6,20 +6,17 @@ import './CleanNavbar.css';
 import React, { useContext } from 'react';
 import nauLogo from '../../images/nauLogoDash.svg';
 import { Link } from 'react-router-dom';
-import Cookies from 'universal-cookie';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
 
-
+// navbar without alternate links
 const CleanNavbar = () => {
 
    // consume context
-   const { setAuthStatus } = useContext(AuthContext);
+   const { setAuthStatus, cookies } = useContext(AuthContext);
 
-   const cookies = new Cookies();
-
-   // sign out of dashboard reset auth status
+   // sign out of dashboard
    const signOut = () => {
 
       // remove cookie
@@ -38,9 +35,11 @@ const CleanNavbar = () => {
             </Link>
          </div>
 
-         <div className="clean-sign-out-div" onClick={signOut}>
-            Sign Out
+         <div className="clean-right-side-div">
+            <div className="clean-sign-out-div" onClick={signOut}>
+               Sign Out
             </div>
+         </div>
       </div>
    );
 }

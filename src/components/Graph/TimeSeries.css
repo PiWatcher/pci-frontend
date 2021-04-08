@@ -11,9 +11,19 @@
    z-index: 999;
 }
 
+.screenshot-button {
+   float: right;
+   z-index: 999;
+}
+
 .download-button {
    float: right;
    z-index: 999;
+}
+
+.csv-anchor-link {
+   width: 24px;
+   height: 24px;
 }
 
 .spinner-div {
