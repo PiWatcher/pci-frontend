@@ -8,8 +8,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import { Button } from '@material-ui/core';
-import { unstable_createMuiStrictModeTheme as createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import axios from 'axios';
 
 // components
@@ -123,6 +122,7 @@ const RoleCreation = (props) => {
         }
     };
 
+    // returns role creation component
     return (
         <div className="role-creation-component">
             <p>Role Creation</p>
@@ -147,7 +147,7 @@ const RoleCreation = (props) => {
                 </form>
             </div>
 
-            {showAlert === true && alertType == 'success' ?
+            {showAlert === true && alertType === 'success' ?
                 <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Role Creation Status`}
                     description={`Creation of role "${newRoleName}" successful.`} />
                 :

@@ -5,28 +5,22 @@ import "./Role.css"
 // page imports
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
-import _ from 'lodash'
 import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import { unstable_createMuiStrictModeTheme as createMuiTheme, MuiThemeProvider } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 
 // components
+import AlertNotification from '../Notification/AlertNotification';
 import ConfirmNotification from '../Notification/ConfirmNotification';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
 
-// user information component
+// role information component
 const Role = (props) => {
 
     // consume props from parent component
@@ -36,7 +30,13 @@ const Role = (props) => {
     const { userToken, baseURL } = useContext(AuthContext);
 
     // alert state
+    const [showDialogAlert, setShowDialogAlert] = useState(false);
+
+    // alert state
     const [showAlert, setShowAlert] = useState(false);
+
+    // role update alert state
+    const [alertType, setAlertType] = useState('');
 
     // custom material theme
     const checkBoxTheme = createMuiTheme({
@@ -61,43 +61,60 @@ const Role = (props) => {
     // delete user role from database
     const deleteRole = async () => {
 
-        alert(`success`)
-
         // close confirmation dialog
+        setShowDialogAlert(false);
+
+        const deleteRoleEndpoint = `${baseURL}:5000/api/auth/roles`;
+
+        // tries to delete role
+        try {
+            const response = await axios({
+                method: 'delete',
+                url: deleteRoleEndpoint,
+                data: {
+                    role_name: name,
+                    jwt_token: userToken
+                }
+            });
+
+            // successfully connected to endpoint and delete role
+            if (response.status === 200) {
+
+                //show success alert
+                setShowAlert(true);
+
+                // set alert type
+                setAlertType('delete-success');
+            }
+        }
+
+        // failed to pull chart data
+        catch (error) {
+
+            // show alert
+            setShowAlert(true);
+
+            // set alert type
+            setAlertType('delete-failure');
+
+            // display error in console for debugging
+            console.error('Error', error.response);
+        }
+    };
+
+
+    // on successful delete of role, closes alert and repulls roles
+    const deleteSuccessful = () => {
+
+        // hide alert
         setShowAlert(false);
-
-
-        // const deleteRoleEndpoint = `${baseURL}:5000/api/auth/`;
-
-        // // tries to delete role
-        // try {
-        //     const response = await axios({
-        //         method: 'post',
-        //         url: deleteRoleEndpoint,
-        //         params: {
-        //             name: name,
-        //             jwt_token: userToken
-        //         }
-        //     });
-
-        //     // successfully connected to endpoint and delete role
-        //     if (response.status === 200) {
-
-        //         setStatusAlert(true);
-
-        //     }
-        // }
-
-        // // failed to pull chart data
-        // catch (error) {
-        //     console.error('Error', error.response);
-        //     setStatusAlert(false);
-        // }
 
         // repull list of roles
         pullRoles();
-    };
 
+    }
+
+    // returns role list item component
     return (
         <li>
             <div className="role-list-option">
@@ -125,15 +142,27 @@ const Role = (props) => {
                     </div>
 
                     <div className="role-delete">
-                        <IconButton className="delete-button" aria-label="delete" onClick={() => setShowAlert(true)} >
+                        <IconButton className="delete-button" aria-label="delete" onClick={() => setShowDialogAlert(true)} >
                             <CloseIcon color="secondary" />
                         </IconButton>
                     </div>
 
                 </MuiThemeProvider>
 
-                <ConfirmNotification showAlert={showAlert} setShowAlert={setShowAlert} onConfirm={deleteRole} title={'Role Delete'}
+                <ConfirmNotification showAlert={showDialogAlert} setShowAlert={setShowDialogAlert} onConfirm={deleteRole} title={'Role Delete'}
                     description={`Are you sure you want to delete the "${name}" role?`} />
+
+                {showAlert === true && alertType === 'delete-success' ?
+                    <AlertNotification showAlert={showAlert} setShowAlert={deleteSuccessful} title={'Role Delete Status'}
+                        description={`${name} role successfully deleted.`} />
+                    :
+                    null}
+
+                {showAlert === true && alertType === 'delete-failure' ?
+                    <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Role Delete Status'}
+                        description={`${name} role deletion failed.`} />
+                    :
+                    null}
             </div>
         </li>
     );

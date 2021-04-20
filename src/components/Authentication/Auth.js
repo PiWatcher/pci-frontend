@@ -41,8 +41,7 @@ const Auth = () => {
     const [showAlert, setShowAlert] = useState(false);
 
     // state for alert type
-    const [alertType, setAlertType] = useState('');
-
+    const [alertMessage, setAlertMessage] = useState('');
 
     // places user form input into local temp variables
     const handleInputChange = (e) => {
@@ -59,7 +58,6 @@ const Auth = () => {
         }
     };
 
-
     // passes temp variables to AuthContext state after submit
     const handleSubmit = (e) => {
 
@@ -72,15 +70,13 @@ const Auth = () => {
             // await authentication
             authenticateAccount(localEmail, localPassword).then(function (result) {
 
-                // set state based on response
-                result === false && setSignInStatus(result);
-            });
+                // // if failure
+                // if (result.status != 200) {
+                //     setAlertMessage(result.data.message);
 
-            // if failure, display alert
-            if (!signInStatus) {
-                setAlertType('Sign-in');
-                setShowAlert(true);
-            }
+                //     setShowAlert(true)
+                // }
+            });
 
         }
 
@@ -90,16 +86,23 @@ const Auth = () => {
             // await creation
             createAccount(localUserName, localEmail, localPassword).then(function (result) {
 
-                // set state based on response
-                setSignUpStatus(result);
+                // if success
+                if (result.status === 201) {
+
+                    // set sign up status
+                    setSignUpStatus(true);
+                }
+
+                else {
+                    // set alert type
+                    setAlertMessage(result.data.message);
+
+                    // show alert
+                    setShowAlert(true);
+                }
+
+                // if failure
             });
-
-            // if failure, display alert
-            if (!signUpStatus) {
-                setAlertType('Sign-up');
-                setShowAlert(true);
-            }
-
         }
     };
 
@@ -209,9 +212,16 @@ const Auth = () => {
                 }
             </div>
 
-            {showAlert === true ?
-                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`${alertType} Failure`}
-                    description={`Failed to ${alertType}`} />
+            {showAlert === true && localSelectedAuth === "Sign In" ?
+                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Sign-In Failure`}
+                    description={alertMessage} />
+                :
+                null}
+
+
+            {showAlert === true && localSelectedAuth === "Sign Up" ?
+                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Sign-Up Failure`}
+                    description={alertMessage} />
                 :
                 null}
         </div>

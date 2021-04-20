@@ -57,6 +57,9 @@ const SideSelection = () => {
 
                 // sets state to list of rooms
                 setPulledRooms(localRoomList);
+
+                // five second refresh on successful data pull
+                setTimeout(pullRoomData, 5000);
             }
         }
 
@@ -74,14 +77,8 @@ const SideSelection = () => {
     // updates room list on selected building change
     useEffect(() => {
 
+        // pull rooms from API
         pullRoomData();
-
-        // five seconds interval for data refresh 
-        const interval = setInterval(() => {
-            pullRoomData();
-        }, 5000);
-
-        return () => clearInterval(interval);
 
     }, [selectedBuilding, pullRoomData])
 

@@ -29,13 +29,13 @@ const Auth = () => {
     const [localNewPasswordConf, setLocalNewPasswordConf] = useState('');
 
     // local variable for user password during text input
-    const [emailSent, setEmailSent] = useState(true);
+    const [emailSent, setEmailSent] = useState(false);
 
     // local variable for user password during text input
-    const [codeVerified, setCodeVerified] = useState(true);
+    const [codeVerified, setCodeVerified] = useState(false);
 
     // local variable for user password during text input
-    const [resetConfirmed, setResetConfirmed] = useState(true);
+    const [resetConfirmed, setResetConfirmed] = useState(false);
 
     // places user form input into local temp variables
     const handleInputChange = (e) => {

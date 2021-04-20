@@ -10,15 +10,30 @@ import adminIcon from '../../images/adminIcon.svg';
 import settingsIcon from '../../images/settingsIcon.svg';
 import { Link } from 'react-router-dom';
 import Tooltip from '@material-ui/core/Tooltip';
-import { unstable_createMuiStrictModeTheme as createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
+import { DataContext } from '../../contexts/DataContext';
 
+// navbar component
 const Navbar = () => {
 
    // consume context
-   const { userAdminPermissions, setAuthStatus, cookies } = useContext(AuthContext);
+   const { userAdminPermissions, signOut } = useContext(AuthContext);
+   const { setSelectedBuilding, setSelectedCharts } = useContext(DataContext);
+
+   const navSignOut = () => {
+
+      // clears selection building in state
+      setSelectedBuilding('');
+
+      // clears selected rooms in state
+      setSelectedCharts([]);
+
+      // signs out from auth context
+      signOut();
+   }
 
    // custom material ui them
    const navLinkTheme = createMuiTheme({
@@ -31,17 +46,7 @@ const Navbar = () => {
       }
    });
 
-   // sign out of dashboard, clear all data and reset auth status
-   const signOut = () => {
-
-      // remove cookie
-      cookies.remove('piWatcher Auth');
-
-      // swap auth flag
-      setAuthStatus(false);
-   }
-
-   // returns navbar component (includes logo, search bar, admin settings, and sign out)
+   // returns navbar component (includes logo, search bar, admin settings, user settings, and sign out)
    return (
       <div>
          <div className="navbar-component">
@@ -74,7 +79,7 @@ const Navbar = () => {
                   </div>
                </MuiThemeProvider>
 
-               <div className="sign-out-div" onClick={signOut}>
+               <div className="sign-out-div" onClick={navSignOut}>
                   Sign Out
                </div>
             </div>

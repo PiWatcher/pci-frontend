@@ -3,21 +3,17 @@
 import './BuildingInfo.css';
 
 // page imports
-import React, { useState } from 'react';
+import React from 'react';
 
 // component for displaying selected building information
 const BuildingInfo = (props) => {
 
    // consume props from parent component
-   const { building, buildingInfo } = props;
+   const { building } = props;
 
-   // state for building number
-   const [buildingNumber, setBuildingNumber] = useState(4);
-
-   // returns the count and percentage component
+   // returns info for selected building
    return (
-      <div className="building-usage-component">
-
+      <div className="building-info-component">
          <div className="building-container">
             <div className="building-name">
                {building.toUpperCase()}

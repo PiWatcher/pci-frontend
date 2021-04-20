@@ -3,7 +3,6 @@
 import './SearchBar.css';
 import 'semantic-ui-css/semantic.min.css'
 
-
 // page imports
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { Dropdown } from 'semantic-ui-react';
@@ -15,7 +14,7 @@ import AlertNotification from '../Notification/AlertNotification';
 // contexts
 import { DataContext } from '../../contexts/DataContext';
 
-
+// search bar with self containing building list state
 const SearchBar = () => {
 
    // consumes context
@@ -50,7 +49,7 @@ const SearchBar = () => {
 
             let responseData = response.data.data;
 
-            // sort buildings
+            // sorts buildings
             let localBuildingList = responseData.sort(function (a, b) {
                return a.localeCompare(b, undefined, {
                   numeric: false,
@@ -58,7 +57,7 @@ const SearchBar = () => {
                });
             });
 
-            // sets state list of buildings and their information
+            // sets state list of buildings
             setBuildingList(localBuildingList);
          }
       }
@@ -76,9 +75,12 @@ const SearchBar = () => {
 
    // pulls buildings on initial page load
    useEffect(() => {
+
       getBuildings();
+
    }, [getBuildings])
 
+   // returns search dropdown component
    return (
       <div className="search-div">
          <Dropdown

@@ -47,6 +47,7 @@ const UserList = (props) => {
 
         // sets list state
         setFilteredUserList(filtered);
+
     }, [pullUsers, roles, users]);
 
 
@@ -58,10 +59,11 @@ const UserList = (props) => {
     }, [users, search, roles, userFilter])
 
 
+    // returns user list component and all child components within
     return (
         <div className="user-list-component">
             <p>Registered Users</p>
-            <input type="text" id="userSearch" onChange={searchHandler} placeholder="Search for a user" value={search} />
+            <input type="text" id="userSearch" onChange={searchHandler} placeholder="User search" value={search} />
             <div className="user-list">
                 <ul>
                     {filteredUserList}

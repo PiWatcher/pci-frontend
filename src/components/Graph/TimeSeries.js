@@ -13,10 +13,8 @@ import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import { CSVLink } from "react-csv";
-import html2canvas from 'html2canvas';
-import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import PulseLoader from "react-spinners/PulseLoader";
-import { unstable_createMuiStrictModeTheme as createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 
 // components
@@ -33,13 +31,10 @@ const TimeSeries = (props) => {
    const { baseURL, selectedCharts, setSelectedCharts } = useContext(DataContext);
 
    // consume context
-   const { userAdminPermissions } = useContext(AuthContext);
+   const { userAdminPermissions, userViewRawData } = useContext(AuthContext);
 
    // consume props
-   const { building, room, chartID } = props;
-
-   // state for chart data
-   const [graphList, setGraphList] = useState([]);
+   const { building, room, capacity, chartID } = props;
 
    // state for alert
    const [showAlert, setShowAlert] = useState(false);
@@ -52,6 +47,12 @@ const TimeSeries = (props) => {
 
    // state for holding CSV data
    const [csvData, setCSVData] = useState([]);
+
+   // state for displaying spinner
+   const [graphCountData, setGraphCountData] = useState([]);
+
+   // state for displaying spinner
+   const [graphTimestampData, setGraphTimestampData] = useState([]);
 
    // settings for auto resize of chart to fit container
    const { width, height, ref } = useResizeDetector({
@@ -79,7 +80,53 @@ const TimeSeries = (props) => {
       }
    });
 
-   // // API pull and parse logic for counts and timestamps
+   // converts isoDate to a string for display 
+   const createTime = useCallback((isoDate) => {
+
+      let parsedDate = new Date(isoDate);
+
+      let dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()}/${parsedDate.getFullYear()} ${addZero(parsedDate.getHours())}:${addZero(parsedDate.getMinutes())}:${addZero(parsedDate.getSeconds())}`;
+
+      return dateString;
+   }, []);
+
+
+   // add zero to the time if single digit for formatting
+   const addZero = (time) => {
+      if (time < 10) {
+         time = "0" + time;
+      }
+      return time;
+   }
+
+
+   // unpacks response data according to user permissions
+   const unpackData = useCallback((data) => {
+
+      let timestamps = _.map(data, data => createTime(data.timestamp.$date));
+
+      setGraphTimestampData(timestamps);
+
+      let counts = _.map(data, data => data.count);
+
+      if (userViewRawData === true) {
+
+         setGraphCountData(counts);
+      }
+
+      else {
+         let percentCounts = [];
+
+         for (let index = 0; index < counts.length; index++) {
+            percentCounts[index] = `${(counts[index] / capacity) * 100}%`;
+         }
+
+         setGraphCountData(percentCounts);
+      }
+   }, [capacity, createTime, userViewRawData]);
+
+
+   // API pull and parse logic for counts and timestamps
    const pullGraphData = useCallback(async () => {
 
       // endpoint URL
@@ -99,12 +146,12 @@ const TimeSeries = (props) => {
          // successfully connected to endpoint and pulled data
          if (response.status === 200) {
 
-            // set state for puled chart data
-            setGraphList(response.data.data);
+            unpackData(response.data.data);
 
             // hide spinner
             setLoading(false);
 
+            setTimeout(pullGraphData, 5000);
          }
       }
 
@@ -117,27 +164,8 @@ const TimeSeries = (props) => {
          // display error to console for debugging
          console.error('Error', error.response);
       }
-   }, [baseURL, building, currentQuery, room]);
+   }, [baseURL, building, currentQuery, room, unpackData]);
 
-
-   // converts isoDate to a string for display 
-   const createTime = (isoDate) => {
-
-      let parsedDate = new Date(isoDate);
-
-      let dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()}/${parsedDate.getFullYear()} ${addZero(parsedDate.getHours())}:${addZero(parsedDate.getMinutes())}:${addZero(parsedDate.getSeconds())}`;
-
-      return dateString;
-   }
-
-
-   // add zero to the time if single digit for formatting
-   const addZero = (time) => {
-      if (time < 10) {
-         time = "0" + time;
-      }
-      return time;
-   }
 
 
    // remove chart from grid
@@ -158,28 +186,49 @@ const TimeSeries = (props) => {
       setSelectedCharts(array);
    }
 
-   // set data for display
+   // set data for plotly display
    const data = [{
       type: "scatter",
       mode: "lines",
-      x: _.map(graphList, data => createTime(data.timestamp.$date)),
-      y: _.map(graphList, data => data.count),
+      x: graphTimestampData,
+      y: graphCountData,
       line: { color: '#003466' }
    }];
 
 
-   // set chart layout settings
-   const layout = {
-      title: `${building} ${room}`,
-      xaxis: { visible: false, fixedrange: true },
-      yaxis: { zeroline: false, fixedrange: true },
-      autosize: true,
-      width: width,
-      height: height,
-      margin: { l: 50, r: 50, b: 50, t: 75, pad: 4 },
-      plot_bgcolor: "rgba(0,0,0,0)",
-      paper_bgcolor: "rgba(0,0,0,0)",
-   };
+   // plotly layout settings
+   let layout = {};
+
+   // set plotly layout based on user permissions
+   userViewRawData === true ?
+
+      // set chart layout settings with raw data
+      layout = {
+         title: `${building} ${room}`,
+         xaxis: { visible: false, fixedrange: true },
+         yaxis: { zeroline: false, fixedrange: true, range: [0, capacity] },
+         autosize: true,
+         width: width,
+         height: height,
+         margin: { l: 50, r: 50, b: 50, t: 75, pad: 4 },
+         plot_bgcolor: "rgba(0,0,0,0)",
+         paper_bgcolor: "rgba(0,0,0,0)",
+      }
+      :
+
+      // set chart layout settings with percentages
+      layout = {
+         title: `${building} ${room}`,
+         xaxis: { visible: false, fixedrange: true },
+         yaxis: { zeroline: false, fixedrange: true, range: [0, 100] },
+         autosize: true,
+         width: width,
+         height: height,
+         margin: { l: 50, r: 50, b: 50, t: 75, pad: 4 },
+         plot_bgcolor: "rgba(0,0,0,0)",
+         paper_bgcolor: "rgba(0,0,0,0)",
+      };
+
 
    // create CSV file with pulled data
    const createCSVData = () => {
@@ -188,26 +237,12 @@ const TimeSeries = (props) => {
 
       let data = [];
 
-      let counts = _.map(graphList, data => data.count);
-
-      let timestamps = _.map(graphList, data => createTime(data.timestamp.$date))
-
-      for (index = 0; index < counts.length; index++) {
-         data.push({ count: counts[index], timestamp: timestamps[index] });
+      for (index = 0; index < graphCountData.length; index++) {
+         data.push({ count: graphCountData[index], timestamp: graphTimestampData[index] });
       }
 
       setCSVData(data);
    }
-
-   // saves image of chart
-   const saveChart = () => {
-      html2canvas(document.querySelector("#chart")).then(function (canvas) {
-         let link = document.createElement('a');
-         link.href = canvas.toDataURL("image/png");
-         link.download = `${building}_${room}_${currentQuery}.png`
-         link.click();
-      });
-   };
 
    // on room change or query change, resets pull timer
    useEffect(() => {
@@ -217,13 +252,6 @@ const TimeSeries = (props) => {
 
       pullGraphData();
 
-      // five seconds interval for data refresh 
-      const interval = setInterval(() => {
-         pullGraphData();
-      }, 5000);
-
-      return () => clearInterval(interval);
-
    }, [currentQuery, pullGraphData]);
 
 
@@ -232,7 +260,7 @@ const TimeSeries = (props) => {
       <div ref={ref} style={{ height: '90%', width: "100%" }}>
 
          <MuiThemeProvider theme={timeSeriesButtonTheme}>
-            <Tooltip title="Remove Chart" arrow>
+            <Tooltip title="Close Chart" arrow>
                <IconButton className="delete-button" aria-label="delete" onClick={() => removeChart()} onTouchStart={() => removeChart()}>
                   <CloseIcon color="secondary" />
                </IconButton>
@@ -240,25 +268,19 @@ const TimeSeries = (props) => {
 
             {userAdminPermissions === true && loading === false ?
                <div>
-                  <Tooltip title="Download Raw Data" arrow>
+                  <Tooltip title="Download CSV" arrow>
                      <IconButton className="download-button" aria-label="download">
                         <CSVLink
                            data={csvData}
-                           header={[{ label: "Footfall Count", key: "count" }, { label: "Timestamp", key: "timestamp" }]}
+                           header={[{ label: "Footfall", key: userViewRawData === true ? "count" : "usage" }, { label: "Timestamp", key: "timestamp" }]}
                            filename={`${building}_${room}_${currentQuery}.csv`}
-                           target=""
+                           target="_self"
                            className="csv-anchor-link"
                            onClick={() => createCSVData()}
                            onTouchStart={() => createCSVData()}
                         >
                            <GetAppIcon color="primary" />
                         </CSVLink>
-                     </IconButton>
-                  </Tooltip>
-
-                  <Tooltip title="Download Screenshot" arrow>
-                     <IconButton onClick={() => saveChart()} onTouchStart={() => saveChart()} className="screenshot-button" aria-label="screenshot">
-                        <CameraAltIcon />
                      </IconButton>
                   </Tooltip>
                </div>

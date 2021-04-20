@@ -6,7 +6,7 @@ import './RoleList.css';
 import React, { useState, useEffect, useCallback } from 'react';
 import Role from './Role';
 
-// list for user components
+// list for role components
 const RoleList = (props) => {
 
     // consume props
@@ -58,10 +58,11 @@ const RoleList = (props) => {
     }, [roles, search, roleFilter])
 
 
+    // returns role list component and all child components within
     return (
         <div className="role-list-component">
             <p>Available Roles</p>
-            <input type="text" id="userSearch" onChange={searchHandler} placeholder="Search for a user" value={search} />
+            <input type="text" id="roleSearch" onChange={searchHandler} placeholder="Role search" value={search} />
             <div className="role-list">
                 <ul>
                     {filteredRoleList}

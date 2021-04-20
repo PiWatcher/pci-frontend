@@ -134,6 +134,8 @@ const AdminSettings = () => {
         pullRoles();
     }, [pullUsers, pullRoles])
 
+
+    // return admin settings page and children components
     return (
         <div className="admin-container">
             <CleanNavbar />

@@ -9,7 +9,7 @@ import React from 'react';
 import CleanNavbar from '../Navigation/CleanNavbar';
 import ChangePassword from './ChangePassword';
 
-// administrator settings
+// user settings
 const Settings = () => {
 
     // returns the the settings page and its child components

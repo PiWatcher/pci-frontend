@@ -1,5 +1,4 @@
 
-
 // page imports
 import React from 'react';
 import Button from '@material-ui/core/Button';
@@ -8,8 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import _ from 'lodash'
-import { unstable_createMuiStrictModeTheme as createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 
 // component for non selection alerts
 const AlertNotification = (props) => {
@@ -36,6 +34,7 @@ const AlertNotification = (props) => {
         }
     });
 
+    // returns an alert modal
     return (
         <div>
             <MuiThemeProvider theme={alertTheme}>

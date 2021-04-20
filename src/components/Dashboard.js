@@ -13,7 +13,7 @@ import Navbar from './Navigation/Navbar';
 import SideSelection from './SideSelection/SideSelection';
 import ChartLayout from './Graph/ChartLayout';
 
-// entire dashboard and all children component
+// entire dashboard and all children components
 const Dashboard = () => {
 
    // consume context

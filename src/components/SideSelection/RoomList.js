@@ -39,11 +39,12 @@ const RoomList = (props) => {
                key={index}
                room={item._id}
                count={item.current_count}
-               capacity={50}
+               capacity={item.room_capacity[0]}
             />)
 
       // sets the state
       setFilteredRoomList(filtered);
+
    }, [rooms]);
 
 
@@ -55,7 +56,7 @@ const RoomList = (props) => {
    }, [building])
 
 
-   // filters rooms on room list change and query change
+   // filters rooms on room list or search query change
    useEffect(() => {
 
       roomFilter(search);
@@ -63,7 +64,7 @@ const RoomList = (props) => {
    }, [rooms, search, roomFilter])
 
 
-   // returns filtered rooms in unordered list
+   // returns filtered rooms
    return (
       <div>
          <input type="text" id="roomSearch" onChange={searchHandler} placeholder="Search for a room" value={search} />

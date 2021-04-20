@@ -9,7 +9,7 @@ const DataContextProvider = (props) => {
 
    // production base url
    // const baseURL = process.env.REACT_APP_BASE_URL;
-   const baseURL = "http://192.168.0.155"
+   const baseURL = "http://localhost"
 
    // creates state: selected building
    const [selectedBuilding, setSelectedBuilding] = useState('');

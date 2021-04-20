@@ -23,7 +23,7 @@ const ChartLayout = () => {
     const { selectedCharts } = useContext(DataContext);
 
     // initial layout for grid
-    const [gridLayout, setGridLayout] = useState([
+    const [gridLayout] = useState([
         {
             i: '0', isBounded: true, isDraggable: true, isResizable: true, resizeHandles: ['se'],
             x: 0, y: 0, w: 1, h: 1, minW: 1, minH: 1, maxW: 2, maxH: 2
@@ -45,17 +45,13 @@ const ChartLayout = () => {
     // constructed charts
     const charts = selectedCharts.map((chart, index) => {
 
-        return (<div className="time-series" data-grid={gridLayout[index]} key={index}><TimeSeries chartID={chart.chartID} building={chart.building} room={chart.room} /></div>)
+        return (<div className="time-series" data-grid={gridLayout[index]} key={index}>
+            <TimeSeries chartID={chart.chartID} building={chart.building} room={chart.room} capacity={chart.capacity} />
+        </div>)
     });
 
 
-    // updates grid state on chart movement/resize
-    const onLayoutChange = (layout) => {
-        // console.log(gridLayout);
-        //console.log(layout);
-        //setGridLayout(layout);
-    };
-
+    // returns chart grid and all charts within
     return (
         <ResponsiveGridLayout className="layout"
             breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
@@ -64,9 +60,7 @@ const ChartLayout = () => {
             compactType={"vertical"}
             useCSSTransforms={false}
             measureBeforeMount={true}
-            onLayoutChange={onLayoutChange}
         >
-
             {charts}
 
         </ResponsiveGridLayout >

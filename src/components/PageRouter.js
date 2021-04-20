@@ -35,6 +35,7 @@ const PageRouter = () => {
 
    // if not authenticated, displays login screen
    // if authenticated, displays dashboard
+   // if admin, can access admin URL
    // anything else redirects back to the login page
    return (
       <div className="PageRouter">

@@ -44,7 +44,7 @@ body {
 }
 
 .return-link:hover {
-  color: gold;
+  color: #004f99;
 }
 
 input[type=button], input[type=submit], input[type=reset]  {

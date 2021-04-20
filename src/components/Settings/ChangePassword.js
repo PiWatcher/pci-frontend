@@ -6,6 +6,9 @@ import './ChangePassword.css';
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
 
+// components
+import AlertNotification from '../Notification/AlertNotification';
+
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
 
@@ -16,15 +19,28 @@ const ChangePassword = () => {
     const { userToken, baseURL } = useContext(AuthContext);
 
     // local variable for user password during text input
+    const [localCurrentPassword, setLocalCurrentPassword] = useState('');
+
+    // local variable for user password during text input
     const [localNewPassword, setLocalNewPassword] = useState('');
 
     // local variable for user password during text input
     const [localNewPasswordConf, setLocalNewPasswordConf] = useState('');
 
-    // places user form input into local temp variables
+    // state for alert
+    const [showAlert, setShowAlert] = useState('');
+
+    // state for alert type
+    const [alertType, setAlertType] = useState('');
+
+    // places password form input into local temp variables
     const handleInputChange = (e) => {
 
-        if (e.target.id === "new-password") {
+        if (e.target.id === "current-password") {
+            setLocalCurrentPassword(e.target.value);
+        }
+
+        else if (e.target.id === "new-password") {
             setLocalNewPassword(e.target.value);
         }
 
@@ -34,17 +50,66 @@ const ChangePassword = () => {
     }
 
     // send new password to backend for update
-    const changePassword = (e) => {
+    const changePassword = async (e) => {
 
         // prevent page refresh after submit
         e.preventDefault();
 
-        //check if passwords match
-        // if they do,send new password to backend
-        // if successful, flip flag
-        // if not, display alert
+        // endpoint URL
+        const userPasswordUpdateEndpoint = `${baseURL}:5000/api/auth/users/update/password`;
 
-        //if not, display error alert
+        // check if passwords match
+        if (localNewPassword === localNewPasswordConf) {
+
+            // tries to submit new password
+            try {
+                const response = await axios({
+                    method: 'post',
+                    url: userPasswordUpdateEndpoint,
+                    params: {
+                        jwt_token: userToken
+                    },
+                    data: {
+                        password: localCurrentPassword,
+                        new_password: localCurrentPassword
+                    }
+                });
+
+                // successfully connected to endpoint and created role
+                if (response.status === 200) {
+
+                    // set alert type
+                    setAlertType('success');
+
+                    // show alert
+                    setShowAlert(true);
+                }
+            }
+
+            // failed to create new role
+            catch (error) {
+
+                // set alert type
+                setAlertType('failure');
+
+                // show alert
+                setShowAlert(true);
+
+                // display error in console for debugging
+                console.error('Error', error.response);
+            }
+
+        }
+
+        // passwords don't match
+        else {
+
+            // set alert type
+            setAlertType('not-matching');
+
+            // show alert
+            setShowAlert(true);
+        }
     }
 
     // returns password reset component
@@ -60,8 +125,25 @@ const ChangePassword = () => {
                     pattern="^(?![a-z]*$)(?![A-Z]*$)(?!\d*$)(?!\p{P}*$)(?![^a-zA-Z\d\p{P}]*$).{6,}$" onChange={handleInputChange} required />
                 <input type="submit" value="Submit change" />
             </form>
-        </div>
 
+            {showAlert === true && alertType === 'success' ?
+                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Role Creation Status`}
+                    description={`Password update successful.`} />
+                :
+                null}
+
+            {showAlert === true && alertType === 'failure' ?
+                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Role Creation Status'}
+                    description={`Password update failed.`} />
+                :
+                null}
+
+            {showAlert === true && alertType === 'not-matching' ?
+                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Role Creation Status'}
+                    description={`New passwords must match.`} />
+                :
+                null}
+        </div>
     )
 }
 

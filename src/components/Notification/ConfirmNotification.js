@@ -7,8 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import _ from 'lodash'
-import { unstable_createMuiStrictModeTheme as createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 
 // component for selection alerts
 const ConfirmNotification = (props) => {
@@ -35,6 +34,7 @@ const ConfirmNotification = (props) => {
         }
     });
 
+    // returns a confirmation dialog
     return (
         <div>
             <MuiThemeProvider theme={confirmTheme}>

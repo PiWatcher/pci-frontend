@@ -9,21 +9,25 @@ import { Link } from 'react-router-dom';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
+import { DataContext } from '../../contexts/DataContext';
 
-// navbar without alternate links
+// navbar component without settings links
 const CleanNavbar = () => {
 
    // consume context
-   const { setAuthStatus, cookies } = useContext(AuthContext);
+   const { signOut } = useContext(AuthContext);
+   const { setSelectedBuilding, setSelectedCharts } = useContext(DataContext);
 
-   // sign out of dashboard
-   const signOut = () => {
+   const navSignOut = () => {
 
-      // remove cookie
-      cookies.remove('piWatcher Auth');
+      // clears selection building in state
+      setSelectedBuilding('');
 
-      // swap auth flag
-      setAuthStatus(false);
+      // clears selected rooms in state
+      setSelectedCharts([]);
+
+      // signs out from auth context
+      signOut();
    }
 
    // returns navbar component (includes logo and and sign out)
@@ -36,7 +40,7 @@ const CleanNavbar = () => {
          </div>
 
          <div className="clean-right-side-div">
-            <div className="clean-sign-out-div" onClick={signOut}>
+            <div className="clean-sign-out-div" onClick={navSignOut}>
                Sign Out
             </div>
          </div>

@@ -11,7 +11,7 @@ const AuthContextProvider = (props) => {
 
     // production base url
     // const baseURL = process.env.REACT_APP_BASE_URL;
-    const baseURL = "http://192.168.0.155"
+    const baseURL = "http://localhost"
 
     // current authentication status
     const [authStatus, setAuthStatus] = useState(true);
@@ -23,7 +23,7 @@ const AuthContextProvider = (props) => {
     const [userAdminPermissions, setUserAdminPermissions] = useState(true);
 
     //  current user permission 
-    const [userViewRawData, setUserViewRawData] = useState('');
+    const [userViewRawData, setUserViewRawData] = useState(true);
 
     // submitted user name
     const [userName, setUserName] = useState('');
@@ -47,8 +47,7 @@ const AuthContextProvider = (props) => {
                 url: signInEndpoint,
                 data: {
                     email: email,
-                    password: password,
-                    user_token: userToken
+                    password: password
                 }
             });
 
@@ -57,25 +56,32 @@ const AuthContextProvider = (props) => {
 
                 let responseData = response.data;
 
+                let responseRole = responseData.role;
+
                 // set user information from response
                 setUserName(responseData.full_name);
-                setUserRoleName(responseData.role);
-                setUserAdminPermissions(responseData.isAdmin);
-                setUserViewRawData(responseData.canVewRaw);
+                setUserRoleName(responseRole.role_name);
+                setUserAdminPermissions(responseRole.is_admin);
+                setUserViewRawData(responseRole.can_view_raw);
                 setUserToken(responseData.jwt_token);
 
                 // set cookie with expiration date (7 days)
                 cookies.set('piWatcher Auth', userToken, { path: '/', expires: new Date(Date.now() + 604800) });
 
+                // set auth status to true
                 setAuthStatus(true);
 
-                return true;
+                return response;
             }
         }
 
         // failed to sign in
         catch (error) {
-            return false;
+
+            // display error to console for debugging
+            console.error('Error', error.response);
+
+            return error;
         }
     };
 
@@ -103,15 +109,16 @@ const AuthContextProvider = (props) => {
 
                 let responseData = response.data;
 
+                let responseRole = responseData.role;
+
                 // set user information from response
                 setUserName(responseData.full_name);
-                setUserRoleName(responseData.role);
-                setUserAdminPermissions(responseData.isAdmin);
-                setUserViewRawData(responseData.canVewRaw);
+                setUserRoleName(responseRole.role_name);
+                setUserAdminPermissions(responseRole.is_admin);
+                setUserViewRawData(responseRole.can_view_raw);
 
+                // set auth status to true
                 setAuthStatus(true);
-
-                return true;
             }
         }
 
@@ -146,7 +153,8 @@ const AuthContextProvider = (props) => {
 
             // successfully signed up
             if (response.status === 201) {
-                return true;
+
+                return response;
             }
         }
 
@@ -156,9 +164,26 @@ const AuthContextProvider = (props) => {
             // display error to console for debugging
             console.error('Error', error.response);
 
-            return false;
+            return error.response;
         }
     }
+
+    // clears user information from state
+    const signOut = () => {
+
+        // remove cookie
+        cookies.remove('piWatcher Auth');
+
+        // clear user information
+        setUserName('');
+        setUserRoleName('');
+        setUserAdminPermissions('');
+        setUserViewRawData('');
+        setUserToken('');
+
+        // set auth status to false
+        setAuthStatus(false);
+    };
 
     useEffect(() => {
 
@@ -173,8 +198,9 @@ const AuthContextProvider = (props) => {
 
     }, [cookies, authenticateCookie])
 
+
     return (
-        <AuthContext.Provider value={{ userName, userRoleName, userToken, userAdminPermissions, userViewRawData, authStatus, setAuthStatus, authenticateAccount, createAccount, baseURL, cookies }}>
+        <AuthContext.Provider value={{ userName, userRoleName, userToken, userAdminPermissions, userViewRawData, authStatus, authenticateAccount, createAccount, signOut, baseURL }}>
             {props.children}
         </AuthContext.Provider>
     )

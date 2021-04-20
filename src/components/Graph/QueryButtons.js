@@ -37,8 +37,8 @@ const QueryButtons = (props) => {
         },
     });
 
+    // returns row based on user permissions
     return (
-
         userAdminPermissions === true ?
 
             <div className="set-buttons">

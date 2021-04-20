@@ -7,7 +7,7 @@ import React, { useState, useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { unstable_createMuiStrictModeTheme as createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import axios from 'axios';
 import _ from 'lodash'
 import { IconButton } from '@material-ui/core';
@@ -36,13 +36,13 @@ const User = (props) => {
     const [anchorEl, setAnchorEl] = useState(null);
 
     // alert state
-    const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+    const [showDialogAlert, setShowDialogAlert] = useState(false);
 
     // alert state
-    const [showUpdateAlert, setShowUpdateAlert] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
 
     // role update alert state
-    const [userUpdateAlert, setUserUpdateAlert] = useState('');
+    const [alertType, setAlertType] = useState('');
 
     // custom material theme
     const roleButtonTheme = createMuiTheme({
@@ -83,20 +83,25 @@ const User = (props) => {
             // successfully connected to endpoint and updated user
             if (response.status === 200) {
 
+                // display current user role
                 setUserRole(response.data.user['role']);
 
-                setShowUpdateAlert(true);
+                //show success alert
+                setShowAlert(true);
 
-                setUserUpdateAlert('success');
+                // set alert type
+                setAlertType('update-success');
             }
         }
 
         // caught failure
         catch (error) {
 
-            setShowUpdateAlert(true);
+            // show alert
+            setShowAlert(true);
 
-            setUserUpdateAlert('failure');
+            // set alert type
+            setAlertType('update-failure');
 
             // display error in console for debugging
             console.error('Error', error.response);
@@ -124,42 +129,62 @@ const User = (props) => {
         setAnchorEl(null);
     };
 
-    // open role menu
+    // delete user role from database
     const deleteUser = async () => {
 
+        // clear confirmation dialog
+        setShowDialogAlert(false);
 
-        alert(`success`)
-        // const deleteRoleEndpoint = `${baseURL}:5000/api/auth/`;
+        const deleteUserEndpoint = `${baseURL}:5000/api/auth/users`;
 
-        // // tries to delete role
-        // try {
-        //     const response = await axios({
-        //         method: 'post',
-        //         url: deleteRoleEndpoint,
-        //         params: {
-        //             name: name,
-        //             jwt_token: userToken
-        //         }
-        //     });
+        // tries to delete user
+        try {
 
-        //     // successfully connected to endpoint and delete role
-        //     if (response.status === 200) {
+            const response = await axios({
+                method: 'delete',
+                url: deleteUserEndpoint,
+                data: {
+                    email: email,
+                    jwt_token: userToken
+                }
+            });
 
-        //         setStatusAlert(true);
+            // successfully connected to endpoint and delete role
+            if (response.status === 200) {
 
-        //     }
-        // }
+                //show success alert
+                setShowAlert(true);
 
-        // // failed to pull chart data
-        // catch (error) {
-        //     console.error('Error', error.response);
-        //     setShowAlert(true);
-        // }
+                // set alert type
+                setAlertType('delete-success');
 
-        setShowDeleteAlert(false);
+            }
+        }
 
-        pullUsers();
+        // failed to pull chart data
+        catch (error) {
+
+            // show alert
+            setShowAlert(true);
+
+            // set alert type
+            setAlertType('delete-failure');
+
+            // display error in console for debugging
+            console.error('Error', error.response);
+        }
     };
+
+    // on successful delete of user, closes alert and repulls users
+    const deleteSuccessful = () => {
+
+        // hide alert
+        setShowAlert(false);
+
+        // repull list of users
+        pullUsers();
+
+    }
 
     // returns user list item component
     return (
@@ -200,26 +225,38 @@ const User = (props) => {
                     </div>
 
                     <div className="user-delete">
-                        <IconButton className="delete-button" aria-label="delete" onClick={() => setShowDeleteAlert(true)} >
+                        <IconButton className="delete-button" aria-label="delete" onClick={() => setShowDialogAlert(true)} >
                             <CloseIcon color="secondary" />
                         </IconButton>
                     </div>
 
                 </MuiThemeProvider>
 
-                <ConfirmNotification showAlert={showDeleteAlert} setShowAlert={setShowDeleteAlert} onConfirm={deleteUser} title={'User Delete'}
+                <ConfirmNotification showAlert={showDialogAlert} setShowAlert={setShowDialogAlert} onConfirm={deleteUser} title={'User Delete'}
                     description={`Are you sure you want to delete the account for ${name}?`} />
 
 
-                {showUpdateAlert === true && userUpdateAlert === 'success' ?
-                    <AlertNotification showAlert={showUpdateAlert} setShowAlert={setShowUpdateAlert} title={'User Role Update'}
+                {showAlert === true && alertType === 'update-success' ?
+                    <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'User Role Update Status'}
                         description={`${name} successfully updated to "${userRole}" role.`} />
                     :
                     null}
 
-                {showUpdateAlert === true && userUpdateAlert === 'failure' ?
-                    <AlertNotification showAlert={showUpdateAlert} setShowAlert={setShowUpdateAlert} title={'User Role Update'}
+                {showAlert === true && alertType === 'update-failure' ?
+                    <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'User Role Update Status'}
                         description={`${name} failed to update to role.`} />
+                    :
+                    null}
+
+                {showAlert === true && alertType === 'delete-success' ?
+                    <AlertNotification showAlert={showAlert} setShowAlert={deleteSuccessful} title={'User Delete Status'}
+                        description={`${name} account successfully deleted.`} />
+                    :
+                    null}
+
+                {showAlert === true && alertType === 'delete-failure' ?
+                    <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'User Delete Status'}
+                        description={`${name} account deletion failed.`} />
                     :
                     null}
 
