@@ -70,12 +70,13 @@ const Auth = () => {
             // await authentication
             authenticateAccount(localEmail, localPassword).then(function (result) {
 
-                // // if failure
-                // if (result.status != 200) {
-                //     setAlertMessage(result.data.message);
+                // if failure
+                if (result.status != 200) {
 
-                //     setShowAlert(true)
-                // }
+                    setAlertMessage(result.message);
+
+                    setShowAlert(true)
+                }
             });
 
         }

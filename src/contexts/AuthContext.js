@@ -81,7 +81,7 @@ const AuthContextProvider = (props) => {
             // display error to console for debugging
             console.error('Error', error.response);
 
-            return error;
+            return error.response.data;
         }
     };
 
