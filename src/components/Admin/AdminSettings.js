@@ -45,8 +45,8 @@ const AdminSettings = () => {
             const response = await axios({
                 method: 'get',
                 url: userEndpoint,
-                params: {
-                    jwt_token: userToken
+                headers: {
+                    'Authorization': `Bearer ${userToken}`
                 }
             });
 
@@ -92,8 +92,8 @@ const AdminSettings = () => {
             const response = await axios({
                 method: 'get',
                 url: roleEndpoint,
-                params: {
-                    jwt_token: userToken
+                headers: {
+                    Authorization: `Bearer ${userToken}`
                 }
             });
 

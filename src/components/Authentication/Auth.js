@@ -17,7 +17,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 const Auth = () => {
 
     // consume data from AuthContext
-    const { authenticateAccount, createAccount } = useContext(AuthContext);
+    const { authenticateAccount, createAccount, setUserToken, userToken } = useContext(AuthContext);
 
     // local variable for user password during text input
     const [localUserName, setLocalUserName] = useState('');

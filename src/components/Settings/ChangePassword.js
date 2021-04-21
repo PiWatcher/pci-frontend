@@ -66,12 +66,12 @@ const ChangePassword = () => {
                 const response = await axios({
                     method: 'post',
                     url: userPasswordUpdateEndpoint,
-                    params: {
-                        jwt_token: userToken
+                    headers: {
+                        Authorization: `Bearer ${userToken}`
                     },
                     data: {
                         password: localCurrentPassword,
-                        new_password: localCurrentPassword
+                        new_password: localNewPassword
                     }
                 });
 

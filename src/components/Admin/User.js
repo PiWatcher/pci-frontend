@@ -27,7 +27,7 @@ const User = (props) => {
     const { name, email, role, roles, pullUsers } = props;
 
     // consumes contexts
-    const { baseURL, userToken } = useContext(AuthContext);
+    const { baseURL, userToken, userName } = useContext(AuthContext);
 
     // user role in state
     const [userRole, setUserRole] = useState(role);
@@ -71,8 +71,8 @@ const User = (props) => {
             const response = await axios({
                 method: 'post',
                 url: roleUpdateEndpoint,
-                params: {
-                    jwt_token: userToken
+                headers: {
+                    Authorization: `Bearer ${userToken}`
                 },
                 data: {
                     email: email,
@@ -143,9 +143,11 @@ const User = (props) => {
             const response = await axios({
                 method: 'delete',
                 url: deleteUserEndpoint,
+                headers: {
+                    Authorization: `Bearer ${userToken}`
+                },
                 data: {
-                    email: email,
-                    jwt_token: userToken
+                    email: email
                 }
             });
 
@@ -223,12 +225,15 @@ const User = (props) => {
 
 
                     </div>
-
+                    {name != 'Administrator' || name != userName ?
                     <div className="user-delete">
                         <IconButton className="delete-button" aria-label="delete" onClick={() => setShowDialogAlert(true)} >
                             <CloseIcon color="secondary" />
                         </IconButton>
                     </div>
+                    :
+                    <div className="user-delete">
+                    </div>}
 
                 </MuiThemeProvider>
 

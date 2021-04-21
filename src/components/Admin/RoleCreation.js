@@ -83,8 +83,8 @@ const RoleCreation = (props) => {
                 const response = await axios({
                     method: 'post',
                     url: roleCreationEndpoint,
-                    params: {
-                        jwt_token: userToken
+                    headers: {
+                        Authorization: `Bearer ${userToken}`
                     },
                     data: {
                         role_name: newRoleName.toLowerCase(),

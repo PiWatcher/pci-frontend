@@ -14,16 +14,16 @@ const AuthContextProvider = (props) => {
     const baseURL = "http://localhost"
 
     // current authentication status
-    const [authStatus, setAuthStatus] = useState(true);
+    const [authStatus, setAuthStatus] = useState(false);
 
     //  current user type 
     const [userRoleName, setUserRoleName] = useState('admin');
 
     //  current user permission
-    const [userAdminPermissions, setUserAdminPermissions] = useState(true);
+    const [userAdminPermissions, setUserAdminPermissions] = useState(false);
 
     //  current user permission 
-    const [userViewRawData, setUserViewRawData] = useState(true);
+    const [userViewRawData, setUserViewRawData] = useState(false);
 
     // submitted user name
     const [userName, setUserName] = useState('');
@@ -58,15 +58,16 @@ const AuthContextProvider = (props) => {
 
                 let responseRole = responseData.role;
 
+                let responseToken = responseData.jwt_token;
+
                 // set user information from response
                 setUserName(responseData.full_name);
                 setUserRoleName(responseRole.role_name);
                 setUserAdminPermissions(responseRole.is_admin);
                 setUserViewRawData(responseRole.can_view_raw);
-                setUserToken(responseData.jwt_token);
+                setUserToken(responseData.jwt_token)
 
-                // set cookie with expiration date (7 days)
-                cookies.set('piWatcher Auth', userToken, { path: '/', expires: new Date(Date.now() + 604800) });
+                cookies.set('piWatcherAuth', {responseToken}, { path: '/', expires: new Date(Date.now() + 604800)});
 
                 // set auth status to true
                 setAuthStatus(true);
@@ -85,22 +86,19 @@ const AuthContextProvider = (props) => {
         }
     };
 
-
     // sends given user data to backend for authentication
-    const authenticateCookie = useCallback(async () => {
+    const authenticateCookie = useCallback(async (cookieToken) => {
 
         // endpoint URL
-        const signInEndpoint = `${baseURL}:5000/api/auth/signin`;
+        const tokenEndpoint = `${baseURL}:5000/api/auth/token`;
 
         // tries to connect to database and verify account information
         try {
             const response = await axios({
                 method: 'post',
-                url: signInEndpoint,
-                data: {
-                    email: null,
-                    password: null,
-                    user_token: userToken
+                url: tokenEndpoint,
+                headers: {
+                    'Authorization': `Bearer ${cookieToken}`
                 }
             });
 
@@ -172,7 +170,7 @@ const AuthContextProvider = (props) => {
     const signOut = () => {
 
         // remove cookie
-        cookies.remove('piWatcher Auth');
+        cookies.remove('piWatcherAuth');
 
         // clear user information
         setUserName('');
@@ -187,20 +185,18 @@ const AuthContextProvider = (props) => {
 
     useEffect(() => {
 
-        // check for cookie
-        if (cookies.get('piWatcher Auth')) {
+        // if cookie, authenticate token
+        if(authStatus === false && cookies.get('piWatcherAuth') != null){
 
-            // if cookie, set token
-            setUserToken(cookies.get('piWatcher Auth'));
+            let localResponseToken = cookies.get('piWatcherAuth').responseToken;
 
-            authenticateCookie();
+            authenticateCookie(localResponseToken);
         }
-
-    }, [cookies, authenticateCookie])
+    }, [])
 
 
     return (
-        <AuthContext.Provider value={{ userName, userRoleName, userToken, userAdminPermissions, userViewRawData, authStatus, authenticateAccount, createAccount, signOut, baseURL }}>
+        <AuthContext.Provider value={{ userName, userRoleName, setUserToken, userToken, userAdminPermissions, userViewRawData, authStatus, authenticateAccount, createAccount, signOut, baseURL }}>
             {props.children}
         </AuthContext.Provider>
     )

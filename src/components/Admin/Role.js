@@ -71,9 +71,11 @@ const Role = (props) => {
             const response = await axios({
                 method: 'delete',
                 url: deleteRoleEndpoint,
+                headers: {
+                    Authorization: `Bearer ${userToken}`
+                },
                 data: {
-                    role_name: name,
-                    jwt_token: userToken
+                    role_name: name
                 }
             });
 
@@ -140,12 +142,15 @@ const Role = (props) => {
                             </FormGroup>
                         </FormControl>
                     </div>
-
+                    {name != 'public' || name != 'admin' ?
                     <div className="role-delete">
                         <IconButton className="delete-button" aria-label="delete" onClick={() => setShowDialogAlert(true)} >
                             <CloseIcon color="secondary" />
                         </IconButton>
                     </div>
+                    :
+                    null
+}
 
                 </MuiThemeProvider>
 
