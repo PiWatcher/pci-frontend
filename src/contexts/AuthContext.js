@@ -67,7 +67,7 @@ const AuthContextProvider = (props) => {
                 setUserViewRawData(responseRole.can_view_raw);
                 setUserToken(responseData.jwt_token)
 
-                cookies.set('piWatcherAuth', {responseToken}, { path: '/', expires: new Date(Date.now() + 604800)});
+                cookies.set('piWatcherAuth', {responseToken}, { path: '/', maxAge:604800, sameSite: 'strict' });
 
                 // set auth status to true
                 setAuthStatus(true);
@@ -190,13 +190,15 @@ const AuthContextProvider = (props) => {
 
             let localResponseToken = cookies.get('piWatcherAuth').responseToken;
 
+            setUserToken(localResponseToken);
+
             authenticateCookie(localResponseToken);
         }
     }, [])
 
 
     return (
-        <AuthContext.Provider value={{ userName, userRoleName, setUserToken, userToken, userAdminPermissions, userViewRawData, authStatus, authenticateAccount, createAccount, signOut, baseURL }}>
+        <AuthContext.Provider value={{ userName, userRoleName, userToken, userAdminPermissions, userViewRawData, authStatus, authenticateAccount, createAccount, signOut, baseURL }}>
             {props.children}
         </AuthContext.Provider>
     )

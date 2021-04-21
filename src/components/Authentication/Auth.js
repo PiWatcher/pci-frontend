@@ -17,7 +17,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 const Auth = () => {
 
     // consume data from AuthContext
-    const { authenticateAccount, createAccount, setUserToken, userToken } = useContext(AuthContext);
+    const { authenticateAccount, createAccount } = useContext(AuthContext);
 
     // local variable for user password during text input
     const [localUserName, setLocalUserName] = useState('');
@@ -30,9 +30,6 @@ const Auth = () => {
 
     // state for auth type management
     const [localSelectedAuth, setLocalSelectedAuth] = useState("Sign In");
-
-    // current sign in status
-    const [signInStatus, setSignInStatus] = useState(false);
 
     // current sign up status
     const [signUpStatus, setSignUpStatus] = useState(false);
@@ -71,7 +68,7 @@ const Auth = () => {
             authenticateAccount(localEmail, localPassword).then(function (result) {
 
                 // if failure
-                if (result.status != 200) {
+                if (result.status !== 200) {
 
                     setAlertMessage(result.message);
 

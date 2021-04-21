@@ -142,14 +142,16 @@ const Role = (props) => {
                             </FormGroup>
                         </FormControl>
                     </div>
-                    {name != 'public' || name != 'admin' ?
+
+                    {name === 'public' || name === 'admin' ?
+                    <div className="role-delete">
+                    </div>
+                    :
                     <div className="role-delete">
                         <IconButton className="delete-button" aria-label="delete" onClick={() => setShowDialogAlert(true)} >
                             <CloseIcon color="secondary" />
                         </IconButton>
                     </div>
-                    :
-                    null
 }
 
                 </MuiThemeProvider>

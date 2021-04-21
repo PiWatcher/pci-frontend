@@ -225,15 +225,17 @@ const User = (props) => {
 
 
                     </div>
-                    {name != 'Administrator' || name != userName ?
+
+                    {name === 'Administrator' || name === userName ?
+                    <div className="user-delete">
+                    </div>
+                    :
                     <div className="user-delete">
                         <IconButton className="delete-button" aria-label="delete" onClick={() => setShowDialogAlert(true)} >
                             <CloseIcon color="secondary" />
                         </IconButton>
                     </div>
-                    :
-                    <div className="user-delete">
-                    </div>}
+                    }
 
                 </MuiThemeProvider>
 

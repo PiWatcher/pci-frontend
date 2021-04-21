@@ -54,6 +54,9 @@ const TimeSeries = (props) => {
    // state for displaying spinner
    const [graphTimestampData, setGraphTimestampData] = useState([]);
 
+   // state for live query timeout
+   const [queryInterval, setQueryInterval] = useState(null);
+
    // settings for auto resize of chart to fit container
    const { width, height, ref } = useResizeDetector({
       refreshMode: 'debounce',
@@ -81,14 +84,14 @@ const TimeSeries = (props) => {
    });
 
    // converts isoDate to a string for display 
-   const createTime = useCallback((isoDate) => {
+   const createTime = (isoDate) => {
 
       let parsedDate = new Date(isoDate);
 
       let dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()}/${parsedDate.getFullYear()} ${addZero(parsedDate.getHours())}:${addZero(parsedDate.getMinutes())}:${addZero(parsedDate.getSeconds())}`;
 
       return dateString;
-   }, []);
+   };
 
 
    // add zero to the time if single digit for formatting
@@ -101,7 +104,7 @@ const TimeSeries = (props) => {
 
 
    // unpacks response data according to user permissions
-   const unpackData = useCallback((data) => {
+   const unpackData = (data) => {
 
       let timestamps = _.map(data, data => createTime(data.timestamp.$date));
 
@@ -123,11 +126,20 @@ const TimeSeries = (props) => {
 
          setGraphCountData(percentCounts);
       }
-   }, [capacity, createTime, userViewRawData]);
+
+      // hide spinner
+      setLoading(false);
+
+      // if live query, repeat data pull
+      if(currentQuery === 'live'){
+
+         setQueryInterval(setTimeout(pullGraphData, 5000));
+      }
+   };
 
 
    // API pull and parse logic for counts and timestamps
-   const pullGraphData = useCallback(async () => {
+   const pullGraphData = async () => {
 
       // endpoint URL
       const graphDataEndpoint = `${baseURL}:5000/api/data/building/room/${currentQuery}`
@@ -147,11 +159,6 @@ const TimeSeries = (props) => {
          if (response.status === 200) {
 
             unpackData(response.data.data);
-
-            // hide spinner
-            setLoading(false);
-
-            setTimeout(pullGraphData, 5000);
          }
       }
 
@@ -163,8 +170,9 @@ const TimeSeries = (props) => {
 
          // display error to console for debugging
          console.error('Error', error.response);
+
       }
-   }, [baseURL, building, currentQuery, room, unpackData]);
+   };
 
 
 
@@ -244,15 +252,22 @@ const TimeSeries = (props) => {
       setCSVData(data);
    }
 
-   // on room change or query change, resets pull timer
+   // on room change or query change
    useEffect(() => {
 
-      // initial load spinner (show)
-      setLoading(true);
+      if(!loading){
 
-      pullGraphData();
+         // initial load spinner (show)
+         setLoading(true);
 
-   }, [currentQuery, pullGraphData]);
+         // clear previous interval
+         setQueryInterval(clearTimeout(queryInterval));
+
+         // pull data once
+         pullGraphData();
+      }
+
+   }, [room, currentQuery]);
 
 
    return (
@@ -307,13 +322,13 @@ const TimeSeries = (props) => {
             </div>
          }
 
-         {showAlert === true ?
+         {showAlert === true?
             <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
                description={`Failed to pull data from endpoint: building: ${building}, room: ${room}, query: ${currentQuery}`} />
             :
             null}
 
-         <QueryButtons currentQuery={currentQuery} setCurrentQuery={setCurrentQuery} />
+         <QueryButtons currentQuery={currentQuery} setCurrentQuery={setCurrentQuery} loading={loading} />
       </div >
    );
 }

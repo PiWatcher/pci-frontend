@@ -1,7 +1,6 @@
 
 // page imports
-import React, { createContext, useState, useEffect } from 'react';
-import axios from 'axios'; 
+import React, { createContext, useState } from 'react';
 
 // context that stores selected building and rooms
 export const DataContext = createContext();
@@ -17,51 +16,6 @@ const DataContextProvider = (props) => {
 
    // creates state: selected room
    const [selectedCharts, setSelectedCharts] = useState([]);
-
-   // // API pull and parse logic for counts and timestamps
-   const mockData = async () => {
-
-      const mockDataEndpoint = `${baseURL}:5000/api/mock/update`
-
-      // tries to pull chart data
-      try {
-         const response = await axios({
-            method: 'get',
-            url: mockDataEndpoint,
-            params: {
-               building: 'Siccs',
-               iterations: 1
-            }
-         });
-
-         // successfully connected to endpoint and pulled data
-         if (response.status === 200) {
-
-            console.log(response);
-
-         }
-      }
-
-      // failed to pull chart data
-      catch (error) {
-         console.error('Error', error.response);
-      }
-   };
-
-   // on room change or query change, resets pull timer
-   useEffect(() => {
-
-      mockData();
-
-      // // five seconds interval for data refresh 
-      // const interval = setInterval(() => {
-      //    console.log('mocking data');
-      //    mockData();
-      // }, 5000);
-
-      // return () => clearInterval(interval);
-
-   }, []);
 
    return (
       <DataContext.Provider value={{
