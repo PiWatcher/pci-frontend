@@ -1,6 +1,7 @@
 .dashboard-container {
    text-align: center;
    font-family: "Open Sans", sans-serif;
+   margin: 0 auto 0 auto;
 }
 
 .dashboard-row {
@@ -20,6 +21,7 @@
 }
 
 @media (max-width: 768px) {
+   
    .chart-container {
       display: none;
    }

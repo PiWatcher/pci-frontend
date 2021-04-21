@@ -5,41 +5,48 @@ import './Navbar.css';
 // page imports
 import React, { useContext } from 'react';
 import SearchBar from './SearchBar';
-//import BuildingMap from './BuildingMap';
 import nauLogo from '../../images/nauLogoDash.svg';
-//import mapIcon from '../../images/mapIcon.svg';
 import adminIcon from '../../images/adminIcon.svg';
+import settingsIcon from '../../images/settingsIcon.svg';
 import { Link } from 'react-router-dom';
-import Cookies from 'universal-cookie';
+import Tooltip from '@material-ui/core/Tooltip';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
+import { DataContext } from '../../contexts/DataContext';
 
+// navbar component
 const Navbar = () => {
 
-
    // consume context
-   const { userAdminPermissions, setAuthStatus } = useContext(AuthContext);
+   const { userAdminPermissions, signOut } = useContext(AuthContext);
+   const { setSelectedBuilding, setSelectedCharts } = useContext(DataContext);
 
-   const cookies = new Cookies();
+   const navSignOut = () => {
 
-   // flag to show map or not on dashboard
-   //const [showMap, setShowMap] = useState(false);
+      // clears selection building in state
+      setSelectedBuilding('');
 
-   // flip flag for showing map div
-   //const onMapClick = () => setShowMap(!showMap);
+      // clears selected rooms in state
+      setSelectedCharts([]);
 
-   // sign out of dashboard, clear all data and reset auth status
-   const signOut = () => {
-
-      // remove cookie
-      cookies.remove('piWatcher Auth');
-
-      // swap auth flag
-      setAuthStatus(false);
+      // signs out from auth context
+      signOut();
    }
 
-   // returns navbar component (includes logo, search bar, admin settings, and sign out)
+   // custom material ui them
+   const navLinkTheme = createMuiTheme({
+      overrides: {
+         MuiTooltip: {
+            tooltip: {
+               fontSize: "1em"
+            }
+         }
+      }
+   });
+
+   // returns navbar component (includes logo, search bar, admin settings, user settings, and sign out)
    return (
       <div>
          <div className="navbar-component">
@@ -47,36 +54,36 @@ const Navbar = () => {
                <img src={nauLogo} alt="NAU Logo" />
             </div>
 
-            <div className="search-div">
-               <SearchBar />
-            </div>
-            {/* 
-            <div className="map-icon-div">
-               <img className="map" onClick={onMapClick} src={mapIcon} alt="Map Icon" />
-            </div> */}
+            <SearchBar />
 
             <div className="right-side-div">
-               {userAdminPermissions === true ?
-                  <div className="admin-icon-div">
-                     <Link to="/admin">
-                        <img src={adminIcon} alt=" Admin Icon" />
-                     </Link>
-                  </div>
-                  :
-                  null
-               }
+               <MuiThemeProvider theme={navLinkTheme}>
+                  {userAdminPermissions === true ?
+                     <div className="admin-icon-div">
+                        <Tooltip title="Admin Settings" arrow>
+                           <Link to="/admin">
+                              <img src={adminIcon} alt=" Admin Icon" />
+                           </Link>
+                        </Tooltip>
+                     </div>
+                     :
+                     null
+                  }
 
-               <div className="sign-out-div" onClick={signOut}>
+                  <div className="settings-icon-div">
+                     <Tooltip title="Settings" arrow>
+                        <Link to="/settings">
+                           <img src={settingsIcon} alt="Settings Icon" />
+                        </Link>
+                     </Tooltip>
+                  </div>
+               </MuiThemeProvider>
+
+               <div className="sign-out-div" onClick={navSignOut}>
                   Sign Out
                </div>
             </div>
-
          </div>
-
-         {/* <div className="map-div">
-            {showMap ? <BuildingMap /> : null}
-         </div> */}
-
       </div>
    );
 }

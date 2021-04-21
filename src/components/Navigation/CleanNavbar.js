@@ -6,27 +6,28 @@ import './CleanNavbar.css';
 import React, { useContext } from 'react';
 import nauLogo from '../../images/nauLogoDash.svg';
 import { Link } from 'react-router-dom';
-import Cookies from 'universal-cookie';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
+import { DataContext } from '../../contexts/DataContext';
 
-
+// navbar component without settings links
 const CleanNavbar = () => {
 
    // consume context
-   const { setAuthStatus } = useContext(AuthContext);
+   const { signOut } = useContext(AuthContext);
+   const { setSelectedBuilding, setSelectedCharts } = useContext(DataContext);
 
-   const cookies = new Cookies();
+   const navSignOut = () => {
 
-   // sign out of dashboard reset auth status
-   const signOut = () => {
+      // clears selection building in state
+      setSelectedBuilding('');
 
-      // remove cookie
-      cookies.remove('piWatcher Auth');
+      // clears selected rooms in state
+      setSelectedCharts([]);
 
-      // swap auth flag
-      setAuthStatus(false);
+      // signs out from auth context
+      signOut();
    }
 
    // returns navbar component (includes logo and and sign out)
@@ -38,9 +39,11 @@ const CleanNavbar = () => {
             </Link>
          </div>
 
-         <div className="clean-sign-out-div" onClick={signOut}>
-            Sign Out
+         <div className="clean-right-side-div">
+            <div className="clean-sign-out-div" onClick={navSignOut}>
+               Sign Out
             </div>
+         </div>
       </div>
    );
 }

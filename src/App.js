@@ -10,7 +10,7 @@ import AuthContextProvider from './contexts/AuthContext';
 import DataContextProvider from './contexts/DataContext';
 
 // components
-import PageRouter from './components/Authentication/PageRouter';
+import PageRouter from './components/PageRouter';
 
 
 const App = () => {
@@ -20,9 +20,7 @@ const App = () => {
       <AuthContextProvider>
         <DataContextProvider>
 
-          <div className="content">
-            <PageRouter />
-          </div>
+          <PageRouter />
 
         </DataContextProvider>
       </AuthContextProvider>

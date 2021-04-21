@@ -8,39 +8,36 @@ import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import { Button } from '@material-ui/core';
-import { unstable_createMuiStrictModeTheme as createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import axios from 'axios';
+
+// components
+import AlertNotification from '../Notification/AlertNotification';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
 
-// component for creating new user roles
-const RoleCreation = () => {
+// create new user role component
+const RoleCreation = (props) => {
 
     // consume context
     const { userToken, baseURL } = useContext(AuthContext);
 
-    // state for new role
+    // consume props from parent component
+    const { pullRoles } = props;
+
+    // state for new role name
     const [newRoleName, setNewRoleName] = useState('');
 
-    // state for role permissions
+    // state for new role permissions
     const [newRolePermissions, setNewRolePermissions] = useState({ isAdmin: false, canViewRaw: false });
-
     const { isAdmin, canViewRaw } = newRolePermissions;
 
+    // state for alert
+    const [showAlert, setShowAlert] = useState('');
 
-    // pulls role name text
-    const formHandler = (e) => {
-        if (e.target.id === "roleNameForm") {
-            setNewRoleName(e.target.value);
-        }
-    }
-
-    // sets role permissions from checkbox
-    const handleCheck = (e) => {
-        setNewRolePermissions({ ...newRolePermissions, [e.target.name]: e.target.checked });
-    }
+    // state for alert type
+    const [alertType, setAlertType] = useState('');
 
     // custom material theme
     const checkBoxTheme = createMuiTheme({
@@ -60,9 +57,24 @@ const RoleCreation = () => {
         },
     });
 
-    // API submit logic for role creation
-    const submitNewRole = async () => {
+    // pulls role name from text input
+    const formHandler = (e) => {
+        if (e.target.id === "roleNameForm") {
+            setNewRoleName(e.target.value);
+        }
+    }
 
+    // sets role permissions from checkboxes
+    const handleCheck = (e) => {
+        setNewRolePermissions({ ...newRolePermissions, [e.target.name]: e.target.checked });
+    }
+
+    // creates role in database
+    const submitNewRole = async (e) => {
+
+        e.preventDefault();
+
+        // endpoint URL
         const roleCreationEndpoint = `${baseURL}:5000/api/auth/roles`;
 
         // tries to submit new role
@@ -71,8 +83,8 @@ const RoleCreation = () => {
                 const response = await axios({
                     method: 'post',
                     url: roleCreationEndpoint,
-                    params: {
-                        jwt_token: userToken
+                    headers: {
+                        Authorization: `Bearer ${userToken}`
                     },
                     data: {
                         role_name: newRoleName.toLowerCase(),
@@ -83,18 +95,32 @@ const RoleCreation = () => {
 
                 // successfully connected to endpoint and created role
                 if (response.status === 200) {
-                    alert(`${newRoleName} role was created successfully.`)
+
+                    // repull list of roles
+                    pullRoles();
+
+                    // set alert type
+                    setAlertType('success');
+
+                    // show alert
+                    setShowAlert(true);
                 }
             }
 
             // failed to create new role
             catch (error) {
-                alert(error.response.data['description'])
-                console.log(error.response.data['description'])
+
+                // set alert type
+                setAlertType('failure');
+
+                // show alert
+                setShowAlert(true);
+
+                // display error in console for debugging
+                console.error('Error', error.response);
             }
         }
     };
-
 
     // returns role creation component
     return (
@@ -115,14 +141,23 @@ const RoleCreation = () => {
                             />
                         </FormGroup>
                     </FormControl>
-                    <div className="role-submit-button">
-                        <Button variant="contained" color="primary"
-                            onClick={() => submitNewRole()}>
-                            Submit new role
-                        </Button>
-                    </div>
                 </MuiThemeProvider>
+                <form onSubmit={submitNewRole}>
+                    <input type="submit" value="Submit new role" />
+                </form>
             </div>
+
+            {showAlert === true && alertType === 'success' ?
+                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Role Creation Status`}
+                    description={`Creation of role "${newRoleName}" successful.`} />
+                :
+                null}
+
+            {showAlert === true && alertType === 'failure' ?
+                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Role Creation Status'}
+                    description={`Creation of role "${newRoleName}" failed.`} />
+                :
+                null}
         </div>
     )
 }

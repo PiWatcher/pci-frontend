@@ -3,14 +3,14 @@
 import './UserList.css';
 
 // page imports
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import User from '../Admin/User';
 
 // list for users
 const UserList = (props) => {
 
     // consume props
-    const { users, roles } = props;
+    const { users, roles, pullUsers } = props;
 
     // state for user search
     const [search, setSearch] = useState('');
@@ -26,7 +26,7 @@ const UserList = (props) => {
     }
 
     // filters out users based on search text
-    const userFilter = (filter) => {
+    const userFilter = useCallback((filter) => {
 
         // filters by name
         let filteredUsers = users.filter(function (item) {
@@ -42,11 +42,13 @@ const UserList = (props) => {
                     email={user.email}
                     role={user.role}
                     roles={roles}
+                    pullUsers={pullUsers}
                 />)
 
         // sets list state
         setFilteredUserList(filtered);
-    }
+
+    }, [pullUsers, roles, users]);
 
 
     // refilters rooms on user list change, search change, or role list updates
@@ -54,14 +56,14 @@ const UserList = (props) => {
 
         userFilter(search);
 
-    }, [users, search, roles])
+    }, [users, search, roles, userFilter])
 
 
-    // returns parsed users in unordered list
+    // returns user list component and all child components within
     return (
         <div className="user-list-component">
             <p>Registered Users</p>
-            <input type="text" id="userSearch" onChange={searchHandler} placeholder="Search for a user" value={search} />
+            <input type="text" id="userSearch" onChange={searchHandler} placeholder="User search" value={search} />
             <div className="user-list">
                 <ul>
                     {filteredUserList}

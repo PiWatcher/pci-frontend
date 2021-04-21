@@ -3,7 +3,7 @@
 import './RoomList.css';
 
 // page imports
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Room from './Room';
 
 const RoomList = (props) => {
@@ -25,7 +25,7 @@ const RoomList = (props) => {
    }
 
    // filters out rooms based on search text
-   const roomFilter = (filter) => {
+   const roomFilter = useCallback((filter) => {
 
       // filters room list
       let filteredRooms = rooms.filter(function (item) {
@@ -39,12 +39,13 @@ const RoomList = (props) => {
                key={index}
                room={item._id}
                count={item.current_count}
-               capacity={50}
+               capacity={item.room_capacity[0]}
             />)
 
       // sets the state
       setFilteredRoomList(filtered);
-   }
+
+   }, [rooms]);
 
 
    // on building change, resets filter to empty
@@ -55,15 +56,15 @@ const RoomList = (props) => {
    }, [building])
 
 
-   // filters rooms on room list change and query change
+   // filters rooms on room list or search query change
    useEffect(() => {
 
       roomFilter(search);
 
-   }, [rooms, search])
+   }, [rooms, search, roomFilter])
 
 
-   // returns filtered rooms in unordered list
+   // returns filtered rooms
    return (
       <div>
          <input type="text" id="roomSearch" onChange={searchHandler} placeholder="Search for a room" value={search} />

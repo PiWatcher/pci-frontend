@@ -7,25 +7,27 @@ import React, { useState, useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { unstable_createMuiStrictModeTheme as createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import axios from 'axios';
 import _ from 'lodash'
 import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
+// components
+import AlertNotification from '../Notification/AlertNotification';
+import ConfirmNotification from '../Notification/ConfirmNotification';
+
 // contexts
-import { DataContext } from '../../contexts/DataContext';
 import { AuthContext } from '../../contexts/AuthContext';
 
-// component for handling each user
+// role information component
 const User = (props) => {
 
     // consume props from parent component
-    const { name, email, role, roles } = props;
+    const { name, email, role, roles, pullUsers } = props;
 
     // consumes contexts
-    const { baseURL } = useContext(DataContext);
-    const { userToken } = useContext(AuthContext);
+    const { baseURL, userToken, userName } = useContext(AuthContext);
 
     // user role in state
     const [userRole, setUserRole] = useState(role);
@@ -33,7 +35,14 @@ const User = (props) => {
     // Material UI menu state
     const [anchorEl, setAnchorEl] = useState(null);
 
-    const [alertStatus, setAlertStatus] = useState(false);
+    // alert state
+    const [showDialogAlert, setShowDialogAlert] = useState(false);
+
+    // alert state
+    const [showAlert, setShowAlert] = useState(false);
+
+    // role update alert state
+    const [alertType, setAlertType] = useState('');
 
     // custom material theme
     const roleButtonTheme = createMuiTheme({
@@ -54,6 +63,7 @@ const User = (props) => {
     // API logic for updating user role
     const updateRole = async (role) => {
 
+        // endpoint URL
         const roleUpdateEndpoint = `${baseURL}:5000/api/auth/users/update`
 
         // tries to update user information
@@ -61,8 +71,8 @@ const User = (props) => {
             const response = await axios({
                 method: 'post',
                 url: roleUpdateEndpoint,
-                params: {
-                    jwt_token: userToken
+                headers: {
+                    Authorization: `Bearer ${userToken}`
                 },
                 data: {
                     email: email,
@@ -72,14 +82,29 @@ const User = (props) => {
 
             // successfully connected to endpoint and updated user
             if (response.status === 200) {
-                alert(`${name} was updated to the role of ${role}.`)
+
+                // display current user role
+                setUserRole(response.data.user['role']);
+
+                //show success alert
+                setShowAlert(true);
+
+                // set alert type
+                setAlertType('update-success');
             }
         }
 
         // caught failure
         catch (error) {
-            alert(error.response.data['description'])
-            console.log(error.response.data['description'])
+
+            // show alert
+            setShowAlert(true);
+
+            // set alert type
+            setAlertType('update-failure');
+
+            // display error in console for debugging
+            console.error('Error', error.response);
         }
     };
 
@@ -96,9 +121,6 @@ const User = (props) => {
         // checks if role has been selected
         if (newRole !== '') {
 
-            // set role for user
-            setUserRole(newRole);
-
             // update user role in database
             updateRole(newRole);
         }
@@ -107,27 +129,70 @@ const User = (props) => {
         setAnchorEl(null);
     };
 
-    // open role menu
-    const handleUserDelete = (e) => {
-        alert(`${name} has been deleted as a user.`);
+    // delete user role from database
+    const deleteUser = async () => {
 
-        //check with alert
+        // clear confirmation dialog
+        setShowDialogAlert(false);
 
-        //if yes, delete with delete function
-        // repull users
+        const deleteUserEndpoint = `${baseURL}:5000/api/auth/users`;
 
-        //if no, 
+        // tries to delete user
+        try {
+
+            const response = await axios({
+                method: 'delete',
+                url: deleteUserEndpoint,
+                headers: {
+                    Authorization: `Bearer ${userToken}`
+                },
+                data: {
+                    email: email
+                }
+            });
+
+            // successfully connected to endpoint and delete role
+            if (response.status === 200) {
+
+                //show success alert
+                setShowAlert(true);
+
+                // set alert type
+                setAlertType('delete-success');
+
+            }
+        }
+
+        // failed to pull chart data
+        catch (error) {
+
+            // show alert
+            setShowAlert(true);
+
+            // set alert type
+            setAlertType('delete-failure');
+
+            // display error in console for debugging
+            console.error('Error', error.response);
+        }
     };
+
+    // on successful delete of user, closes alert and repulls users
+    const deleteSuccessful = () => {
+
+        // hide alert
+        setShowAlert(false);
+
+        // repull list of users
+        pullUsers();
+
+    }
 
     // returns user list item component
     return (
         <li>
             <div className="user-list-option">
                 <div className="user-info">
-
-
-
-
                     <div className="user-name">
                         {name}
                     </div>
@@ -161,13 +226,46 @@ const User = (props) => {
 
                     </div>
 
+                    {name === 'Administrator' || name === userName ?
                     <div className="user-delete">
-                        <IconButton className="delete-button" aria-label="delete" onClick={handleUserDelete} >
+                    </div>
+                    :
+                    <div className="user-delete">
+                        <IconButton className="delete-button" aria-label="delete" onClick={() => setShowDialogAlert(true)} >
                             <CloseIcon color="secondary" />
                         </IconButton>
                     </div>
+                    }
 
                 </MuiThemeProvider>
+
+                <ConfirmNotification showAlert={showDialogAlert} setShowAlert={setShowDialogAlert} onConfirm={deleteUser} title={'User Delete'}
+                    description={`Are you sure you want to delete the account for ${name}?`} />
+
+
+                {showAlert === true && alertType === 'update-success' ?
+                    <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'User Role Update Status'}
+                        description={`${name} successfully updated to "${userRole}" role.`} />
+                    :
+                    null}
+
+                {showAlert === true && alertType === 'update-failure' ?
+                    <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'User Role Update Status'}
+                        description={`${name} failed to update to role.`} />
+                    :
+                    null}
+
+                {showAlert === true && alertType === 'delete-success' ?
+                    <AlertNotification showAlert={showAlert} setShowAlert={deleteSuccessful} title={'User Delete Status'}
+                        description={`${name} account successfully deleted.`} />
+                    :
+                    null}
+
+                {showAlert === true && alertType === 'delete-failure' ?
+                    <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'User Delete Status'}
+                        description={`${name} account deletion failed.`} />
+                    :
+                    null}
 
             </div>
         </li>

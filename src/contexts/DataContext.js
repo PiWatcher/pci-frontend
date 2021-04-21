@@ -2,7 +2,7 @@
 // page imports
 import React, { createContext, useState } from 'react';
 
-// context that pulls data from backend and parses
+// context that stores selected building and rooms
 export const DataContext = createContext();
 
 const DataContextProvider = (props) => {

@@ -3,7 +3,7 @@
 import './AdminSettings.css';
 
 // page imports
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 // contexts
@@ -14,8 +14,9 @@ import CleanNavbar from '../Navigation/CleanNavbar';
 import UserList from './UserList';
 import RoleCreation from './RoleCreation';
 import RoleList from './RoleList';
+import AlertNotification from '../Notification/AlertNotification';
 
-// administrator settings
+// administrator settings page
 const AdminSettings = () => {
 
     // consume context 
@@ -24,12 +25,19 @@ const AdminSettings = () => {
     // state for pulled users
     const [pulledUsers, setPulledUsers] = useState([]);
 
-    // state for pulled roles and permissions
+    // state for pulled roles and their permissions
     const [pulledRoles, setPulledRoles] = useState([]);
 
-    // API pull logic for user information
-    const pullUsers = async () => {
+    // state for where error came from
+    const [errorCause, setErrorCause] = useState('');
 
+    // state for if alert is to be displayed
+    const [showAlert, setShowAlert] = useState(false);
+
+    // API pull logic for user information
+    const pullUsers = useCallback(async () => {
+
+        // endpoint URL
         const userEndpoint = `${baseURL}:5000/api/auth/users`;
 
         // tries to pull users and their information in database
@@ -37,8 +45,8 @@ const AdminSettings = () => {
             const response = await axios({
                 method: 'get',
                 url: userEndpoint,
-                params: {
-                    jwt_token: userToken
+                headers: {
+                    'Authorization': `Bearer ${userToken}`
                 }
             });
 
@@ -47,33 +55,45 @@ const AdminSettings = () => {
 
                 let responseData = response.data;
 
-                let userList = responseData.users;
+                // sorts users in order
+                let userList = responseData.users.sort(function (a, b) {
+                    return a.full_name.localeCompare(b.full_name, undefined, {
+                        numeric: true,
+                        sensitivity: 'base'
+                    });
+                });
 
-                // sets state pulled users
+                // sets state
                 setPulledUsers(userList);
             }
         }
 
         // failed to pull users
         catch (error) {
-            alert('test');
-            //alert(error.response.data['description']);
+
+            // sets state
+            setErrorCause('users');
+            setShowAlert(true);
+
+            // display error in console for debugging
             console.error('Error', error.response);
         }
-    };
+
+    }, [baseURL, userToken]);
 
     // API pull logic for available user roles
-    const pullRoles = async () => {
+    const pullRoles = useCallback(async () => {
 
+        // endpoint URL
         const roleEndpoint = `${baseURL}:5000/api/auth/roles`;
 
-        // tries to pull available roles
+        // tries to pull available roles from database
         try {
             const response = await axios({
                 method: 'get',
                 url: roleEndpoint,
-                params: {
-                    jwt_token: userToken
+                headers: {
+                    Authorization: `Bearer ${userToken}`
                 }
             });
 
@@ -82,44 +102,60 @@ const AdminSettings = () => {
 
                 let responseData = response.data;
 
-                let roleList = responseData.roles;
+                // sorts roles in order
+                let roleList = responseData.roles.sort(function (a, b) {
+                    return a.role_name.localeCompare(b.role_name, undefined, {
+                        numeric: true,
+                        sensitivity: 'base'
+                    });
+                });
 
-                // sets state to list of roles
+                // sets state
                 setPulledRoles(roleList);
-
-                console.log(response);
-
             }
         }
 
         // failed to pull roles
         catch (error) {
-            alert("failed to pull roles");
+
+            // sets state
+            setErrorCause('roles');
+            setShowAlert(true);
+
+            // display error in console for debugging
             console.error('Error', error.response);
         }
-    };
 
-    // on initial component load pull users and roles
+    }, [baseURL, userToken]);
+
+    // pull users and roles on initial component load
     useEffect(() => {
         pullUsers();
         pullRoles();
-    }, [])
+    }, [pullUsers, pullRoles])
 
-    // returns the the admin page and its child components
+
+    // return admin settings page and children components
     return (
         <div className="admin-container">
             <CleanNavbar />
             <div className="admin-settings-row">
 
                 <div className="role-column">
-                    <RoleCreation />
-                    <RoleList roles={pulledRoles} />
+                    <RoleCreation pullRoles={pullRoles} />
+                    <RoleList roles={pulledRoles} pullRoles={pullRoles} />
                 </div>
 
                 <div className="user-column">
-                    <UserList users={pulledUsers} roles={pulledRoles} />
+                    <UserList users={pulledUsers} roles={pulledRoles} pullUsers={pullUsers} />
                 </div>
             </div>
+
+            {showAlert === true ?
+                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
+                    description={`Failed to pull data from endpoint: list of ${errorCause}`} />
+                :
+                null}
         </div >
     );
 }

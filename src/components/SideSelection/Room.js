@@ -3,26 +3,26 @@
 import './Room.css';
 
 // page imports
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 
 // contexts
 import { DataContext } from '../../contexts/DataContext';
 import { AuthContext } from '../../contexts/AuthContext';
 
-
+// component for room information
 const Room = (props) => {
 
     // consume props
     const { room, count, capacity } = props;
 
-    // consume context
-    const { userAdminPermissions } = useContext(AuthContext);
+    // consume contexts
+    const { userAdminPermissions, userViewRawData } = useContext(AuthContext);
     const { selectedBuilding, selectedCharts, setSelectedCharts } = useContext(DataContext);
 
-    // state of room usage
+    // state for room usage
     const [roomUsage, setRoomUsage] = useState(0);
 
-    // state of usage color
+    // state for usage color
     const [usageColor, setUsageColor] = useState('low-usage');
 
     // calculates usage from given data
@@ -34,11 +34,10 @@ const Room = (props) => {
     }
 
     // constructs room data for packaging
-    const createRoom = () => {
+    const createRoom = useCallback(() => {
 
         // calculates usage
         let localUsage = getUsage(count, capacity);
-
 
         if (localUsage <= 75) {
 
@@ -46,7 +45,7 @@ const Room = (props) => {
             setUsageColor('low-usage');
         }
 
-        else if (localUsage > 75 && localUsage <= 100) {
+        else if (localUsage > 75) {
 
             // set to red text
             setUsageColor('high-usage');
@@ -54,36 +53,33 @@ const Room = (props) => {
 
         // sets usage
         setRoomUsage(localUsage);
-    }
 
-    // manages list of selected rooms
+    }, [capacity, count]);
+
+    // manages list of selected rooms for chart creation
     const selectRoom = () => {
 
-        let MAX_SELECTED_ROOMS = 0;
+        // public viewer limit
+        let MAX_SELECTED_ROOMS = 1;
 
+        // admin viewer limit
         if (userAdminPermissions === true) {
             MAX_SELECTED_ROOMS = 4;
         }
 
-        else {
-            MAX_SELECTED_ROOMS = 1;
-        }
-
+        // construct building/room object and add to list
         if (selectedCharts.length < MAX_SELECTED_ROOMS) {
-
-            setSelectedCharts([...selectedCharts, { chartID: selectedCharts.length, building: selectedBuilding, room: room }])
+            setSelectedCharts([...selectedCharts, { chartID: selectedCharts.length, building: selectedBuilding, room: room, capacity: capacity }]);
         }
-    }
+    };
 
-    // updates on data change (new room selected)
+    // updates on data change (count)
     useEffect(() => {
 
         createRoom();
 
-    }, [count])
+    }, [count, createRoom]);
 
-
-    // returns room component
     return (
         <li key={room} onClick={() => selectRoom(room)}>
             <div className="list-option">
@@ -93,9 +89,20 @@ const Room = (props) => {
                     </p>
                 </div>
 
-                <div className={`usage ${usageColor}`}>
-                    {roomUsage} %
-                </div>
+                {userViewRawData === true ?
+
+                    // display raw count
+                    <div className={`usage ${usageColor}`}>
+                        {count} / {capacity}
+                    </div>
+                    :
+
+                    // display percentage 
+                    <div className={`usage ${usageColor}`}>
+                        {roomUsage}%
+                    </div>
+                }
+
             </div>
         </li>
     )

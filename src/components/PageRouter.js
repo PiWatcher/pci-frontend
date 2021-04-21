@@ -4,17 +4,16 @@ import React, { useContext, useEffect } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 // contexts
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthContext';
 
 // components
-import Auth from './Auth';
-import Dashboard from '../Dashboard';
-import AdminSettings from '../Admin/AdminSettings';
-import AuthForgot from '../Authentication/AuthForgot';
-import AuthReset from '../Authentication/AuthReset';
+import Auth from './Authentication/Auth';
+import Dashboard from './Dashboard';
+import AdminSettings from './Admin/AdminSettings';
+import AuthForgot from './Authentication/AuthForgot';
+import Settings from './Settings/Settings';
 
 // component that redirects based on authentication status
-
 const PageRouter = () => {
 
    // consumes current user information from AuthContext
@@ -36,6 +35,7 @@ const PageRouter = () => {
 
    // if not authenticated, displays login screen
    // if authenticated, displays dashboard
+   // if admin, can access admin URL
    // anything else redirects back to the login page
    return (
       <div className="PageRouter">
@@ -43,6 +43,10 @@ const PageRouter = () => {
             <BrowserRouter >
                <Switch>
 
+                  {/* forgot password */}
+                  <Route exact path="/authforgot" component={AuthForgot} />
+
+                  {/* auth to dashboard */}
                   <Route exact path="/auth" component={Auth}>
                      {authStatus === true ?
                         <Redirect to="/dashboard" component={Dashboard} /> :
@@ -50,8 +54,15 @@ const PageRouter = () => {
                      }
                   </Route>
 
+                  {/* dashboard to auth */}
                   {authStatus === true ?
                      <Route exact path="/dashboard" component={Dashboard} /> :
+                     <Redirect to="/auth" component={Auth} />
+                  }
+
+                  {/* settings to auth */}
+                  {authStatus === true ?
+                     <Route exact path="/settings" component={Settings} /> :
                      <Redirect to="/auth" component={Auth} />
                   }
 
@@ -61,10 +72,7 @@ const PageRouter = () => {
                      <Redirect to="/dashboard" component={Dashboard} />
                   }
 
-                  <Route exact path="/authforgot" component={AuthForgot} />
-
-                  <Route exact path="/authreset" component={AuthReset} />
-
+                  {/* redirect to login for any other address */}
                   <Route path="*">
                      <Redirect to="/auth" component={Auth} />
                   </Route>

@@ -2,29 +2,33 @@
 import "./SideSelection.css"
 
 // page imports
-import React, { useContext, useState, useEffect } from 'react';
-import RoomList from './RoomList';
-import BuildingUsage from './BuildingUsage';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+
+// components
+import RoomList from './RoomList';
+import BuildingInfo from './BuildingInfo';
+import AlertNotification from '../Notification/AlertNotification';
 
 // contexts
 import { DataContext } from '../../contexts/DataContext';
 
-
+// component for sidebar and its child components
 const SideSelection = () => {
 
-    // consumes context
+    // consume context
     const { selectedBuilding, baseURL } = useContext(DataContext);
 
     // creates state for pulled rooms
     const [pulledRooms, setPulledRooms] = useState([]);
 
-    // creates state for building information
-    const [buildingInfo, setBuildingInfo] = useState({});
+    // state for alert
+    const [showAlert, setShowAlert] = useState(false);
 
     // API pull logic for rooms in selected building
-    const pullRoomData = async () => {
+    const pullRoomData = useCallback(async () => {
 
+        // endpoint URL
         const roomListEndpoint = `${baseURL}:5000/api/data/building/rooms`;
 
         // tries to pull room data
@@ -54,40 +58,41 @@ const SideSelection = () => {
                 // sets state to list of rooms
                 setPulledRooms(localRoomList);
 
-                console.log(response);
-
-                // sets building info
-                setBuildingInfo({ count: response.data.count_total, capacity: 1 });
+                // five second refresh on successful data pull
+                setTimeout(pullRoomData, 5000);
             }
         }
 
         // failed to pull room
         catch (error) {
-            alert(error.response.data['description']);
-            console.log(error.response.data['description']);
+
+            // display alert
+            setShowAlert(true);
+
+            // display error to console for debugging
+            console.error('Error', error.response);
         }
-    };
+    }, [baseURL, selectedBuilding]);
 
     // updates room list on selected building change
     useEffect(() => {
 
+        // pull rooms from API
         pullRoomData();
 
-        // five seconds interval for data refresh 
-        const interval = setInterval(() => {
-            console.log('grabbing rooms');
-            pullRoomData();
-        }, 5000);
-
-        return () => clearInterval(interval);
-
-    }, [selectedBuilding])
+    }, [selectedBuilding, pullRoomData])
 
     // returns side selection component and its children
     return (
         <div className="room-list-container">
-            <BuildingUsage building={selectedBuilding} buildingInfo={buildingInfo} />
+            <BuildingInfo building={selectedBuilding} />
             <RoomList building={selectedBuilding} rooms={pulledRooms} />
+
+            {showAlert === true ?
+                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
+                    description={`Failed to pull data from endpoint: List of rooms within ${selectedBuilding}`} />
+                :
+                null}
         </div>
     )
 }

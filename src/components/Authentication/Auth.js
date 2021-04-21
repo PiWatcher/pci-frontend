@@ -7,6 +7,9 @@ import React, { useContext, useState } from 'react';
 import nauLogo from '../../images/nauLogoLogin.svg';
 import { Link } from 'react-router-dom';
 
+// components
+import AlertNotification from '../Notification/AlertNotification';
+
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
 
@@ -31,6 +34,11 @@ const Auth = () => {
     // current sign up status
     const [signUpStatus, setSignUpStatus] = useState(false);
 
+    // state for alert display
+    const [showAlert, setShowAlert] = useState(false);
+
+    // state for alert type
+    const [alertMessage, setAlertMessage] = useState('');
 
     // places user form input into local temp variables
     const handleInputChange = (e) => {
@@ -45,8 +53,7 @@ const Auth = () => {
         else if (e.target.id === "password") {
             setLocalPassword(e.target.value);
         }
-    }
-
+    };
 
     // passes temp variables to AuthContext state after submit
     const handleSubmit = (e) => {
@@ -57,17 +64,45 @@ const Auth = () => {
         // authenticates account 
         if (localSelectedAuth === "Sign In") {
 
-            authenticateAccount(localEmail, localPassword);
+            // await authentication
+            authenticateAccount(localEmail, localPassword).then(function (result) {
+
+                // if failure
+                if (result.status !== 200) {
+
+                    setAlertMessage(result.message);
+
+                    setShowAlert(true)
+                }
+            });
+
         }
 
         // creates user in database
         else if (localSelectedAuth === "Sign Up") {
 
-            if (createAccount(localUserName, localEmail, localPassword)) {
-                setSignUpStatus(true);
-            };
+            // await creation
+            createAccount(localUserName, localEmail, localPassword).then(function (result) {
+
+                // if success
+                if (result.status === 201) {
+
+                    // set sign up status
+                    setSignUpStatus(true);
+                }
+
+                else {
+                    // set alert type
+                    setAlertMessage(result.data.message);
+
+                    // show alert
+                    setShowAlert(true);
+                }
+
+                // if failure
+            });
         }
-    }
+    };
 
     // sets css for sign in tab and sets local variable to sign in
     const selectSignIn = () => {
@@ -88,7 +123,7 @@ const Auth = () => {
             signIn.classList.remove("nonActiveLoginType");
             signIn.classList.add("activeLoginType");
         }
-    }
+    };
 
 
     // sets css for register tab and sets local variables to sing in
@@ -110,7 +145,7 @@ const Auth = () => {
             signUp.classList.remove("nonActiveLoginType");
             signUp.classList.add("activeLoginType");
         }
-    }
+    };
 
     // returns the login page with input form
     return (
@@ -141,7 +176,7 @@ const Auth = () => {
                                 </form>
                             }
                             <div className="forgot-password-div">
-                                <Link to="/authforgot">
+                                <Link to="/authforgot" className="forgot-password-link">
                                     Forgot password?
                                 </Link>
                             </div>
@@ -168,12 +203,25 @@ const Auth = () => {
                                     :
 
                                     <div className="sign-up-success">
-                                        Sign up success! Please wait for administrator approval.
+                                        Sign up success!
                                 </div>
                             }
                         </div>
                 }
             </div>
+
+            {showAlert === true && localSelectedAuth === "Sign In" ?
+                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Sign-In Failure`}
+                    description={alertMessage} />
+                :
+                null}
+
+
+            {showAlert === true && localSelectedAuth === "Sign Up" ?
+                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Sign-Up Failure`}
+                    description={alertMessage} />
+                :
+                null}
         </div>
     )
 }
