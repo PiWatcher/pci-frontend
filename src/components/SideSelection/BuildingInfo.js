@@ -9,14 +9,14 @@ import React from 'react';
 const BuildingInfo = (props) => {
 
    // consume props from parent component
-   const { building } = props;
+   const { selectedBuilding } = props;
 
    // returns info for selected building
    return (
       <div className="building-info-component">
          <div className="building-container">
             <div className="building-name">
-               {building.toUpperCase()}
+               {selectedBuilding.toUpperCase()}
             </div>
          </div>
       </div >

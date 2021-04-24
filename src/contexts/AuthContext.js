@@ -4,6 +4,13 @@ import React, { createContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 
+
+import UserSignIn from '../components/Utilites/Authentication/UserSignIn';
+
+import UserSignUp from '../components/Utilites/Authentication/UserSignUp';
+
+import TokenSignIn from '../components/Utilites/Authentication/TokenSignIn';
+
 // context that manages user login and authentication
 export const AuthContext = createContext();
 
@@ -35,139 +42,86 @@ const AuthContextProvider = (props) => {
     const cookies = new Cookies();
 
     // sends given user data to backend for authentication
-    const authenticateAccount = async (email, password) => {
+    const handleUserSignIn = async (baseURL, email, password) => {
 
-        // endpoint URL
-        const signInEndpoint = `${baseURL}:5000/api/auth/signin`;
+        // await authentication
+        const result = await UserSignIn(baseURL, email, password);
 
-        // tries to connect to database and verify account information
-        try {
-            const response = await axios({
-                method: 'post',
-                url: signInEndpoint,
-                data: {
-                    email: email,
-                    password: password
-                }
-            });
+        // if failure
+        if (result instanceof Error) {
 
-            // successfully verified
-            if (response.status === 200) {
+            return result;
 
-                let responseData = response.data;
+        } else {
 
-                let responseRole = responseData.role;
+            let resultData = result.data;
 
-                let responseToken = responseData.jwt_token;
+            let resultRole = resultData.role;
 
-                // set user information from response
-                setUserName(responseData.full_name);
-                setUserRoleName(responseRole.role_name);
-                setUserAdminPermissions(responseRole.is_admin);
-                setUserViewRawData(responseRole.can_view_raw);
-                setUserToken(responseData.jwt_token)
+            let resultToken = resultData.jwt_token;
 
-                cookies.set('piWatcherAuth', {responseToken}, { path: '/', maxAge:604800, sameSite: 'strict' });
+            // set user information from response
+            setUserName(resultData.full_name);
+            setUserRoleName(resultRole.role_name);
+            setUserAdminPermissions(resultRole.is_admin);
+            setUserViewRawData(resultRole.can_view_raw);
+            setUserToken(resultToken);
 
-                // set auth status to true
-                setAuthStatus(true);
+            cookies.set('piWatcherAuth', {resultToken}, { path: '/', maxAge:604800, sameSite: 'strict' });
 
-                return response;
-            }
-        }
-
-        // failed to sign in
-        catch (error) {
-
-            // display error to console for debugging
-            console.error('Error', error.response);
-
-            return error.response.data;
+            // set auth status to true
+            setAuthStatus(true);
         }
     };
 
     // sends given user data to backend for authentication
-    const authenticateCookie = useCallback(async (cookieToken) => {
+    const handleTokenSignIn = async (cookieToken) => {
 
-        // endpoint URL
-        const tokenEndpoint = `${baseURL}:5000/api/auth/token`;
+        // await authentication
+        const result = await TokenSignIn(baseURL, cookieToken);
 
-        // tries to connect to database and verify account information
-        try {
-            const response = await axios({
-                method: 'post',
-                url: tokenEndpoint,
-                headers: {
-                    'Authorization': `Bearer ${cookieToken}`
-                }
-            });
+        // if failure
+        if (result instanceof Error) {
 
-            // successfully verified
-            if (response.status === 200) {
+            return result;
 
-                let responseData = response.data;
+        } else {
 
-                let responseRole = responseData.role;
+            let resultData = result.data;
 
-                // set user information from response
-                setUserName(responseData.full_name);
-                setUserRoleName(responseRole.role_name);
-                setUserAdminPermissions(responseRole.is_admin);
-                setUserViewRawData(responseRole.can_view_raw);
+            let resultRole = resultData.role;
 
-                // set auth status to true
-                setAuthStatus(true);
-            }
+            // set user information from response
+            setUserName(resultData.full_name);
+            setUserRoleName(resultRole.role_name);
+            setUserAdminPermissions(resultRole.is_admin);
+            setUserViewRawData(resultRole.can_view_raw);
+
+            // set auth status to true
+            setAuthStatus(true);
         }
-
-        // failed to sign in
-        catch (error) {
-
-            // display error to console for debugging
-            console.error('Error', error.response);
-
-            return false;
-        }
-    }, [userToken]);
+    };
 
 
     // sends given user data to backend for account creation
-    const createAccount = async (name, email, password) => {
+    const handleUserSignUp = async (baseURL, name, email, password) => {
 
-        // endpoint URL
-        const signUpEndpoint = `${baseURL}:5000/api/auth/signup`;
+        // await authentication
+        const result = await UserSignUp(baseURL, name, email, password);
 
-        // tries to connect to database and post new account information
-        try {
-            const response = await axios({
-                method: 'post',
-                url: signUpEndpoint,
-                data: {
-                    email: email,
-                    password: password,
-                    full_name: name
-                }
-            });
+        // if failure
+        if (result instanceof Error) {
 
-            // successfully signed up
-            if (response.status === 201) {
+            return result;
 
-                return response;
-            }
+        } else {
+
+            return true;
         }
-
-        // failed to sign up
-        catch (error) {
-
-            // display error to console for debugging
-            console.error('Error', error.response);
-
-            return error.response;
-        }
-    }
+    };
 
     // clears user information from state
-    const signOut = () => {
+    const handleUserSignOut = () => {
 
         // remove cookie
         cookies.remove('piWatcherAuth');
@@ -185,20 +139,20 @@ const AuthContextProvider = (props) => {
 
     useEffect(() => {
 
-        // if cookie, authenticate token
+        // // if cookie, authenticate token
         if(authStatus === false && cookies.get('piWatcherAuth') != null){
 
-            let localResponseToken = cookies.get('piWatcherAuth').responseToken;
+            let localResultToken = cookies.get('piWatcherAuth').resultToken;
 
-            setUserToken(localResponseToken);
+            setUserToken(localResultToken);
 
-            authenticateCookie(localResponseToken);
+            handleTokenSignIn(localResultToken);
         }
     }, [])
 
 
     return (
-        <AuthContext.Provider value={{ userName, userRoleName, userToken, userAdminPermissions, userViewRawData, authStatus, authenticateAccount, createAccount, signOut, baseURL }}>
+        <AuthContext.Provider value={{ userName, userRoleName, userToken, userAdminPermissions, userViewRawData, authStatus, handleUserSignIn, handleUserSignUp, handleUserSignOut, baseURL }}>
             {props.children}
         </AuthContext.Provider>
     )

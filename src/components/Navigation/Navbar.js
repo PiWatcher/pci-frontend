@@ -17,10 +17,12 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { DataContext } from '../../contexts/DataContext';
 
 // navbar component
-const Navbar = () => {
+const Navbar = (props) => {
+
+   const { pulledBuildings } = props;
 
    // consume context
-   const { userAdminPermissions, signOut } = useContext(AuthContext);
+   const { userAdminPermissions, handleUserSignOut } = useContext(AuthContext);
    const { setSelectedBuilding, setSelectedCharts } = useContext(DataContext);
 
    const navSignOut = () => {
@@ -32,7 +34,7 @@ const Navbar = () => {
       setSelectedCharts([]);
 
       // signs out from auth context
-      signOut();
+      handleUserSignOut();
    }
 
    // custom material ui them
@@ -54,7 +56,7 @@ const Navbar = () => {
                <img src={nauLogo} alt="NAU Logo" />
             </div>
 
-            <SearchBar />
+            <SearchBar pulledBuildings={pulledBuildings} />
 
             <div className="right-side-div">
                <MuiThemeProvider theme={navLinkTheme}>

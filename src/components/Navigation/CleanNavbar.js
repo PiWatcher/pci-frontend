@@ -15,7 +15,7 @@ import { DataContext } from '../../contexts/DataContext';
 const CleanNavbar = () => {
 
    // consume context
-   const { signOut } = useContext(AuthContext);
+   const { handleUserSignOut } = useContext(AuthContext);
    const { setSelectedBuilding, setSelectedCharts } = useContext(DataContext);
 
    const navSignOut = () => {
@@ -27,7 +27,7 @@ const CleanNavbar = () => {
       setSelectedCharts([]);
 
       // signs out from auth context
-      signOut();
+      handleUserSignOut();
    }
 
    // returns navbar component (includes logo and and sign out)

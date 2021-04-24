@@ -17,6 +17,9 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import AlertNotification from '../Notification/AlertNotification';
 import ConfirmNotification from '../Notification/ConfirmNotification';
 
+//functions
+import DeleteRole from '../Utilites/Admin/DeleteRole';
+
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
 
@@ -57,56 +60,31 @@ const Role = (props) => {
         }
     });
 
-
-    // delete user role from database
-    const deleteRole = async () => {
+    const handleRoleDelete = async () => {
 
         // close confirmation dialog
         setShowDialogAlert(false);
 
-        const deleteRoleEndpoint = `${baseURL}:5000/api/auth/roles`;
+        const result = await DeleteRole(baseURL, userToken, name);
 
-        // tries to delete role
-        try {
-            const response = await axios({
-                method: 'delete',
-                url: deleteRoleEndpoint,
-                headers: {
-                    Authorization: `Bearer ${userToken}`
-                },
-                data: {
-                    role_name: name
-                }
-            });
+        if(result.status === 200){
 
-            // successfully connected to endpoint and delete role
-            if (response.status === 200) {
-
-                //show success alert
-                setShowAlert(true);
-
-                // set alert type
-                setAlertType('delete-success');
-            }
-        }
-
-        // failed to pull chart data
-        catch (error) {
-
-            // show alert
-            setShowAlert(true);
+            // set alert type
+            setAlertType('delete-success');
+        } else {      
 
             // set alert type
             setAlertType('delete-failure');
-
-            // display error in console for debugging
-            console.error('Error', error.response);
         }
+
+        // // show alert
+        setShowAlert(true);
+
     };
 
 
     // on successful delete of role, closes alert and repulls roles
-    const deleteSuccessful = () => {
+    const onDeleteSuccess = () => {
 
         // hide alert
         setShowAlert(false);
@@ -156,11 +134,11 @@ const Role = (props) => {
 
                 </MuiThemeProvider>
 
-                <ConfirmNotification showAlert={showDialogAlert} setShowAlert={setShowDialogAlert} onConfirm={deleteRole} title={'Role Delete'}
+                <ConfirmNotification showAlert={showDialogAlert} setShowAlert={setShowDialogAlert} onConfirm={handleRoleDelete} title={'Role Delete'}
                     description={`Are you sure you want to delete the "${name}" role?`} />
 
                 {showAlert === true && alertType === 'delete-success' ?
-                    <AlertNotification showAlert={showAlert} setShowAlert={deleteSuccessful} title={'Role Delete Status'}
+                    <AlertNotification showAlert={showAlert} setShowAlert={onDeleteSuccess} title={'Role Delete Status'}
                         description={`${name} role successfully deleted.`} />
                     :
                     null}

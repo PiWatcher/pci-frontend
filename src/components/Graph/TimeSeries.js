@@ -19,6 +19,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 // components
 import AlertNotification from '../Notification/AlertNotification';
+import PullRoomData from '../../components/Utilites/Dashboard/PullRoomData'
 
 // contexts
 import { DataContext } from '../../contexts/DataContext';
@@ -38,6 +39,9 @@ const TimeSeries = (props) => {
 
    // state for alert
    const [showAlert, setShowAlert] = useState(false);
+
+   // state for alert type
+   const [alertType, setAlertType] = useState('');
 
    // state for current query of query buttons
    const [currentQuery, setCurrentQuery] = useState('live');
@@ -62,147 +66,6 @@ const TimeSeries = (props) => {
       refreshMode: 'debounce',
       refreshRate: 10
    })
-
-   // custom material theme
-   const timeSeriesButtonTheme = createMuiTheme({
-      typography: {
-         fontFamily: 'Open Sans',
-         fontSize: 16
-      },
-      props: {
-         MuiIconButton: {
-            disableRipple: true
-         }
-      },
-      overrides: {
-         MuiTooltip: {
-            tooltip: {
-               fontSize: "1em"
-            }
-         }
-      }
-   });
-
-   // converts isoDate to a string for display 
-   const createTime = (isoDate) => {
-
-      let parsedDate = new Date(isoDate);
-
-      let dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()}/${parsedDate.getFullYear()} ${addZero(parsedDate.getHours())}:${addZero(parsedDate.getMinutes())}:${addZero(parsedDate.getSeconds())}`;
-
-      return dateString;
-   };
-
-
-   // add zero to the time if single digit for formatting
-   const addZero = (time) => {
-      if (time < 10) {
-         time = "0" + time;
-      }
-      return time;
-   }
-
-
-   // unpacks response data according to user permissions
-   const unpackData = (data) => {
-
-      let timestamps = _.map(data, data => createTime(data.timestamp.$date));
-
-      setGraphTimestampData(timestamps);
-
-      let counts = _.map(data, data => data.count);
-
-      if (userViewRawData === true) {
-
-         setGraphCountData(counts);
-      }
-
-      else {
-         let percentCounts = [];
-
-         for (let index = 0; index < counts.length; index++) {
-            percentCounts[index] = `${(counts[index] / capacity) * 100}%`;
-         }
-
-         setGraphCountData(percentCounts);
-      }
-
-      // hide spinner
-      setLoading(false);
-
-      // if live query, repeat data pull
-      if(currentQuery === 'live'){
-
-         setQueryInterval(setTimeout(pullGraphData, 5000));
-      }
-   };
-
-
-   // API pull and parse logic for counts and timestamps
-   const pullGraphData = async () => {
-
-      // endpoint URL
-      const graphDataEndpoint = `${baseURL}:5000/api/data/building/room/${currentQuery}`
-
-      // tries to pull chart data
-      try {
-         const response = await axios({
-            method: 'get',
-            url: graphDataEndpoint,
-            params: {
-               building_name: building,
-               room: room
-            }
-         });
-
-         // successfully connected to endpoint and pulled data
-         if (response.status === 200) {
-
-            unpackData(response.data.data);
-         }
-      }
-
-      // failed to pull chart data
-      catch (error) {
-
-         // display failure alert
-         setShowAlert(true);
-
-         // display error to console for debugging
-         console.error('Error', error.response);
-
-      }
-   };
-
-
-
-   // remove chart from grid
-   const removeChart = () => {
-      let array = [...selectedCharts];
-
-      // removes chart with matching ID
-      _.remove(array, {
-         chartID: chartID
-      });
-
-      // shifts all charts to new ID positions
-      for (let index = 0; index < array.length; index++) {
-         array[index].chartID = index;
-      }
-
-      // sets updated list to display
-      setSelectedCharts(array);
-   }
-
-   // set data for plotly display
-   const data = [{
-      type: "scatter",
-      mode: "lines",
-      x: graphTimestampData,
-      y: graphCountData,
-      line: { color: '#003466' }
-   }];
-
 
    // plotly layout settings
    let layout = {};
@@ -237,6 +100,132 @@ const TimeSeries = (props) => {
          paper_bgcolor: "rgba(0,0,0,0)",
       };
 
+      // set data for plotly display
+   const data = [{
+      type: "scatter",
+      mode: "lines",
+      x: graphTimestampData,
+      y: graphCountData,
+      line: { color: '#003466' }
+   }];
+
+   // custom material theme
+   const timeSeriesButtonTheme = createMuiTheme({
+      typography: {
+         fontFamily: 'Open Sans',
+         fontSize: 16
+      },
+      props: {
+         MuiIconButton: {
+            disableRipple: true
+         }
+      },
+      overrides: {
+         MuiTooltip: {
+            tooltip: {
+               fontSize: "1em"
+            }
+         }
+      }
+   });
+
+   // converts isoDate to a string for display 
+   const formatTimeStamp = (isoDate) => {
+
+      let parsedDate = new Date(isoDate);
+
+      let dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()}/${parsedDate.getFullYear()} ${addZeroToTimeStamp(parsedDate.getHours())}:${addZeroToTimeStamp(parsedDate.getMinutes())}:${addZeroToTimeStamp(parsedDate.getSeconds())}`;
+
+      return dateString;
+   };
+
+   // add zero to the time if single digit for formatting
+   const addZeroToTimeStamp = (time) => {
+      if (time < 10) {
+         time = "0" + time;
+      }
+      return time;
+   }
+
+   // unpacks response data according to user permissions
+   const unpackDataForDisplay = (resultData) => {
+
+      let timestamps = _.map(resultData, resultData => formatTimeStamp(resultData.timestamp.$date));
+
+      setGraphTimestampData(timestamps);
+
+      let counts = _.map(resultData, resultData => resultData.count);
+
+      console.log("unpacking data");
+
+      if (userViewRawData === true) {
+
+         setGraphCountData(counts);
+      } else {
+
+         let percentCounts = [];
+
+         for (let index = 0; index < counts.length; index++) {
+            percentCounts[index] = `${(counts[index] / capacity) * 100}%`;
+         }
+
+         setGraphCountData(percentCounts);
+      }
+
+
+      console.log(loading)
+
+      // hide spinner
+      setLoading(false);
+
+      console.log(loading)
+
+      // if live query, repeat data pull
+      if(currentQuery === 'live'){
+
+         setQueryInterval(setTimeout(handlePullRoomData, 5000));
+      }
+   };
+
+   
+   const handlePullRoomData = async () => {
+
+      const result = await PullRoomData(baseURL, building, room, currentQuery);
+
+      if(result instanceof Error) {
+         // set alert type
+         setAlertType('room-data-pull-failure')
+
+         // show alert
+         setShowAlert(true);
+     } else {
+
+         let resultData = result.data.data;
+
+
+         console.log(resultData);
+
+         unpackDataForDisplay(resultData);
+     }
+  };
+
+   // remove chart from grid
+   const removeChart = () => {
+      let array = [...selectedCharts];
+
+      // removes chart with matching ID
+      _.remove(array, {
+         chartID: chartID
+      });
+
+      // shifts all charts to new ID positions
+      for (let index = 0; index < array.length; index++) {
+         array[index].chartID = index;
+      }
+
+      // sets updated list to display
+      setSelectedCharts(array);
+   }
 
    // create CSV file with pulled data
    const createCSVData = () => {
@@ -255,17 +244,14 @@ const TimeSeries = (props) => {
    // on room change or query change
    useEffect(() => {
 
-      if(!loading){
+      // initial load spinner (show)
+      setLoading(true);
 
-         // initial load spinner (show)
-         setLoading(true);
+      // clear previous interval
+      setQueryInterval(clearTimeout(queryInterval));
 
-         // clear previous interval
-         setQueryInterval(clearTimeout(queryInterval));
-
-         // pull data once
-         pullGraphData();
-      }
+      // pull data once
+      handlePullRoomData();
 
    }, [room, currentQuery]);
 
@@ -322,13 +308,13 @@ const TimeSeries = (props) => {
             </div>
          }
 
-         {showAlert === true?
+         <QueryButtons currentQuery={currentQuery} setCurrentQuery={setCurrentQuery} loading={loading} />
+
+         {showAlert === true && alertType === 'room-data-pull-failure'?
             <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
                description={`Failed to pull data from endpoint: building: ${building}, room: ${room}, query: ${currentQuery}`} />
             :
             null}
-
-         <QueryButtons currentQuery={currentQuery} setCurrentQuery={setCurrentQuery} loading={loading} />
       </div >
    );
 }

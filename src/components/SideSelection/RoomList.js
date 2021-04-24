@@ -9,7 +9,7 @@ import Room from './Room';
 const RoomList = (props) => {
 
    // consume props
-   const { building, rooms } = props;
+   const { selectedBuilding, pulledRooms } = props;
 
    // state for search value
    const [search, setSearch] = useState('');
@@ -28,7 +28,7 @@ const RoomList = (props) => {
    const roomFilter = useCallback((filter) => {
 
       // filters room list
-      let filteredRooms = rooms.filter(function (item) {
+      let filteredRooms = pulledRooms.filter(function (item) {
          return item['_id'].toLowerCase().indexOf(filter.toLowerCase()) !== -1;
       })
 
@@ -45,7 +45,7 @@ const RoomList = (props) => {
       // sets the state
       setFilteredRoomList(filtered);
 
-   }, [rooms]);
+   }, [pulledRooms]);
 
 
    // on building change, resets filter to empty
@@ -53,7 +53,7 @@ const RoomList = (props) => {
 
       setSearch('');
 
-   }, [building])
+   }, [selectedBuilding])
 
 
    // filters rooms on room list or search query change
@@ -61,7 +61,7 @@ const RoomList = (props) => {
 
       roomFilter(search);
 
-   }, [rooms, search, roomFilter])
+   }, [pulledRooms, search, roomFilter])
 
 
    // returns filtered rooms

@@ -12,6 +12,8 @@ import axios from 'axios';
 import _ from 'lodash'
 import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import UpdateUserRole from '../Utilites/Admin/UpdateUserRole'
+import DeleteUser from '../Utilites/Admin/DeleteUser'
 
 // components
 import AlertNotification from '../Notification/AlertNotification';
@@ -61,51 +63,24 @@ const User = (props) => {
     });
 
     // API logic for updating user role
-    const updateRole = async (role) => {
+    const handleUserRoleUpdate = async (newRole) => {
 
-        // endpoint URL
-        const roleUpdateEndpoint = `${baseURL}:5000/api/auth/users/update`
+        const result = await UpdateUserRole(baseURL, userToken, email, newRole);
 
-        // tries to update user information
-        try {
-            const response = await axios({
-                method: 'post',
-                url: roleUpdateEndpoint,
-                headers: {
-                    Authorization: `Bearer ${userToken}`
-                },
-                data: {
-                    email: email,
-                    new_role: role
-                }
-            });
+        if(result){
 
-            // successfully connected to endpoint and updated user
-            if (response.status === 200) {
-
-                // display current user role
-                setUserRole(response.data.user['role']);
-
-                //show success alert
-                setShowAlert(true);
-
-                // set alert type
-                setAlertType('update-success');
-            }
+            // set alert type
+            setAlertType('update-success');
         }
 
-        // caught failure
-        catch (error) {
-
-            // show alert
-            setShowAlert(true);
+        else{      
 
             // set alert type
             setAlertType('update-failure');
-
-            // display error in console for debugging
-            console.error('Error', error.response);
         }
+
+        // show alert
+        setShowAlert(true);
     };
 
     // open role menu
@@ -122,63 +97,40 @@ const User = (props) => {
         if (newRole !== '') {
 
             // update user role in database
-            updateRole(newRole);
+            handleUserRoleUpdate(newRole);
         }
 
         // close menu
         setAnchorEl(null);
     };
 
-    // delete user role from database
-    const deleteUser = async () => {
+    const handleUserDelete = async () => {
 
-        // clear confirmation dialog
+        // close confirmation dialog
         setShowDialogAlert(false);
 
-        const deleteUserEndpoint = `${baseURL}:5000/api/auth/users`;
+        const result = await DeleteUser(baseURL, userToken, name);
 
-        // tries to delete user
-        try {
+        if(result.status === 200){
 
-            const response = await axios({
-                method: 'delete',
-                url: deleteUserEndpoint,
-                headers: {
-                    Authorization: `Bearer ${userToken}`
-                },
-                data: {
-                    email: email
-                }
-            });
-
-            // successfully connected to endpoint and delete role
-            if (response.status === 200) {
-
-                //show success alert
-                setShowAlert(true);
-
-                // set alert type
-                setAlertType('delete-success');
-
-            }
-        }
-
-        // failed to pull chart data
-        catch (error) {
-
-            // show alert
-            setShowAlert(true);
+            // set alert type
+            setAlertType('delete-success');
+        } else {      
 
             // set alert type
             setAlertType('delete-failure');
 
             // display error in console for debugging
-            console.error('Error', error.response);
+            //console.error('Error', error.response);
         }
+
+        // // show alert
+        setShowAlert(true);
+
     };
 
     // on successful delete of user, closes alert and repulls users
-    const deleteSuccessful = () => {
+    const onDeleteSuccess = () => {
 
         // hide alert
         setShowAlert(false);
@@ -239,7 +191,7 @@ const User = (props) => {
 
                 </MuiThemeProvider>
 
-                <ConfirmNotification showAlert={showDialogAlert} setShowAlert={setShowDialogAlert} onConfirm={deleteUser} title={'User Delete'}
+                <ConfirmNotification showAlert={showDialogAlert} setShowAlert={setShowDialogAlert} onConfirm={handleUserDelete} title={'User Delete'}
                     description={`Are you sure you want to delete the account for ${name}?`} />
 
 
@@ -256,7 +208,7 @@ const User = (props) => {
                     null}
 
                 {showAlert === true && alertType === 'delete-success' ?
-                    <AlertNotification showAlert={showAlert} setShowAlert={deleteSuccessful} title={'User Delete Status'}
+                    <AlertNotification showAlert={showAlert} setShowAlert={onDeleteSuccess} title={'User Delete Status'}
                         description={`${name} account successfully deleted.`} />
                     :
                     null}
