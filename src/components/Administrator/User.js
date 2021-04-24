@@ -8,12 +8,11 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
-import axios from 'axios';
 import _ from 'lodash'
 import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import UpdateUserRole from '../Utilites/Admin/UpdateUserRole'
-import DeleteUser from '../Utilites/Admin/DeleteUser'
+import UpdateUserRole from '../Utilities/Administrator/UpdateUserRole'
+import DeleteUser from '../Utilities/Administrator/DeleteUser'
 
 // components
 import AlertNotification from '../Notification/AlertNotification';
@@ -67,13 +66,15 @@ const User = (props) => {
 
         const result = await UpdateUserRole(baseURL, userToken, email, newRole);
 
-        if(result){
+        if (result) {
+
+            setUserRole(newRole);
 
             // set alert type
             setAlertType('update-success');
         }
 
-        else{      
+        else {
 
             // set alert type
             setAlertType('update-failure');
@@ -111,11 +112,11 @@ const User = (props) => {
 
         const result = await DeleteUser(baseURL, userToken, name);
 
-        if(result.status === 200){
+        if (result.status === 200) {
 
             // set alert type
             setAlertType('delete-success');
-        } else {      
+        } else {
 
             // set alert type
             setAlertType('delete-failure');
@@ -179,14 +180,14 @@ const User = (props) => {
                     </div>
 
                     {name === 'Administrator' || name === userName ?
-                    <div className="user-delete">
-                    </div>
-                    :
-                    <div className="user-delete">
-                        <IconButton className="delete-button" aria-label="delete" onClick={() => setShowDialogAlert(true)} >
-                            <CloseIcon color="secondary" />
-                        </IconButton>
-                    </div>
+                        <div className="user-delete">
+                        </div>
+                        :
+                        <div className="user-delete">
+                            <IconButton className="delete-button" aria-label="delete" onClick={() => setShowDialogAlert(true)} >
+                                <CloseIcon color="secondary" />
+                            </IconButton>
+                        </div>
                     }
 
                 </MuiThemeProvider>

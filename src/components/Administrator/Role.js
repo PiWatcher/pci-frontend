@@ -4,7 +4,6 @@ import "./Role.css"
 
 // page imports
 import React, { useState, useContext } from 'react';
-import axios from 'axios';
 import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import FormControl from '@material-ui/core/FormControl';
@@ -18,7 +17,7 @@ import AlertNotification from '../Notification/AlertNotification';
 import ConfirmNotification from '../Notification/ConfirmNotification';
 
 //functions
-import DeleteRole from '../Utilites/Admin/DeleteRole';
+import DeleteRole from '../Utilities/Administrator/DeleteRole';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
@@ -67,11 +66,11 @@ const Role = (props) => {
 
         const result = await DeleteRole(baseURL, userToken, name);
 
-        if(result.status === 200){
+        if (result.status === 200) {
 
             // set alert type
             setAlertType('delete-success');
-        } else {      
+        } else {
 
             // set alert type
             setAlertType('delete-failure');
@@ -122,15 +121,15 @@ const Role = (props) => {
                     </div>
 
                     {name === 'public' || name === 'admin' ?
-                    <div className="role-delete">
-                    </div>
-                    :
-                    <div className="role-delete">
-                        <IconButton className="delete-button" aria-label="delete" onClick={() => setShowDialogAlert(true)} >
-                            <CloseIcon color="secondary" />
-                        </IconButton>
-                    </div>
-}
+                        <div className="role-delete">
+                        </div>
+                        :
+                        <div className="role-delete">
+                            <IconButton className="delete-button" aria-label="delete" onClick={() => setShowDialogAlert(true)} >
+                                <CloseIcon color="secondary" />
+                            </IconButton>
+                        </div>
+                    }
 
                 </MuiThemeProvider>
 

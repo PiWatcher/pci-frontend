@@ -1,34 +1,35 @@
-import ChangeUserPassword from '../../../Utilites/Authentication/ChangeUserPassword';
+import ChangeUserPassword from '../../../Utilities/Settings/ChangeUserPassword';
 import axios from 'axios';
 
 jest.mock('axios');
 
-  describe(("Axios user change password functionality."), () => {
+describe(("Axios user change password functionality."), () => {
 
-    it("User successfully changes password.", async () => {
+  it("User successfully changes password.", async () => {
 
-      let response = {
-        status: 200,
-        statusText: 'OK'
-      }
+    let response = {
+      status: 200,
+      statusText: 'OK'
+    }
 
-      axios.post.mockResolvedValue(response);
+    axios.mockResolvedValue(response);
 
-      const result = await ChangeUserPassword("testURL", "testToken", "testPassword", "testNewPassword");
+    const result = await ChangeUserPassword("testURL", "testToken", "testPassword", "testNewPassword");
 
-      expect(result).toEqual(response);
-    });
+    expect(result).toEqual(response);
+  });
 
-    it("User fails to change password.", async () => {
+  it("User fails to change password.", async () => {
 
-      let response = {
-        status: 400
-      }
+    let response = {
+      status: 400,
+      message: 'Failed request.'
+    }
 
-      axios.post.mockRejectedValue(response);
+    axios.mockRejectedValue(response);
 
-      const result = await ChangeUserPassword("testURL", "testToken", "testPassword", "testNewPassword");
+    const result = await ChangeUserPassword("testURL", "testToken", "testPassword", "testNewPassword");
 
-      expect(result instanceof Error).toBeTruthy;
-    });
-  })
+    expect(result instanceof Error).toBeTruthy;
+  });
+})

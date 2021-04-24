@@ -9,7 +9,7 @@ import { AuthContext } from '../contexts/AuthContext';
 // components
 import Auth from './Authentication/Auth';
 import Dashboard from './Dashboard';
-import AdminSettings from './Admin/AdminSettings';
+import AdminSettings from './Administrator/AdminSettings';
 import AuthForgot from './Authentication/AuthForgot';
 import Settings from './Settings/Settings';
 

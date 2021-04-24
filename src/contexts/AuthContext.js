@@ -1,15 +1,14 @@
 
 // page imports
-import React, { createContext, useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import React, { createContext, useState, useEffect } from 'react';
 import Cookies from 'universal-cookie';
 
 
-import UserSignIn from '../components/Utilites/Authentication/UserSignIn';
+import UserSignIn from '../components/Utilities/Authentication/UserSignIn';
 
-import UserSignUp from '../components/Utilites/Authentication/UserSignUp';
+import UserSignUp from '../components/Utilities/Authentication/UserSignUp';
 
-import TokenSignIn from '../components/Utilites/Authentication/TokenSignIn';
+import TokenSignIn from '../components/Utilities/Authentication/TokenSignIn';
 
 // context that manages user login and authentication
 export const AuthContext = createContext();
@@ -24,7 +23,7 @@ const AuthContextProvider = (props) => {
     const [authStatus, setAuthStatus] = useState(false);
 
     //  current user type 
-    const [userRoleName, setUserRoleName] = useState('admin');
+    const [userRoleName, setUserRoleName] = useState('');
 
     //  current user permission
     const [userAdminPermissions, setUserAdminPermissions] = useState(false);
@@ -67,7 +66,7 @@ const AuthContextProvider = (props) => {
             setUserViewRawData(resultRole.can_view_raw);
             setUserToken(resultToken);
 
-            cookies.set('piWatcherAuth', {resultToken}, { path: '/', maxAge:604800, sameSite: 'strict' });
+            cookies.set('piWatcherAuth', { resultToken }, { path: '/', maxAge: 604800, sameSite: 'strict' });
 
             // set auth status to true
             setAuthStatus(true);
@@ -140,7 +139,7 @@ const AuthContextProvider = (props) => {
     useEffect(() => {
 
         // // if cookie, authenticate token
-        if(authStatus === false && cookies.get('piWatcherAuth') != null){
+        if (authStatus === false && cookies.get('piWatcherAuth') != null) {
 
             let localResultToken = cookies.get('piWatcherAuth').resultToken;
 
@@ -148,7 +147,7 @@ const AuthContextProvider = (props) => {
 
             handleTokenSignIn(localResultToken);
         }
-    }, [])
+    }, [authStatus, cookies])
 
 
     return (

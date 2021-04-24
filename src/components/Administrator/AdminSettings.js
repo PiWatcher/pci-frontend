@@ -4,7 +4,6 @@ import './AdminSettings.css';
 
 // page imports
 import React, { useState, useContext, useEffect, useCallback } from 'react';
-import axios from 'axios';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
@@ -15,8 +14,8 @@ import UserList from './UserList';
 import RoleCreation from './RoleCreation';
 import RoleList from './RoleList';
 import AlertNotification from '../Notification/AlertNotification';
-import PullUsers from '../Utilites/Admin/PullUsers';
-import PullRoles from '../Utilites/Admin/PullRoles';
+import PullUsers from '../Utilities/Administrator/PullUsers';
+import PullRoles from '../Utilities/Administrator/PullRoles';
 
 // administrator settings page
 const AdminSettings = () => {
@@ -31,18 +30,26 @@ const AdminSettings = () => {
     const [pulledRoles, setPulledRoles] = useState([]);
 
     // state for where error came from
-    const [errorCause, setErrorCause] = useState('');
+    const [alertType, setAlertType] = useState('');
 
     // state for if alert is to be displayed
     const [showAlert, setShowAlert] = useState(false);
 
 
 
-    const handleUsersPull = async () => {
+    const handleUsersPull = useCallback(async () => {
 
         const result = await PullUsers(baseURL, userToken);
 
-        if(result.status === 200){
+        // if failure
+        if (result instanceof Error) {
+
+            // sets state
+            setAlertType('users-pull-failure');
+
+            setShowAlert(true);
+
+        } else {
 
             const resultData = result.data
 
@@ -56,27 +63,23 @@ const AdminSettings = () => {
 
             // sets state
             setPulledUsers(userList);
-
-        } else {      
-
-            // sets state
-            setErrorCause('users');
-            setShowAlert(true);
-
-            // display error in console for debugging
-            // console.error('Error', result.response);
         }
 
-        // // show alert
-        setShowAlert(true);
+    }, [baseURL, userToken]);
 
-    };
-
-    const handleRolesPull = async () => {
+    const handleRolesPull = useCallback(async () => {
 
         const result = await PullRoles(baseURL, userToken);
 
-        if(result.status === 200){
+        // if failure
+        if (result instanceof Error) {
+
+            // sets state
+            setAlertType('roles-pull-failure');
+
+            setShowAlert(true);
+
+        } else {
 
             const resultData = result.data
 
@@ -90,27 +93,15 @@ const AdminSettings = () => {
 
             // sets state
             setPulledRoles(roleList);
-
-        } else {      
-
-            // sets state
-            setErrorCause('roles');
-            setShowAlert(true);
-
-            // display error in console for debugging
-            // console.error('Error', error.response);
         }
+    }, [baseURL, userToken]);
 
-        // // show alert
-        setShowAlert(true);
-
-    };
 
     // pull users and roles on initial component load
     useEffect(() => {
         handleUsersPull();
         handleRolesPull();
-    }, [])
+    }, [handleUsersPull, handleRolesPull])
 
 
     // return admin settings page and children components
@@ -129,9 +120,15 @@ const AdminSettings = () => {
                 </div>
             </div>
 
-            {showAlert === true ?
+            {showAlert && alertType === 'users-pull-failure' ?
                 <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
-                    description={`Failed to pull data from endpoint: list of ${errorCause}`} />
+                    description={`Failed to pull data from endpoint: list of users`} />
+                :
+                null}
+
+            {showAlert && alertType === 'roles-pull-failure' ?
+                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
+                    description={`Failed to pull data from endpoint: list of roles`} />
                 :
                 null}
         </div >

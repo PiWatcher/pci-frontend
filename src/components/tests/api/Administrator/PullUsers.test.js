@@ -1,34 +1,35 @@
-import PullUsers from '../../../Utilites/Admin/PullUsers';
+import PullUsers from '../../../Utilities/Administrator/PullUsers';
 import axios from 'axios';
 
-  jest.mock('axios');
+jest.mock('axios');
 
-  describe(("Axios user pulling functionality."), () => {
+describe(("Axios user pulling functionality."), () => {
 
-    it("Users are successfully pulled.", async () => {
+  it("Users are successfully pulled.", async () => {
 
-      let response = {
-        status: 200,
-        statusText: 'OK'
-      }
+    let response = {
+      status: 200,
+      statusText: 'OK'
+    }
 
-      axios.get.mockResolvedValue(response);
+    axios.mockResolvedValue(response);
 
-      const result = await PullUsers("testURL", "testToken");
+    const result = await PullUsers("testURL", "testToken");
 
-      expect(result).toEqual(response);
-    });
+    expect(result).toEqual(response);
+  });
 
-    it("Users fail to be pulled.", async () => {
+  it("Users fail to be pulled.", async () => {
 
-      let response = {
-        status: 400
-      }
+    let response = {
+      status: 400,
+      message: 'Failed request.'
+    }
 
-      axios.get.mockRejectedValue(response);
+    axios.mockRejectedValue(response);
 
-      const result = await PullUsers("testURL", "testToken");
+    const result = await PullUsers("testURL", "testToken");
 
-      expect(result).toEqual(response);
-    });
-  })
+    expect(result instanceof Error).toBeTruthy();
+  });
+})

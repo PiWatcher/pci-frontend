@@ -1,34 +1,35 @@
-import PullRoomData from '../../../Utilites/Dashboard/PullRoomData';
+import PullRoomData from '../../../Utilities/Dashboard/PullRoomData';
 import axios from 'axios';
 
 jest.mock('axios');
 
-  describe(("Axios room data pull functionality."), () => {
+describe(("Axios room data pull functionality."), () => {
 
-    it("Room data is successfully pulled.", async () => {
+  it("Room data is successfully pulled.", async () => {
 
-      let response = {
-        status: 200,
-        statusText: 'OK'
-      }
+    let response = {
+      status: 200,
+      statusText: 'OK'
+    }
 
-      axios.post.mockResolvedValue(response);
+    axios.mockResolvedValue(response);
 
-      const result = await PullRoomData("testURL");
+    const result = await PullRoomData("testURL");
 
-      expect(result).toEqual(response);
-    });
+    expect(result).toEqual(response);
+  });
 
-    it("Room data fails to be pulled.", async () => {
+  it("Room data fails to be pulled.", async () => {
 
-      let response = {
-        status: 400
-      }
+    let response = {
+      status: 400,
+      message: 'Failed request.'
+    }
 
-      axios.post.mockRejectedValue(response);
+    axios.mockRejectedValue(response);
 
-      const result = await PullRoomData("testURL");
+    const result = await PullRoomData("testURL");
 
-      expect(result instanceof Error).toBeTruthy;
-    });
-  })
+    expect(result instanceof Error).toBeTruthy;
+  });
+})

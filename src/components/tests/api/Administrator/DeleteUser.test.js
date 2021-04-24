@@ -1,34 +1,35 @@
-import DeleteUser from '../../../Utilites/Admin/DeleteUser';
+import DeleteUser from '../../../Utilities/Administrator/DeleteUser';
 import axios from 'axios';
 
-  jest.mock('axios');
+jest.mock('axios');
 
-  describe(("Axios user deleting functionality."), () => {
+describe(("Axios user deleting functionality."), () => {
 
-    it("User successfully deletes.", async () => {
+  it("User successfully deletes.", async () => {
 
-      let response = {
-        status: 200,
-        statusText: 'OK'
-      }
+    let response = {
+      status: 200,
+      statusText: 'OK'
+    }
 
-      axios.delete.mockResolvedValue(response);
+    axios.mockResolvedValue(response);
 
-      const result = await DeleteUser("testURL", "testToken", "testEmail");
+    const result = await DeleteUser("testURL", "testToken", "testEmail");
 
-      expect(result).toEqual(response);
-    });
+    expect(result).toEqual(response);
+  });
 
-    it("User fails to delete.", async () => {
+  it("User fails to delete.", async () => {
 
-      let response = {
-        status: 400
-      }
+    let response = {
+      status: 400,
+      message: 'Failed request.'
+    }
 
-      axios.delete.mockRejectedValue(response);
+    axios.mockRejectedValue(response);
 
-      const result = await DeleteUser("testURL", "testToken", "testEmail");
+    const result = await DeleteUser("testURL", "testToken", "testEmail");
 
-      expect(result).toEqual(response);
-    });
-  })
+    expect(result instanceof Error).toBeTruthy();
+  });
+})

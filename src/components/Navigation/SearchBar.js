@@ -4,7 +4,7 @@ import './SearchBar.css';
 import 'semantic-ui-css/semantic.min.css'
 
 // page imports
-import React, { useContext, useState, useEffect, useCallback } from 'react';
+import React, { useContext } from 'react';
 import { Dropdown } from 'semantic-ui-react';
 
 // contexts

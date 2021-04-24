@@ -1,34 +1,35 @@
-import PullRoles from '../../../Utilites/Admin/PullRoles';
+import PullRoles from '../../../Utilities/Administrator/PullRoles';
 import axios from 'axios';
 
-  jest.mock('axios');
+jest.mock('axios');
 
-  describe(("Axios user pulling functionality."), () => {
+describe(("Axios user pulling functionality."), () => {
 
-    it("Roles are successfully pulled.", async () => {
+  it("Roles are successfully pulled.", async () => {
 
-      let response = {
-        status: 200,
-        statusText: 'OK'
-      }
+    let response = {
+      status: 200,
+      statusText: 'OK'
+    }
 
-      axios.get.mockResolvedValue(response);
+    axios.mockResolvedValue(response);
 
-      const result = await PullRoles("testURL", "testToken");
+    const result = await PullRoles("testURL", "testToken");
 
-      expect(result).toEqual(response);
-    });
+    expect(result).toEqual(response);
+  });
 
-    it("Roles fail to be pulled.", async () => {
+  it("Roles fail to be pulled.", async () => {
 
-      let response = {
-        status: 400
-      }
+    let response = {
+      status: 400,
+      message: 'Failed request.'
+    }
 
-      axios.get.mockRejectedValue(response);
+    axios.mockRejectedValue(response);
 
-      const result = await PullRoles("testURL", "testToken");
+    const result = await PullRoles("testURL", "testToken");
 
-      expect(result).toEqual(response);
-    });
-  })
+    expect(result instanceof Error).toBeTruthy();
+  });
+})

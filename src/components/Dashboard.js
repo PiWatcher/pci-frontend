@@ -3,7 +3,7 @@
 import './Dashboard.css';
 
 // page imports
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 
 // contexts
 import { DataContext } from '../contexts/DataContext';
@@ -14,8 +14,8 @@ import SideSelection from './SideSelection/SideSelection';
 import ChartLayout from './Graph/ChartLayout';
 import AlertNotification from '../components/Notification/AlertNotification';
 
-import PullBuildings from '../components/Utilites/Dashboard/PullBuildings'
-import PullRooms from '../components/Utilites/Dashboard/PullRooms'
+import PullBuildings from '../components/Utilities/Dashboard/PullBuildings'
+import PullRooms from '../components/Utilities/Dashboard/PullRooms'
 
 // entire dashboard and all children components
 const Dashboard = () => {
@@ -35,11 +35,11 @@ const Dashboard = () => {
    // creates state: list of buildings pulled from endpoint
    const [showAlert, setShowAlert] = useState('');
 
-   const handlePullBuildings = async () => {
- 
+   const handlePullBuildings = useCallback(async () => {
+
       const result = await PullBuildings(baseURL);
 
-      if(result instanceof Error) {
+      if (result instanceof Error) {
 
          setAlertType('building-pull-failure')
 
@@ -60,57 +60,57 @@ const Dashboard = () => {
          // sets state list of buildings
          setPulledBuildings(localBuildingList);
       }
-};
+   }, [baseURL]);
 
-const handlePullRooms = async () => {
+   const handlePullRooms = useCallback(async () => {
 
-   const result = await PullRooms(baseURL, selectedBuilding);
+      const result = await PullRooms(baseURL, selectedBuilding);
 
-   if(result instanceof Error) {
+      if (result instanceof Error) {
 
-      setAlertType('room-pull-failure');
+         setAlertType('room-pull-failure');
 
-      // display alert
-      setShowAlert(true);
-   } else {
+         // display alert
+         setShowAlert(true);
+      } else {
 
-      let resultData = result.data.data;
+         let resultData = result.data.data;
 
-           // sorts rooms in order
-           let localRoomList = resultData.sort(function (a, b) {
-               return a._id.localeCompare(b._id, undefined, {
-                   numeric: true,
-                   sensitivity: 'base'
-               });
-           });
+         // sorts rooms in order
+         let localRoomList = resultData.sort(function (a, b) {
+            return a._id.localeCompare(b._id, undefined, {
+               numeric: true,
+               sensitivity: 'base'
+            });
+         });
 
-           // sets state to list of rooms
-           setPulledRooms(localRoomList);
+         // sets state to list of rooms
+         setPulledRooms(localRoomList);
 
-           // five second refresh on successful data pull
-           setTimeout(handlePullRooms, 5000);
+         // five second refresh on successful data pull
+         setTimeout(handlePullRooms, 5000);
 
-   }
-};
+      }
+   }, [baseURL, selectedBuilding]);
 
-// updates room list on selected building change
-useEffect(() => {
+   // updates room list on selected building change
+   useEffect(() => {
 
-   // pull rooms from API
-   handlePullBuildings();
+      // pull rooms from API
+      handlePullBuildings();
 
-}, [])
+   }, [handlePullBuildings])
 
-useEffect(() => {
+   useEffect(() => {
 
-   selectedBuilding != '' && handlePullRooms();
+      selectedBuilding !== '' && handlePullRooms();
 
-}, [selectedBuilding])
+   }, [selectedBuilding, handlePullRooms])
 
    return (
       <div className="dashboard-container">
 
-         <Navbar pulledBuildings={pulledBuildings}/>
+         <Navbar pulledBuildings={pulledBuildings} />
 
          <div className="dashboard-row">
             <div className="chart-container">
@@ -121,23 +121,23 @@ useEffect(() => {
 
             {/* hidden until building is selected */}
             {selectedBuilding !== '' ?
-               <SideSelection pulledRooms={pulledRooms}/>
+               <SideSelection pulledRooms={pulledRooms} />
                : null
             }
 
          </div >
 
-         {showAlert === true && alertType === 'building-pull-failure' ?
+         {showAlert && alertType === 'building-pull-failure' ?
             <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
                description={`Failed to pull data from endpoint: building list`} />
             :
             null}
 
-         {showAlert === true && alertType === 'room-pull-failure' ?
-                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
-                    description={`Failed to pull data from endpoint: List of rooms within ${selectedBuilding}`} />
-                :
-                null}
+         {showAlert && alertType === 'room-pull-failure' ?
+            <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
+               description={`Failed to pull data from endpoint: List of rooms within ${selectedBuilding}`} />
+            :
+            null}
 
       </div >
    );

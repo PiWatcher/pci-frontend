@@ -4,9 +4,8 @@ import './ChangePassword.css';
 
 // page imports
 import React, { useContext, useState } from 'react';
-import axios from 'axios';
 
-import ChangeUserPassword from '../Utilites/Settings/ChangeUserPassword'
+import ChangeUserPassword from '../Utilities/Settings/ChangeUserPassword'
 
 // components
 import AlertNotification from '../Notification/AlertNotification';
@@ -65,7 +64,7 @@ const ChangePassword = () => {
 
             const result = await ChangeUserPassword(baseURL, userToken, localCurrentPassword, localNewPassword);
 
-            if(result instanceof Error) {
+            if (result instanceof Error) {
                 // set alert type
                 setAlertType('change-password-failure');
 
@@ -84,7 +83,7 @@ const ChangePassword = () => {
             setAlertType('new-passwords-not-matching');
 
             setAlertMessage(`New passwords must match.`);
-            
+
         }
 
         // show alert
@@ -105,19 +104,19 @@ const ChangePassword = () => {
                 <input type="submit" value="Submit change" />
             </form>
 
-            {showAlert === true && alertType === 'change-password-success' ?
+            {showAlert && alertType === 'change-password-success' ?
                 <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Password Change Status`}
                     description={alertMessage} />
                 :
                 null}
 
-            {showAlert === true && alertType === 'change-password-failure' ?
+            {showAlert && alertType === 'change-password-failure' ?
                 <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Password Change Status`}
                     description={alertMessage} />
                 :
                 null}
 
-            {showAlert === true && alertType === 'new-passwords-not-matching' ?
+            {showAlert && alertType === 'new-passwords-not-matching' ?
                 <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Password Change Status`}
                     description={alertMessage} />
                 :

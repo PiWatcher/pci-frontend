@@ -19,7 +19,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 // components
 import AlertNotification from '../Notification/AlertNotification';
-import PullRoomData from '../../components/Utilites/Dashboard/PullRoomData'
+import PullRoomData from '../../components/Utilities/Dashboard/PullRoomData'
 
 // contexts
 import { DataContext } from '../../contexts/DataContext';
@@ -100,7 +100,7 @@ const TimeSeries = (props) => {
          paper_bgcolor: "rgba(0,0,0,0)",
       };
 
-      // set data for plotly display
+   // set data for plotly display
    const data = [{
       type: "scatter",
       mode: "lines",
@@ -181,24 +181,24 @@ const TimeSeries = (props) => {
       console.log(loading)
 
       // if live query, repeat data pull
-      if(currentQuery === 'live'){
+      if (currentQuery === 'live') {
 
          setQueryInterval(setTimeout(handlePullRoomData, 5000));
       }
    };
 
-   
+
    const handlePullRoomData = async () => {
 
       const result = await PullRoomData(baseURL, building, room, currentQuery);
 
-      if(result instanceof Error) {
+      if (result instanceof Error) {
          // set alert type
          setAlertType('room-data-pull-failure')
 
          // show alert
          setShowAlert(true);
-     } else {
+      } else {
 
          let resultData = result.data.data;
 
@@ -206,8 +206,8 @@ const TimeSeries = (props) => {
          console.log(resultData);
 
          unpackDataForDisplay(resultData);
-     }
-  };
+      }
+   };
 
    // remove chart from grid
    const removeChart = () => {
@@ -310,7 +310,7 @@ const TimeSeries = (props) => {
 
          <QueryButtons currentQuery={currentQuery} setCurrentQuery={setCurrentQuery} loading={loading} />
 
-         {showAlert === true && alertType === 'room-data-pull-failure'?
+         {showAlert === true && alertType === 'room-data-pull-failure' ?
             <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
                description={`Failed to pull data from endpoint: building: ${building}, room: ${room}, query: ${currentQuery}`} />
             :

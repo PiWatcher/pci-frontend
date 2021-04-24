@@ -9,13 +9,14 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
-import axios from 'axios';
 
 // components
 import AlertNotification from '../Notification/AlertNotification';
 
 // contexts
 import { AuthContext } from '../../contexts/AuthContext';
+
+import CreateRole from '../Utilities/Administrator/CreateRole'
 
 // create new user role component
 const RoleCreation = (props) => {
@@ -38,6 +39,9 @@ const RoleCreation = (props) => {
 
     // state for alert type
     const [alertType, setAlertType] = useState('');
+
+    // state for alert type
+    const [alertMessage, setAlertMessage] = useState('');
 
     // custom material theme
     const checkBoxTheme = createMuiTheme({
@@ -74,51 +78,29 @@ const RoleCreation = (props) => {
 
         e.preventDefault();
 
-        // endpoint URL
-        const roleCreationEndpoint = `${baseURL}:5000/api/auth/roles`;
+        // await authentication
+        const result = await CreateRole(baseURL, userToken, newRoleName.toLowerCase(), isAdmin, canViewRaw);
 
-        // tries to submit new role
-        if (newRoleName !== '') {
-            try {
-                const response = await axios({
-                    method: 'post',
-                    url: roleCreationEndpoint,
-                    headers: {
-                        Authorization: `Bearer ${userToken}`
-                    },
-                    data: {
-                        role_name: newRoleName.toLowerCase(),
-                        is_admin: isAdmin,
-                        can_view_raw: canViewRaw
-                    }
-                });
+        // if failure
+        if (result instanceof Error) {
 
-                // successfully connected to endpoint and created role
-                if (response.status === 200) {
+            setAlertType('create-role-failure');
 
-                    // repull list of roles
-                    pullRoles();
+            setAlertMessage(result.message)
 
-                    // set alert type
-                    setAlertType('success');
+            setShowAlert(true);
+        } else {
 
-                    // show alert
-                    setShowAlert(true);
-                }
-            }
+            // repull list of roles
+            pullRoles();
 
-            // failed to create new role
-            catch (error) {
+            // set alert type
+            setAlertType('create-role-success');
 
-                // set alert type
-                setAlertType('failure');
+            setAlertMessage(`${newRoleName} role has been created successfully.`);
 
-                // show alert
-                setShowAlert(true);
-
-                // display error in console for debugging
-                console.error('Error', error.response);
-            }
+            // show alert
+            setShowAlert(true);
         }
     };
 
@@ -147,15 +129,15 @@ const RoleCreation = (props) => {
                 </form>
             </div>
 
-            {showAlert === true && alertType === 'success' ?
+            {showAlert === true && alertType === 'create-role-success' ?
                 <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Role Creation Status`}
-                    description={`Creation of role "${newRoleName}" successful.`} />
+                    description={alertMessage} />
                 :
                 null}
 
-            {showAlert === true && alertType === 'failure' ?
+            {showAlert === true && alertType === 'create-role-failure' ?
                 <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Role Creation Status'}
-                    description={`Creation of role "${newRoleName}" failed.`} />
+                    description={alertMessage} />
                 :
                 null}
         </div>

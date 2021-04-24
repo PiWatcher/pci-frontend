@@ -6,7 +6,6 @@ import './Auth.css';
 import React, { useContext, useState } from 'react';
 import nauLogo from '../../images/nauLogoLogin.svg';
 import { Link } from 'react-router-dom';
-import UserSignUp from '../Utilites/Authentication/UserSignUp';
 
 
 // components
@@ -20,7 +19,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 const Auth = () => {
 
     // consume data from AuthContext
-    const {baseURL, handleUserSignIn, handleUserSignUp} = useContext(AuthContext);
+    const { baseURL, handleUserSignIn, handleUserSignUp } = useContext(AuthContext);
 
     // local variable for user password during text input
     const [localUserName, setLocalUserName] = useState('');
@@ -73,15 +72,15 @@ const Auth = () => {
             // await authentication
             const result = await handleUserSignIn(baseURL, localEmail, localPassword);
 
-                // if failure
-                if (result instanceof Error) {
+            // if failure
+            if (result instanceof Error) {
 
-                    setAlertType('sign-in-failure');
+                setAlertType('sign-in-failure');
 
-                    setAlertMessage(result.message)
+                setAlertMessage(result.message)
 
-                    setShowAlert(true);
-                }
+                setShowAlert(true);
+            }
         }
 
         // creates user in database
@@ -90,7 +89,7 @@ const Auth = () => {
             const result = await handleUserSignUp(baseURL, localUserName, localEmail, localPassword);
 
 
-            if(result instanceof Error) {
+            if (result instanceof Error) {
                 // set alert type
                 setAlertType('sign-up-failure')
 
@@ -212,14 +211,14 @@ const Auth = () => {
                 }
             </div>
 
-            {showAlert === true && localSelectedAuth === "Sign In" ?
+            {showAlert && alertType === "sign-in-failure" ?
                 <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Sign In Failure`}
                     description={alertMessage} />
                 :
                 null}
 
 
-            {showAlert === true && localSelectedAuth === "Sign Up" ?
+            {showAlert && alertType === "sign-up-failure" ?
                 <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Sign Up Failure`}
                     description={alertMessage} />
                 :

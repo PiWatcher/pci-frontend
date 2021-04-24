@@ -1,34 +1,35 @@
-import DeleteRole from '../../../Utilites/Admin/DeleteRole';
+import DeleteRole from '../../../Utilities/Administrator/DeleteRole';
 import axios from 'axios';
 
 jest.mock('axios');
 
-  describe(("Axios role deletion functionality."), () => {
+describe(("Axios role deletion functionality."), () => {
 
-    it("Role successfully deletes.", async () => {
+  it("Role successfully deletes.", async () => {
 
-      let response = {
-        status: 200,
-        statusText: 'OK'
-      }
+    let response = {
+      status: 200,
+      statusText: 'OK'
+    }
 
-      axios.delete.mockResolvedValue(response);
+    axios.mockResolvedValue(response);
 
-      const result = await DeleteRole("testURL", "testToken", "testRole");
+    const result = await DeleteRole("testURL", "testToken", "testRole");
 
-      expect(result).toEqual(response);
-    });
+    expect(result).toEqual(response);
+  });
 
-    it("Role fails to delete.", async () => {
+  it("Role fails to delete.", async () => {
 
-      let response = {
-        status: 400
-      }
+    let response = {
+      status: 400,
+      message: 'Failed request.'
+    }
 
-      axios.delete.mockRejectedValue(response);
+    axios.mockRejectedValue(response);
 
-      const result = await DeleteRole("testURL", "testToken", "testRole");
+    const result = await DeleteRole("testURL", "testToken", "testRole");
 
-      expect(result).toEqual(false);
-    });
-  })
+    expect(result instanceof Error).toBeTruthy();
+  });
+})

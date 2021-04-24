@@ -4,7 +4,7 @@ import './UserList.css';
 
 // page imports
 import React, { useState, useEffect, useCallback } from 'react';
-import User from '../Admin/User';
+import User from './User';
 
 // list for users
 const UserList = (props) => {
@@ -48,7 +48,7 @@ const UserList = (props) => {
         // sets list state
         setFilteredUserList(filtered);
 
-    }, [pullUsers, roles, users]);
+    }, [users, roles, pullUsers]);
 
 
     // refilters rooms on user list change, search change, or role list updates
@@ -56,7 +56,7 @@ const UserList = (props) => {
 
         userFilter(search);
 
-    }, [users, search, roles, userFilter])
+    }, [search, userFilter])
 
 
     // returns user list component and all child components within
