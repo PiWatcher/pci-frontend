@@ -4,72 +4,93 @@ import './RoleList.css';
 
 // page imports
 import React, { useState, useEffect, useCallback } from 'react';
+
+// components
 import Role from './Role';
 
-// list for role components
+
+/** 
+* Component: RoleList
+* 
+* Maps all pulled roles to role components and displays them within the list
+*/
 const RoleList = (props) => {
 
-    // consume props
-    const { roles, pullRoles } = props;
+   const { roles, pullRoles } = props;
 
-    // state for role search
-    const [search, setSearch] = useState('');
+   const [search, setSearch] = useState('');
 
-    // state for list of roles
-    const [filteredRoleList, setFilteredRoleList] = useState([]);
-
-    // pulls search text for processing
-    const searchHandler = (e) => {
-        if (e.target.id === "userSearch") {
-            setSearch(e.target.value);
-        }
-    }
-
-    // filters out roles based on search text
-    const roleFilter = useCallback((filter) => {
-
-        // filters by role name
-        let filteredRoles = roles.filter(function (item) {
-            return item['role_name'].toLowerCase().indexOf(filter.toLowerCase()) !== -1;
-        })
-
-        // maps only roles that match search query
-        let filtered =
-            filteredRoles.map((role) =>
-                <Role
-                    key={role.role_name}
-                    name={role.role_name}
-                    isAdmin={role.is_admin}
-                    canViewRaw={role.can_view_raw}
-                    pullRoles={pullRoles}
-                />)
-
-        // sets list state
-        setFilteredRoleList(filtered);
-
-    }, [pullRoles, roles]);
+   const [filteredRoleList, setFilteredRoleList] = useState([]);
 
 
-    // refilters rooms on role list change or search change
-    useEffect(() => {
+   /** 
+   * Function: handleRoleSearch
+   * 
+   * Takes user search input and sets to state
+   */
+   const handleRoleSearch = (e) => {
+      if (e.target.id === "roleSearch") {
+         setSearch(e.target.value);
+      }
+   }
 
-        roleFilter(search);
+   /** 
+   * Function: handleRoleFilter
+   * 
+   * Filters displayed roles based on the state of the search bar
+   */
+   const handleRoleFilter = useCallback(() => {
 
-    }, [roles, search, roleFilter])
+      // filters by role name
+      let filteredRoles = roles.filter(function (item) {
+         return item['role_name'].toLowerCase().indexOf(search.toLowerCase()) !== -1;
+      })
+
+      // maps only roles that match search query
+      let filtered =
+         filteredRoles.map((role) =>
+            <Role
+               key={role.role_name}
+               name={role.role_name}
+               isAdmin={role.is_admin}
+               canViewRaw={role.can_view_raw}
+               pullRoles={pullRoles}
+            />)
+
+      // sets filtered list state
+      setFilteredRoleList(filtered);
+
+   }, [roles, search, pullRoles]);
 
 
-    // returns role list component and all child components within
-    return (
-        <div className="role-list-component">
-            <p>Available Roles</p>
-            <input type="text" id="roleSearch" onChange={searchHandler} placeholder="Role search" value={search} />
-            <div className="role-list">
-                <ul>
-                    {filteredRoleList}
-                </ul>
-            </div>
-        </div>
-    )
+   /** 
+   * Function: useEffect
+   * 
+   * Refilters the list of roles every time the search state changes
+   */
+   useEffect(() => {
+
+      handleRoleFilter();
+
+   }, [search, handleRoleFilter])
+
+
+   /** 
+   * Return: RoleList JSX
+   * 
+   * Returns the layout for display in the browser
+   */
+   return (
+      <div className="role-list-component">
+         <p>Available Roles</p>
+         <input type="text" id="roleSearch" onChange={handleRoleSearch} placeholder="Role search" value={search} />
+         <div className="role-list">
+            <ul>
+               {filteredRoleList}
+            </ul>
+         </div>
+      </div>
+   )
 }
 
 export default RoleList;

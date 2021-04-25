@@ -5,13 +5,20 @@ import './BuildingInfo.css';
 // page imports
 import React from 'react';
 
-// component for displaying selected building information
+/** 
+  * Component: BuildingInfo
+  * 
+  * Component for displaying the building information within SideSelection
+  */
 const BuildingInfo = (props) => {
 
-   // consume props from parent component
    const { selectedBuilding } = props;
 
-   // returns info for selected building
+   /** 
+    * Return: BuildingInfo JSX
+    * 
+    * Returns the layout for display in the browser
+    */
    return (
       <div className="building-info-component">
          <div className="building-container">

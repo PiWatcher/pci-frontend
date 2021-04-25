@@ -1,155 +1,178 @@
 
 // styling
-import "./Role.css"
+import './Role.css'
 
 // page imports
 import React, { useState, useContext } from 'react';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+
+// components
 import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
-
-// components
 import AlertNotification from '../Notification/AlertNotification';
 import ConfirmNotification from '../Notification/ConfirmNotification';
 
-//functions
-import DeleteRole from '../Utilities/Administrator/DeleteRole';
+// functions
+import DeleteRole from '../../utilities/Administrator/DeleteRole';
 
 // contexts
-import { AuthContext } from '../../contexts/AuthContext';
+import { EnvironmentContext } from '../../contexts/EnvironmentContext'
+import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 
-// role information component
+
+/** 
+* Component: Role
+* 
+* Holds information for each role for display in RoleList
+*/
 const Role = (props) => {
 
-    // consume props from parent component
-    const { name, isAdmin, canViewRaw, pullRoles } = props;
+   const { name, isAdmin, canViewRaw, pullRoles } = props;
 
-    // consumes context
-    const { userToken, baseURL } = useContext(AuthContext);
+   const { baseURL } = useContext(EnvironmentContext);
 
-    // alert state
-    const [showDialogAlert, setShowDialogAlert] = useState(false);
+   const { userToken } = useContext(AuthenticationContext);
 
-    // alert state
-    const [showAlert, setShowAlert] = useState(false);
+   const [showDialogAlert, setShowDialogAlert] = useState(false);
 
-    // role update alert state
-    const [alertType, setAlertType] = useState('');
+   const [showAlert, setShowAlert] = useState(false);
 
-    // custom material theme
-    const checkBoxTheme = createMuiTheme({
-        typography: {
-            fontFamily: 'Open Sans',
-            fontSize: 16
-        },
-        props: {
-            MuiCheckbox: {
-                disableRipple: true,
-                color: "primary"
-            }
-        },
-        palette: {
-            primary: {
-                main: '#003466'
-            }
-        }
-    });
+   const [alertType, setAlertType] = useState('');
 
-    const handleRoleDelete = async () => {
+   const [alertMessage, setAlertMessage] = useState('');
 
-        // close confirmation dialog
-        setShowDialogAlert(false);
-
-        const result = await DeleteRole(baseURL, userToken, name);
-
-        if (result.status === 200) {
-
-            // set alert type
-            setAlertType('delete-success');
-        } else {
-
-            // set alert type
-            setAlertType('delete-failure');
-        }
-
-        // // show alert
-        setShowAlert(true);
-
-    };
+   // Material UI theme
+   const checkBoxTheme = createMuiTheme({
+      typography: {
+         fontFamily: 'Open Sans',
+         fontSize: 16
+      },
+      props: {
+         MuiCheckbox: {
+            disableRipple: true,
+            color: "primary"
+         }
+      },
+      palette: {
+         primary: {
+            main: '#003466'
+         }
+      }
+   });
 
 
-    // on successful delete of role, closes alert and repulls roles
-    const onDeleteSuccess = () => {
+   /** 
+   * Function: handleDeleteRole
+   * 
+   * Uses DeleteRole utility function to delete role from back end 
+   *   database and sets appropriate alert based on the response
+   */
+   const handleDeleteRole = async () => {
 
-        // hide alert
-        setShowAlert(false);
+      // close confirmation dialog
+      setShowDialogAlert(false);
 
-        // repull list of roles
-        pullRoles();
+      const result = await DeleteRole(baseURL, userToken, name);
 
-    }
+      // if error is returned
+      if (result instanceof Error) {
 
-    // returns role list item component
-    return (
-        <li>
-            <div className="role-list-option">
-                <div className="role-info">
-                    <div className="role-name">
-                        {name}
-                    </div>
-                </div>
+         setAlertType('role-delete-failure');
 
-                <MuiThemeProvider theme={checkBoxTheme}>
+         setAlertMessage(result.message)
 
-                    <div className="checkbox-div">
-                        <FormControl>
-                            <FormGroup>
-                                <FormControlLabel
-                                    control={<Checkbox color="primary" checked={isAdmin} name="isAdmin" />}
-                                    label="Admin"
-                                />
-                                <FormControlLabel
-                                    control={<Checkbox color="primary" checked={canViewRaw} name="canViewRaw" />}
-                                    label="Raw Data"
-                                />
-                            </FormGroup>
-                        </FormControl>
-                    </div>
+      } else {
 
-                    {name === 'public' || name === 'admin' ?
-                        <div className="role-delete">
-                        </div>
-                        :
-                        <div className="role-delete">
-                            <IconButton className="delete-button" aria-label="delete" onClick={() => setShowDialogAlert(true)} >
-                                <CloseIcon color="secondary" />
-                            </IconButton>
-                        </div>
-                    }
+         setAlertType('role-delete-success');
 
-                </MuiThemeProvider>
+         setAlertMessage(result.data.message)
+      }
 
-                <ConfirmNotification showAlert={showDialogAlert} setShowAlert={setShowDialogAlert} onConfirm={handleRoleDelete} title={'Role Delete'}
-                    description={`Are you sure you want to delete the "${name}" role?`} />
+      // show alert
+      setShowAlert(true);
+   };
 
-                {showAlert === true && alertType === 'delete-success' ?
-                    <AlertNotification showAlert={showAlert} setShowAlert={onDeleteSuccess} title={'Role Delete Status'}
-                        description={`${name} role successfully deleted.`} />
-                    :
-                    null}
 
-                {showAlert === true && alertType === 'delete-failure' ?
-                    <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Role Delete Status'}
-                        description={`${name} role deletion failed.`} />
-                    :
-                    null}
+   /** 
+   * Function: onRoleDeleteSuccess
+   * 
+   * Hides status alert and re pulls list of roles from back end database
+   */
+   const onRoleDeleteSuccess = () => {
+
+      setShowAlert(false);
+
+      // re pull list of roles
+      pullRoles();
+   }
+
+
+   /** 
+   * Return: Role JSX
+   * 
+   * Returns the layout for display in the browser
+   */
+   return (
+      <li>
+         <div className='role-list-option'>
+
+            <div className='role-info'>
+               <div className='role-name'>
+                  {name}
+               </div>
             </div>
-        </li>
-    );
+
+            <MuiThemeProvider theme={checkBoxTheme}>
+               <div className='checkbox-div'>
+                  <FormControl>
+                     <FormGroup>
+                        <FormControlLabel
+                           control={<Checkbox color='primary' checked={isAdmin} name='isAdmin' />}
+                           label="Admin"
+                        />
+                        <FormControlLabel
+                           control={<Checkbox color='primary' checked={canViewRaw} name='canViewRaw' />}
+                           label="Raw Data"
+                        />
+                     </FormGroup>
+                  </FormControl>
+               </div>
+
+               {/* if roles are admin or public, hide delete option */}
+               {name === 'public' || name === 'admin' ?
+                  <div className="role-delete">
+                  </div>
+                  :
+                  <div className='role-delete'>
+                     <IconButton className='delete-button' aria-label='delete' onClick={() => setShowDialogAlert(true)} >
+                        <CloseIcon color='secondary' />
+                     </IconButton>
+                  </div>
+               }
+            </MuiThemeProvider>
+
+            <ConfirmNotification showAlert={showDialogAlert} setShowAlert={setShowDialogAlert} onConfirm={handleDeleteRole} title={'Role Delete'}
+               description={`Are you sure you want to delete the '${name}' role?`} />
+
+            {alertType === 'role-delete-success' ?
+               <AlertNotification showAlert={showAlert} setShowAlert={onRoleDeleteSuccess} title={'Role Delete Status'}
+                  description={alertMessage} />
+               :
+               null}
+
+            {alertType === 'role-delete-failure' ?
+               <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Role Delete Status'}
+                  description={alertMessage} />
+               :
+               null}
+
+         </div>
+      </li>
+   );
 }
 
 export default Role;

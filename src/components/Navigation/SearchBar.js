@@ -1,29 +1,45 @@
 
 // styling
-import './SearchBar.css';
+import './Searchbar.css';
 import 'semantic-ui-css/semantic.min.css'
 
 // page imports
 import React, { useContext } from 'react';
-import { Dropdown } from 'semantic-ui-react';
 
 // contexts
 import { DataContext } from '../../contexts/DataContext';
 
-// search bar with self containing building list state
-const SearchBar = (props) => {
+// components
+import { Dropdown } from 'semantic-ui-react';
+
+
+/** 
+* Component: Searchbar
+* 
+* Searchbar component for searching and selecting buildings
+*/
+const Searchbar = (props) => {
 
    const { pulledBuildings } = props;
 
-   // consumes context
    const { selectedBuilding, setSelectedBuilding } = useContext(DataContext);
 
-   // pulls selection text from dropdown and passes it back to context
+
+   /** 
+   * Function: handleSelectChange
+   * 
+   * Pulls selection text from dropdown and sets it to state
+   */
    const handleSelectChange = (e, { value }) => {
       setSelectedBuilding(value);
    }
 
-   // returns search dropdown component
+
+   /** 
+    * Return: Searchbar JSX
+    * 
+    * Returns the layout for display in the browser
+    */
    return (
       <div className="search-div">
          <Dropdown
@@ -45,4 +61,4 @@ const SearchBar = (props) => {
    );
 }
 
-export default SearchBar;
+export default Searchbar;

@@ -6,24 +6,27 @@ import './App.css';
 import React from 'react';
 
 // contexts
-import AuthContextProvider from './contexts/AuthContext';
+import EnvironmentContextProvider from './contexts/EnvironmentContext';
+import AuthenticationContextProvider from './contexts/AuthenticationContext';
 import DataContextProvider from './contexts/DataContext';
 
 // components
-import PageRouter from './components/PageRouter';
+import PageRouter from './components/Authentication/PageRouter';
 
 
 const App = () => {
 
   return (
     <div className="App">
-      <AuthContextProvider>
-        <DataContextProvider>
+      <EnvironmentContextProvider>
+        <AuthenticationContextProvider>
+          <DataContextProvider>
 
-          <PageRouter />
+            <PageRouter />
 
-        </DataContextProvider>
-      </AuthContextProvider>
+          </DataContextProvider>
+        </AuthenticationContextProvider>
+      </EnvironmentContextProvider>
     </div>
   );
 }

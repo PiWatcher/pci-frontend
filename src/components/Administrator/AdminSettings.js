@@ -6,7 +6,8 @@ import './AdminSettings.css';
 import React, { useState, useContext, useEffect, useCallback } from 'react';
 
 // contexts
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthenticationContext } from '../../contexts/AuthenticationContext';
+import { EnvironmentContext } from '../../contexts/EnvironmentContext'
 
 // components
 import CleanNavbar from '../Navigation/CleanNavbar';
@@ -14,125 +15,149 @@ import UserList from './UserList';
 import RoleCreation from './RoleCreation';
 import RoleList from './RoleList';
 import AlertNotification from '../Notification/AlertNotification';
-import PullUsers from '../Utilities/Administrator/PullUsers';
-import PullRoles from '../Utilities/Administrator/PullRoles';
 
-// administrator settings page
+// utilities
+import PullUsers from '../../utilities/Administrator/PullUsers';
+import PullRoles from '../../utilities/Administrator/PullRoles';
+
+
+/** 
+* Component: AdminSettings
+* 
+* Home layout for admin settings and child components
+*/
 const AdminSettings = () => {
 
-    // consume context 
-    const { userToken, baseURL } = useContext(AuthContext);
+   const { baseURL } = useContext(EnvironmentContext);
 
-    // state for pulled users
-    const [pulledUsers, setPulledUsers] = useState([]);
+   const { userToken } = useContext(AuthenticationContext);
 
-    // state for pulled roles and their permissions
-    const [pulledRoles, setPulledRoles] = useState([]);
+   const [pulledUsers, setPulledUsers] = useState([]);
 
-    // state for where error came from
-    const [alertType, setAlertType] = useState('');
+   const [pulledRoles, setPulledRoles] = useState([]);
 
-    // state for if alert is to be displayed
-    const [showAlert, setShowAlert] = useState(false);
+   const [alertType, setAlertType] = useState('');
 
+   const [showAlert, setShowAlert] = useState(false);
+
+   const [alertMessage, setAlertMessage] = useState('');
 
 
-    const handleUsersPull = useCallback(async () => {
+   /** 
+   * Function: handleUsersPull
+   * 
+   * Uses PullUsers utility function to pull all created users from the API
+   *   and sets them to state
+   */
+   const handleUsersPull = useCallback(async () => {
 
-        const result = await PullUsers(baseURL, userToken);
+      const result = await PullUsers(baseURL, userToken);
 
-        // if failure
-        if (result instanceof Error) {
+      // if error is returned
+      if (result instanceof Error) {
 
-            // sets state
-            setAlertType('users-pull-failure');
+         setAlertType('users-pull-failure');
 
-            setShowAlert(true);
+         setAlertMessage(result.message);
 
-        } else {
+         setShowAlert(true);
 
-            const resultData = result.data
+      } else {
 
-            // sorts users in order
-            let userList = resultData.users.sort(function (a, b) {
-                return a.full_name.localeCompare(b.full_name, undefined, {
-                    numeric: true,
-                    sensitivity: 'base'
-                });
+         const resultData = result.data
+
+         // sorts users in natural order
+         let userList = resultData.users.sort(function (a, b) {
+            return a.full_name.localeCompare(b.full_name, undefined, {
+               numeric: true,
+               sensitivity: 'base'
             });
+         });
 
-            // sets state
-            setPulledUsers(userList);
-        }
+         setPulledUsers(userList);
+      }
 
-    }, [baseURL, userToken]);
+   }, [baseURL, userToken]);
 
-    const handleRolesPull = useCallback(async () => {
 
-        const result = await PullRoles(baseURL, userToken);
+   /** 
+   * Function: handleRolesPull
+   * 
+   * Uses PullRoles utility function to pull all created roles from the API
+   *   and sets them to state
+   */
+   const handleRolesPull = useCallback(async () => {
 
-        // if failure
-        if (result instanceof Error) {
+      const result = await PullRoles(baseURL, userToken);
 
-            // sets state
-            setAlertType('roles-pull-failure');
+      // if error is returned
+      if (result instanceof Error) {
 
-            setShowAlert(true);
+         setAlertType('roles-pull-failure');
 
-        } else {
+         setAlertMessage(result.message);
 
-            const resultData = result.data
+         setShowAlert(true);
 
-            // sorts roles in order
-            let roleList = resultData.roles.sort(function (a, b) {
-                return a.role_name.localeCompare(b.role_name, undefined, {
-                    numeric: true,
-                    sensitivity: 'base'
-                });
+      } else {
+
+         const resultData = result.data
+
+         // sorts roles in natural order
+         let roleList = resultData.roles.sort(function (a, b) {
+            return a.role_name.localeCompare(b.role_name, undefined, {
+               numeric: true,
+               sensitivity: 'base'
             });
+         });
 
-            // sets state
-            setPulledRoles(roleList);
-        }
-    }, [baseURL, userToken]);
-
-
-    // pull users and roles on initial component load
-    useEffect(() => {
-        handleUsersPull();
-        handleRolesPull();
-    }, [handleUsersPull, handleRolesPull])
+         setPulledRoles(roleList);
+      }
+   }, [baseURL, userToken]);
 
 
-    // return admin settings page and children components
-    return (
-        <div className="admin-container">
-            <CleanNavbar />
-            <div className="admin-settings-row">
+   /** 
+   * Function: useEffect
+   * 
+   * Calls handleUsersPull and handleRolesPull on component creation
+   */
+   useEffect(() => {
+      handleUsersPull();
+      handleRolesPull();
+   }, [handleUsersPull, handleRolesPull])
 
-                <div className="role-column">
-                    <RoleCreation pullRoles={handleRolesPull} />
-                    <RoleList roles={pulledRoles} pullRoles={handleRolesPull} />
-                </div>
 
-                <div className="user-column">
-                    <UserList users={pulledUsers} roles={pulledRoles} pullUsers={handleUsersPull} />
-                </div>
+   /** 
+   * Return: AdminSettings JSX
+   * 
+   * Returns the layout for display in the browser
+   */
+   return (
+      <div className="admin-container">
+         <CleanNavbar />
+         <div className="admin-settings-row">
+            <div className="role-column">
+               <RoleCreation pullRoles={handleRolesPull} />
+               <RoleList roles={pulledRoles} pullRoles={handleRolesPull} />
             </div>
+            <div className="user-column">
+               <UserList users={pulledUsers} roles={pulledRoles} pullUsers={handleUsersPull} />
+            </div>
+         </div>
 
-            {showAlert && alertType === 'users-pull-failure' ?
-                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
-                    description={`Failed to pull data from endpoint: list of users`} />
-                :
-                null}
+         {alertType === 'users-pull-failure' ?
+            <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Users Pull Failure'}
+               description={alertMessage} />
+            :
+            null}
 
-            {showAlert && alertType === 'roles-pull-failure' ?
-                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
-                    description={`Failed to pull data from endpoint: list of roles`} />
-                :
-                null}
-        </div >
-    );
+         {alertType === 'roles-pull-failure' ?
+            <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Roles Pull Failure'}
+               description={alertMessage} />
+            :
+            null}
+      </div >
+   );
 }
 
 export default AdminSettings;

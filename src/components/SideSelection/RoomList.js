@@ -4,11 +4,18 @@ import './RoomList.css';
 
 // page imports
 import React, { useState, useEffect, useCallback } from 'react';
+
+// components
 import Room from './Room';
 
+
+/** 
+* Component: RoomList
+* 
+* Maps all pulled rooms to room components and displays them within the list
+*/
 const RoomList = (props) => {
 
-   // consume props
    const { selectedBuilding, pulledRooms } = props;
 
    // state for search value
@@ -17,15 +24,25 @@ const RoomList = (props) => {
    // state for filtered room list
    const [filteredRoomList, setFilteredRoomList] = useState([]);
 
-   // pulls search text for processing
-   const searchHandler = (e) => {
+
+   /** 
+    * Function: handleRoomSearch
+    * 
+    * Takes user search input and sets to state
+    */
+   const handleRoomSearch = (e) => {
       if (e.target.id === "roomSearch") {
          setSearch(e.target.value);
       }
    }
 
-   // filters out rooms based on search text
-   const roomFilter = useCallback((filter) => {
+
+   /** 
+   * Function: handleRoomFilter
+   * 
+   * Filters displayed rooms based on the state of the search bar
+   */
+   const handleRoomFilter = useCallback((filter) => {
 
       // filters room list
       let filteredRooms = pulledRooms.filter(function (item) {
@@ -48,7 +65,11 @@ const RoomList = (props) => {
    }, [pulledRooms]);
 
 
-   // on building change, resets filter to empty
+   /** 
+   * Function: useEffect
+   * 
+   * Sets search back to empty on selectedBuilding change
+   */
    useEffect(() => {
 
       setSearch('');
@@ -56,18 +77,26 @@ const RoomList = (props) => {
    }, [selectedBuilding])
 
 
-   // filters rooms on room list or search query change
+   /** 
+   * Function: useEffect
+   * 
+   * Refilters rooms based on changing user text search input
+   */
    useEffect(() => {
 
-      roomFilter(search);
+      handleRoomFilter(search);
 
-   }, [pulledRooms, search, roomFilter])
+   }, [pulledRooms, search, handleRoomFilter])
 
 
-   // returns filtered rooms
+   /** 
+    * Return: RoomList JSX
+    * 
+    * Returns the layout for display in the browser
+    */
    return (
       <div>
-         <input type="text" id="roomSearch" onChange={searchHandler} placeholder="Search for a room" value={search} />
+         <input type="text" id="roomSearch" onChange={handleRoomSearch} placeholder="Search for a room" value={search} />
          <div className="room-list-component">
             <ul>
                {filteredRoomList}

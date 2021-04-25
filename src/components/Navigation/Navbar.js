@@ -4,27 +4,52 @@ import './Navbar.css';
 
 // page imports
 import React, { useContext } from 'react';
-import SearchBar from './SearchBar';
+
 import nauLogo from '../../images/nauLogoDash.svg';
 import adminIcon from '../../images/adminIcon.svg';
 import settingsIcon from '../../images/settingsIcon.svg';
-import { Link } from 'react-router-dom';
-import Tooltip from '@material-ui/core/Tooltip';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 
+// components
+import Tooltip from '@material-ui/core/Tooltip';
+import { Link } from 'react-router-dom';
+import Searchbar from './Searchbar';
+
 // contexts
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 import { DataContext } from '../../contexts/DataContext';
 
-// navbar component
+
+/** 
+* Component: Navbar
+* 
+* Navigation bar component that does include the searchbar and settings buttons
+*/
 const Navbar = (props) => {
 
    const { pulledBuildings } = props;
 
-   // consume context
-   const { userAdminPermissions, handleUserSignOut } = useContext(AuthContext);
+   const { userAdminPermissions, handleUserSignOut } = useContext(AuthenticationContext);
+
    const { setSelectedBuilding, setSelectedCharts } = useContext(DataContext);
 
+   // Material UI Theme
+   const navLinkTheme = createMuiTheme({
+      overrides: {
+         MuiTooltip: {
+            tooltip: {
+               fontSize: "1em"
+            }
+         }
+      }
+   });
+
+
+   /** 
+   * Function: navSignOut
+   * 
+   * Clears data from state and calls the handleUserSignOut function from auth context
+   */
    const navSignOut = () => {
 
       // clears selection building in state
@@ -37,18 +62,12 @@ const Navbar = (props) => {
       handleUserSignOut();
    }
 
-   // custom material ui them
-   const navLinkTheme = createMuiTheme({
-      overrides: {
-         MuiTooltip: {
-            tooltip: {
-               fontSize: "1em"
-            }
-         }
-      }
-   });
 
-   // returns navbar component (includes logo, search bar, admin settings, user settings, and sign out)
+   /** 
+    * Return: CleanNavbar JSX
+    * 
+    * Returns the layout for display in the browser
+    */
    return (
       <div>
          <div className="navbar-component">
@@ -56,7 +75,7 @@ const Navbar = (props) => {
                <img src={nauLogo} alt="NAU Logo" />
             </div>
 
-            <SearchBar pulledBuildings={pulledBuildings} />
+            <Searchbar pulledBuildings={pulledBuildings} />
 
             <div className="right-side-div">
                <MuiThemeProvider theme={navLinkTheme}>
