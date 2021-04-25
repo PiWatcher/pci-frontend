@@ -25,103 +25,103 @@ import PullRooms from '../../utilities/Dashboard/PullRooms'
 */
 const SideSelection = () => {
 
-    const { authStatus } = useContext(AuthenticationContext);
+   const { authStatus } = useContext(AuthenticationContext);
 
-    const { selectedBuilding } = useContext(DataContext);
+   const { selectedBuilding } = useContext(DataContext);
 
-    const { baseURL } = useContext(EnvironmentContext);
+   const { baseURL } = useContext(EnvironmentContext);
 
-    const [pulledRooms, setPulledRooms] = useState([]);
+   const [pulledRooms, setPulledRooms] = useState([]);
 
-    const [alertType, setAlertType] = useState('');
+   const [alertType, setAlertType] = useState('');
 
-    const [showAlert, setShowAlert] = useState('');
+   const [showAlert, setShowAlert] = useState('');
 
-    // state for recursive timeout variable
-    const [queryInterval, setQueryInterval] = useState(null);
+   // state for recursive timeout variable
+   const [queryInterval, setQueryInterval] = useState(null);
 
 
-    /** 
-    * Function: handlePullRooms
-    * 
-    * Uses the PullRooms utility function to query the backend database and pull list of rooms
-    */
-    const handlePullRooms = useCallback(async () => {
+   /** 
+   * Function: handlePullRooms
+   * 
+   * Uses the PullRooms utility function to query the backend database and pull list of rooms
+   */
+   const handlePullRooms = useCallback(async () => {
 
-        const result = await PullRooms(baseURL, selectedBuilding);
+      const result = await PullRooms(baseURL, selectedBuilding);
 
-        // if error
-        if (result instanceof Error) {
+      // if error
+      if (result instanceof Error) {
 
-            setAlertType('room-pull-failure');
+         setAlertType('room-pull-failure');
 
-            setShowAlert(true);
+         setShowAlert(true);
 
-        } else {
+      } else {
 
-            let resultData = result.data.data;
+         let resultData = result.data.data;
 
-            // sorts rooms in order
-            let localRoomList = resultData.sort(function (a, b) {
-                return a._id.localeCompare(b._id, undefined, {
-                    numeric: true,
-                    sensitivity: 'base'
-                });
+         // sorts rooms in order
+         let localRoomList = resultData.sort(function (a, b) {
+            return a._id.localeCompare(b._id, undefined, {
+               numeric: true,
+               sensitivity: 'base'
             });
+         });
 
-            // sets state to list of rooms
-            setPulledRooms(localRoomList);
+         // sets state to list of rooms
+         setPulledRooms(localRoomList);
 
-            // five second refresh on successful data pull
-            let timeoutID = setTimeout(handlePullRooms, 5000);
+         // five second refresh on successful data pull
+         let timeoutID = setTimeout(handlePullRooms, 5000);
 
-            setQueryInterval(timeoutID);
+         setQueryInterval(timeoutID);
 
-        }
-    }, [baseURL, selectedBuilding]);
-
-
-    /** 
-    * Function: useEffect
-    * 
-    * Calls handlePullRooms if the selectedBuilding is not empty
-    */
-    useEffect(() => {
-
-        selectedBuilding !== '' && handlePullRooms();
-
-    }, [selectedBuilding, handlePullRooms])
+      }
+   }, [baseURL, selectedBuilding]);
 
 
-    /** 
-    * Function: useEffect
-    * 
-    * On authStatus change(user sign out), clears recursive data pull
-    */
-    useEffect(() => {
+   /** 
+   * Function: useEffect
+   * 
+   * Calls handlePullRooms if the selectedBuilding is not empty
+   */
+   useEffect(() => {
 
-        clearTimeout(queryInterval);
+      selectedBuilding !== '' && handlePullRooms();
 
-    }, [authStatus])
+   }, [selectedBuilding, handlePullRooms])
 
 
-    /** 
-    * Return: SideSelection JSX
-    * 
-    * Returns the layout for display in the browser
-    */
-    return (
-        <div className="room-list-container">
-            <BuildingInfo selectedBuilding={selectedBuilding} />
-            <RoomList selectedBuilding={selectedBuilding} pulledRooms={pulledRooms} />
+   /** 
+   * Function: useEffect
+   * 
+   * On authStatus change(user sign out), clears recursive data pull
+   */
+   useEffect(() => {
 
-            {showAlert && alertType === 'room-pull-failure' ?
-                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
-                    description={`Failed to pull data from endpoint: List of rooms within ${selectedBuilding}`} />
-                :
-                null}
-        </div>
-    )
+      clearTimeout(queryInterval);
+
+   }, [authStatus])
+
+
+   /** 
+   * Return: SideSelection JSX
+   * 
+   * Returns the layout for display in the browser
+   */
+   return (
+      <div className="room-list-container">
+         <BuildingInfo selectedBuilding={selectedBuilding} />
+         <RoomList selectedBuilding={selectedBuilding} pulledRooms={pulledRooms} />
+
+         {showAlert && alertType === 'room-pull-failure' ?
+            <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
+               description={`Failed to pull data from endpoint: List of rooms within ${selectedBuilding}`} />
+            :
+            null}
+      </div>
+   )
 }
 
 export default SideSelection;
