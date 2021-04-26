@@ -1,7 +1,7 @@
 
 // page imports
 import React from 'react';
-import Enzyme, { mount } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-17-updated';
 
 // contexts
@@ -24,7 +24,7 @@ describe(("Admin Settings Component"), () => {
       const setSelectedBuildingMock = jest.fn();
       const setSelectedChartsMock = jest.fn();
 
-      const AdminSettingsWrapper = mount(
+      const AdminSettingsWrapper = shallow(
          <EnvironmentContext.Provider value={{ baseURL: "testURL" }}>
             <AuthenticationContext.Provider value={{ userToken: "testToken", handleUserSignOut: handleUserSignOutMock }}>
                <DataContext.Provider value={{ setSelectedBuilding: setSelectedBuildingMock, setSelectedCharts: setSelectedChartsMock }}>

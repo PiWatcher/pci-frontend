@@ -239,7 +239,6 @@ const TimeSeries = (props) => {
    */
    const removeChart = () => {
 
-
       // stops recursive data pulls
       clearTimeout(queryInterval);
 
@@ -334,7 +333,7 @@ const TimeSeries = (props) => {
                </IconButton>
             </Tooltip>
 
-            {userAdminPermissions === true && loading === false ?
+            {userAdminPermissions && !loading ?
                <div>
                   <Tooltip title="Download CSV" arrow>
                      <IconButton className="download-button" aria-label="download">

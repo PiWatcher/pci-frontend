@@ -13,9 +13,6 @@ import { DataContext } from '../../../contexts/DataContext';
 import Settings from '../../../components/Settings/UserSettings'
 import { BrowserRouter as Router } from 'react-router-dom';
 
-
-
-
 Enzyme.configure({ adapter: new Adapter() })
 
 

@@ -1,11 +1,13 @@
 
 // page imports
 import React from 'react';
-import Enzyme, { mount } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-17-updated';
 
 // contexts
+import { EnvironmentContext } from '../../../contexts/EnvironmentContext';
 import { AuthenticationContext } from '../../../contexts/AuthenticationContext';
+import { DataContext } from '../../../contexts/DataContext';
 
 // components
 import PageRouter from '../../../components/Authentication/PageRouter'
@@ -17,10 +19,14 @@ describe(("PageRouter Component"), () => {
 
    it("Renders correctly.", () => {
 
-      const PageRouterWrapper = mount(
-         <AuthenticationContext.Provider value={{ userAdminPermissions: true, authStatus: true }}>
-            <PageRouter />
-         </AuthenticationContext.Provider>
+      const PageRouterWrapper = shallow(
+         <EnvironmentContext.Provider value={{ baseURL: "testURL" }}>
+            <AuthenticationContext.Provider value={{ userAdminPermissions: true, authStatus: true }}>
+               <DataContext.Provider value={{ selectedBuilding: "testBuilding" }}>
+                  <PageRouter />
+               </DataContext.Provider>
+            </AuthenticationContext.Provider>
+         </EnvironmentContext.Provider>
       )
 
       expect(PageRouterWrapper).toBeTruthy();

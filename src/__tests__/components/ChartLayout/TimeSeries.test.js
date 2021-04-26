@@ -1,7 +1,7 @@
 
 // page imports
 import React from 'react';
-import Enzyme, { mount } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-17-updated';
 
 // contexts
@@ -21,7 +21,7 @@ describe(("TimeSeries Component"), () => {
 
       const setSelectedChartsMock = jest.fn();
 
-      const TimeSeriesWrapper = mount(
+      const TimeSeriesWrapper = shallow(
          <EnvironmentContext.Provider value={{ baseURL: "testURL" }}>
             <DataContext.Provider value={{ selectedCharts: [], setSelectedCharts: setSelectedChartsMock }}>
                <AuthenticationContext.Provider value={{ userAdminPermissions: true, userViewRawData: true }}>
