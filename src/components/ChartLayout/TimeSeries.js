@@ -71,38 +71,18 @@ const TimeSeries = (props) => {
       refreshRate: 10
    });
 
-   // plotly layout settings
-   let layout = {};
-
-   // set plotly layout based on user permissions
-   userViewRawData === true ?
-
-      // set chart layout settings with raw data
-      layout = {
-         title: `${building} ${room}`,
-         xaxis: { visible: false, fixedrange: true },
-         yaxis: { zeroline: false, fixedrange: true, range: [0, capacity] },
-         autosize: true,
-         width: width,
-         height: height,
-         margin: { l: 50, r: 50, b: 50, t: 75, pad: 4 },
-         plot_bgcolor: "rgba(0,0,0,0)",
-         paper_bgcolor: "rgba(0,0,0,0)",
-      }
-      :
-
-      // set chart layout settings with percentages
-      layout = {
-         title: `${building} ${room}`,
-         xaxis: { visible: false, fixedrange: true },
-         yaxis: { zeroline: false, fixedrange: true, range: [0, 100] },
-         autosize: true,
-         width: width,
-         height: height,
-         margin: { l: 50, r: 50, b: 50, t: 75, pad: 4 },
-         plot_bgcolor: "rgba(0,0,0,0)",
-         paper_bgcolor: "rgba(0,0,0,0)",
-      };
+   // plotly layout settings based on user permissions
+   let layout = {
+      title: `${building} ${room}`,
+      xaxis: { visible: false, fixedrange: true },
+      yaxis: { zeroline: false, fixedrange: true, range: userViewRawData ? [0, capacity] : [0, 100] },
+      autosize: true,
+      width: width,
+      height: height,
+      margin: { l: 50, r: 50, b: 50, t: 75, pad: 4 },
+      plot_bgcolor: "rgba(0,0,0,0)",
+      paper_bgcolor: "rgba(0,0,0,0)",
+   };
 
 
    // set data for plotly display
