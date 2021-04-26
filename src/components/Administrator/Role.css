@@ -1,3 +1,4 @@
+
 .role-list-option {
    display: inline-flex;
    justify-content: center;
@@ -40,5 +41,13 @@
 
 .alert-dialog-title {
    color: #003466;
+}
+
+.MuiIconButton-colorPrimary:hover {
+   background-color: rgba(255, 255, 255, 255);
+}
+
+.MuiCheckbox-colorPrimary.Mui-checked:hover {
+   background-color: rgba(255, 255, 255, 255);
 }
 

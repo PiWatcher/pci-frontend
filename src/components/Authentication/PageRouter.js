@@ -7,7 +7,6 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import Auth from '../Authentication/Auth';
 import Dashboard from '../Dashboard/Dashboard';
 import AdminSettings from '../Administrator/AdminSettings';
-import AuthForgot from '../Authentication/AuthForgot';
 import UserSettings from '../Settings/UserSettings';
 
 // contexts
@@ -58,9 +57,6 @@ const PageRouter = () => {
          {
             <BrowserRouter >
                <Switch>
-
-                  {/* forgot password */}
-                  <Route exact path="/authforgot" component={AuthForgot} />
 
                   {/* auth to dashboard */}
                   <Route exact path="/auth" component={Auth}>

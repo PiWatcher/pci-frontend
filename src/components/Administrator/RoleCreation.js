@@ -98,27 +98,49 @@ const RoleCreation = (props) => {
 
       e.preventDefault();
 
-      const result = await CreateRole(baseURL, userToken, newRoleName.toLowerCase(), isAdmin, canViewRaw);
+      if (newRoleName !== '') {
+         const result = await CreateRole(baseURL, userToken, newRoleName.toLowerCase(), isAdmin, canViewRaw);
 
-      // if error is returned
-      if (result instanceof Error) {
+         // if error is returned
+         if (result instanceof Error) {
 
-         setAlertType('create-role-failure');
+            setAlertType('create-role-failure');
 
-         setAlertMessage(result.message)
+            setAlertMessage(result.message)
+
+         } else {
+
+            setAlertType('create-role-success');
+
+            setAlertMessage(`Role of ${newRoleName} has been created successfully.`);
+         }
 
       } else {
 
-         // re pull roles
-         pullRoles();
+         setAlertType('create-role-failure');
 
-         setAlertType('create-role-success');
+         setAlertMessage('Please enter a role name.')
 
-         setAlertMessage(`Role of ${newRoleName} has been created successfully.`);
       }
 
       setShowAlert(true);
    };
+
+
+
+
+   /** 
+   * Function: onRoleCreateSuccess
+   * 
+   * Hides status alert and re pulls list of roles from back end database
+   */
+   const onRoleCreateSuccess = () => {
+
+      setShowAlert(false);
+
+      // re pull list of roles
+      pullRoles();
+   }
 
 
    /** 
@@ -151,13 +173,13 @@ const RoleCreation = (props) => {
          </div>
 
          {alertType === 'create-role-success' ?
-            <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Role Creation Status`}
+            <AlertNotification showAlert={showAlert} setShowAlert={onRoleCreateSuccess} title={`Role Creation Success`}
                description={alertMessage} />
             :
             null}
 
          {alertType === 'create-role-failure' ?
-            <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Role Creation Status'}
+            <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Role Creation Failure'}
                description={alertMessage} />
             :
             null}

@@ -46,7 +46,7 @@ const Role = (props) => {
    const [alertMessage, setAlertMessage] = useState('');
 
    // Material UI theme
-   const checkBoxTheme = createMuiTheme({
+   const roleTheme = createMuiTheme({
       typography: {
          fontFamily: 'Open Sans',
          fontSize: 16
@@ -55,6 +55,9 @@ const Role = (props) => {
          MuiCheckbox: {
             disableRipple: true,
             color: "primary"
+         },
+         MuiIconButton: {
+            disableRipple: true
          }
       },
       palette: {
@@ -126,7 +129,7 @@ const Role = (props) => {
                </div>
             </div>
 
-            <MuiThemeProvider theme={checkBoxTheme}>
+            <MuiThemeProvider theme={roleTheme}>
                <div className='checkbox-div'>
                   <FormControl>
                      <FormGroup>

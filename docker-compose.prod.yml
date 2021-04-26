@@ -9,6 +9,6 @@ services:
       context: .
       dockerfile: Dockerfile.prod
       args:
-        - REACT_APP_BASE_URL=http://cscap1.iot.nau.edu
+        - REACT_APP_BASE_URL=
     ports:
       - "4000:80"

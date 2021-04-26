@@ -112,7 +112,7 @@ const Dashboard = () => {
             }
          </div >
 
-         {showAlert && alertType === 'building-pull-failure' ?
+         {alertType === 'building-pull-failure' ?
             <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
                description={alertMessage} />
             :

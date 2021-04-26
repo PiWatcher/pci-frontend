@@ -124,19 +124,19 @@ const ChangePassword = () => {
             <input type="submit" value="Submit change" />
          </form>
 
-         {showAlert && alertType === 'change-password-success' ?
+         {alertType === 'change-password-success' ?
             <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Password Change Status`}
                description={alertMessage} />
             :
             null}
 
-         {showAlert && alertType === 'change-password-failure' ?
+         {alertType === 'change-password-failure' ?
             <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Password Change Status`}
                description={alertMessage} />
             :
             null}
 
-         {showAlert && alertType === 'new-passwords-not-matching' ?
+         {alertType === 'new-passwords-not-matching' ?
             <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Password Change Status`}
                description={alertMessage} />
             :

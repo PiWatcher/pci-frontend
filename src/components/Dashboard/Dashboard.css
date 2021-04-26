@@ -1,3 +1,4 @@
+
 .dashboard-container {
    text-align: center;
    font-family: "Open Sans", sans-serif;
@@ -7,12 +8,12 @@
 .dashboard-row {
    width: 90vw;
    margin: 50px auto 50px auto;
-   max-width: 2000px;
+   max-width: 2400px;
    display: flex;
 }
 
 .chart-container {
-   width: 75vw;
+   width: 65vw;
 }
 
 .chart-div {

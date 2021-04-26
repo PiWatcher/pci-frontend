@@ -4,6 +4,10 @@
     width: 400px;
 }
 
+.ui.search.selection.dropdown > input.search {
+    margin: -3px 0 0 0;
+}
+
 @media (max-width: 750px) {
     .search-div {
        width: 175px;

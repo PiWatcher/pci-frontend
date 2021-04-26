@@ -16,19 +16,19 @@ import PageRouter from './components/Authentication/PageRouter';
 
 const App = () => {
 
-  return (
-    <div className="App">
-      <EnvironmentContextProvider>
-        <AuthenticationContextProvider>
-          <DataContextProvider>
+   return (
+      <div className="App">
+         <EnvironmentContextProvider>
+            <AuthenticationContextProvider>
+               <DataContextProvider>
 
-            <PageRouter />
+                  <PageRouter />
 
-          </DataContextProvider>
-        </AuthenticationContextProvider>
-      </EnvironmentContextProvider>
-    </div>
-  );
+               </DataContextProvider>
+            </AuthenticationContextProvider>
+         </EnvironmentContextProvider>
+      </div>
+   );
 }
 
 export default App;

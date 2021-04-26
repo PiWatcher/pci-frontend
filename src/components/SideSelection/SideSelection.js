@@ -115,7 +115,7 @@ const SideSelection = () => {
          <BuildingInfo selectedBuilding={selectedBuilding} />
          <RoomList selectedBuilding={selectedBuilding} pulledRooms={pulledRooms} />
 
-         {showAlert && alertType === 'room-pull-failure' ?
+         {alertType === 'room-pull-failure' ?
             <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
                description={`Failed to pull data from endpoint: List of rooms within ${selectedBuilding}`} />
             :

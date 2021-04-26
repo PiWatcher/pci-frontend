@@ -82,7 +82,7 @@ const Room = (props) => {
       let MAX_SELECTED_ROOMS = 1;
 
       // admin viewer limit
-      if (userAdminPermissions === true) {
+      if (userAdminPermissions) {
          MAX_SELECTED_ROOMS = 4;
       }
 
@@ -120,7 +120,7 @@ const Room = (props) => {
             </div>
 
             {/* check if user can view raw data */}
-            {userViewRawData === true ?
+            {userViewRawData ?
 
                // if yes, display raw count
                <div className={`usage ${usageColor}`}>

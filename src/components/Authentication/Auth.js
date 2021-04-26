@@ -197,9 +197,9 @@ const Auth = () => {
                         </form>
                      }
                      <div className="forgot-password-div">
-                        <Link to="/authforgot" className="forgot-password-link">
+                        <Link to="/auth" className="forgot-password-link">
                            Forgot password?
-                                </Link>
+                        </Link>
                      </div>
                   </div>
 
@@ -231,14 +231,14 @@ const Auth = () => {
             }
          </div>
 
-         {showAlert && alertType === "sign-in-failure" ?
+         {alertType === "sign-in-failure" ?
             <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Sign In Failure`}
                description={alertMessage} />
             :
             null}
 
 
-         {showAlert && alertType === "sign-up-failure" ?
+         {alertType === "sign-up-failure" ?
             <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Sign Up Failure`}
                description={alertMessage} />
             :

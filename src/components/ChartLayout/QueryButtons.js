@@ -126,7 +126,7 @@ const QueryButtons = (props) => {
                </MuiThemeProvider>
             </div>}
 
-         {showAlert === true && loading === true ?
+         {loading ?
             <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Query In Progress'}
                description={`Please wait for the current query to complete.`} />
             :

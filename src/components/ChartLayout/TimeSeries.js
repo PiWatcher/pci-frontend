@@ -145,11 +145,18 @@ const TimeSeries = (props) => {
 
       let parsedDate = new Date(isoDate);
 
-      let dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()}/${parsedDate.getFullYear()}
-       ${addZeroToTimestamp(parsedDate.getHours())}:${addZeroToTimestamp(parsedDate.getMinutes())}:${addZeroToTimestamp(parsedDate.getSeconds())}`;
+      let dateString;
+
+      if (currentQuery === 'quarterly' || currentQuery === 'yearly') {
+         dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()}/${parsedDate.getFullYear()}`;
+      } else {
+         dateString = `${parsedDate.getMonth() + 1}/${parsedDate.getDate()}/${parsedDate.getFullYear()}` +
+            ` ${addZeroToTimestamp(parsedDate.getHours())}:${addZeroToTimestamp(parsedDate.getMinutes())}:${addZeroToTimestamp(parsedDate.getSeconds())}`;
+      }
 
       return dateString;
-   }, []);
+
+   }, [currentQuery]);
 
 
    /** 
@@ -369,7 +376,7 @@ const TimeSeries = (props) => {
                null
             }
          </MuiThemeProvider>
-         {loading === false ?
+         {!loading ?
             <div id="chart">
                <Plot
                   useResizeHandler={true}

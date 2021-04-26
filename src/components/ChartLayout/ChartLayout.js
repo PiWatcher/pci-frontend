@@ -93,7 +93,7 @@ const ChartLayout = () => {
          cols={{ lg: 2, md: 2, sm: 1, xs: 1, xxs: 1 }}
          rowHeight={500}
          compactType={"vertical"}
-         useCSSTransforms={false}
+         useCSSTransforms={true}
          measureBeforeMount={true}
       >
          {charts}

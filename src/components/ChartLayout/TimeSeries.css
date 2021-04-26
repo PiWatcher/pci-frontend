@@ -1,3 +1,4 @@
+
 .time-series {
    padding-top: 5px;
    padding-left: 5px;
@@ -8,11 +9,6 @@
 
 .delete-button {
    float: left;
-   z-index: 999;
-}
-
-.screenshot-button {
-   float: right;
    z-index: 999;
 }
 

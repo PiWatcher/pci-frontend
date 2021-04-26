@@ -53,7 +53,7 @@ const User = (props) => {
 
 
    // Material UI theme
-   const roleButtonTheme = createMuiTheme({
+   const userTheme = createMuiTheme({
       typography: {
          fontFamily: 'Open Sans',
          fontSize: 16
@@ -61,6 +61,9 @@ const User = (props) => {
       props: {
          MuiButton: {
             disableRipple: true,
+         },
+         MuiIconButton: {
+            disableRipple: true
          },
          MuiMenuItem: {
             disableRipple: true,
@@ -193,7 +196,7 @@ const User = (props) => {
                </div>
             </div>
 
-            <MuiThemeProvider theme={roleButtonTheme}>
+            <MuiThemeProvider theme={userTheme}>
 
                <div className="user-role">
 
@@ -230,7 +233,7 @@ const User = (props) => {
                   }
                </div>
 
-               {/* if admin or currently logged in account, block ability to delete user */}
+               {/* if admin or currently logged in account, hide delete option */}
                {name === 'Administrator' || name === userName ?
                   <div className="user-delete">
                   </div>
