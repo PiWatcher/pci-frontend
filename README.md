@@ -116,6 +116,6 @@ NOTE: this command will remove all volumes that do not currently have a parent c
 
 ```
 
-docker system prune --all
+docker volume prune
 
 ```
