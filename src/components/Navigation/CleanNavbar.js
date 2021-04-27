@@ -5,19 +5,45 @@ import './CleanNavbar.css';
 // page imports
 import React, { useContext } from 'react';
 import nauLogo from '../../images/nauLogoDash.svg';
-import { Link } from 'react-router-dom';
 
 // contexts
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 import { DataContext } from '../../contexts/DataContext';
 
-// navbar component without settings links
+// components
+import { Link } from 'react-router-dom';
+
+
+/** 
+* Component: CleanNavbar
+* 
+* Navigation bar component that does not include the searchbar and settings buttons
+*/
 const CleanNavbar = () => {
 
-   // consume context
-   const { signOut } = useContext(AuthContext);
-   const { setSelectedBuilding, setSelectedCharts } = useContext(DataContext);
+   const {
 
+      // {function} signs out the user from the application
+      handleUserSignOut
+
+   } = useContext(AuthenticationContext);
+
+   const {
+
+      // {function} sets the selected building
+      setSelectedBuilding,
+
+      // {function} sets the list of selected chart objects
+      setSelectedCharts
+
+   } = useContext(DataContext);
+
+
+   /** 
+   * Function: navSignOut
+   * 
+   * Clears data from state and calls the handleUserSignOut function from auth context
+   */
    const navSignOut = () => {
 
       // clears selection building in state
@@ -27,10 +53,15 @@ const CleanNavbar = () => {
       setSelectedCharts([]);
 
       // signs out from auth context
-      signOut();
+      handleUserSignOut();
    }
 
-   // returns navbar component (includes logo and and sign out)
+
+   /** 
+    * Return: CleanNavbar JSX
+    * 
+    * Returns the layout for display in the browser
+    */
    return (
       <div className="clean-navbar-component">
          <div className="clean-logo-div">

@@ -2,26 +2,34 @@
 // page imports
 import React, { createContext, useState } from 'react';
 
-// context that stores selected building and rooms
+// exports
 export const DataContext = createContext();
 
+
+/** 
+* Context: DataContextProvider
+* 
+* Context that handles the storage and sharing of user selected building/room data
+*
+* @param {props} props
+*/
 const DataContextProvider = (props) => {
 
-   // production base url
-   // const baseURL = process.env.REACT_APP_BASE_URL;
-   const baseURL = "http://localhost"
-
-   // creates state: selected building
+   // {string} building selected by the user
    const [selectedBuilding, setSelectedBuilding] = useState('');
 
-   // creates state: selected room
+   // {list} user selected building/room objects for use in ChartLayout
    const [selectedCharts, setSelectedCharts] = useState([]);
 
+
+   /** 
+   * Return: DataContextProvider JSX
+   * 
+   * Returns props for use by the children components
+   */
    return (
-      <DataContext.Provider value={{
-         selectedBuilding, setSelectedBuilding, selectedCharts, setSelectedCharts, baseURL
-      }}>
-         { props.children}
+      <DataContext.Provider value={{ selectedBuilding, setSelectedBuilding, selectedCharts, setSelectedCharts }}>
+         {props.children}
       </DataContext.Provider>
    )
 }

@@ -2,99 +2,137 @@
 import "./SideSelection.css"
 
 // page imports
-import React, { useContext, useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
+
+// contexts
+import { EnvironmentContext } from '../../contexts/EnvironmentContext';
+import { DataContext } from '../../contexts/DataContext';
+import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 
 // components
 import RoomList from './RoomList';
 import BuildingInfo from './BuildingInfo';
 import AlertNotification from '../Notification/AlertNotification';
 
-// contexts
-import { DataContext } from '../../contexts/DataContext';
+// functions
+import PullRooms from '../../utilities/Dashboard/PullRooms'
 
-// component for sidebar and its child components
+
+/** 
+* Component: SideSelection
+* 
+* Home layout for SideSelection and its child components
+*/
 const SideSelection = () => {
 
-    // consume context
-    const { selectedBuilding, baseURL } = useContext(DataContext);
+   // {boolean} if current user has been authenticated
+   const { authStatus } = useContext(AuthenticationContext);
 
-    // creates state for pulled rooms
-    const [pulledRooms, setPulledRooms] = useState([]);
+   // {string} building selected by the user
+   const { selectedBuilding } = useContext(DataContext);
 
-    // state for alert
-    const [showAlert, setShowAlert] = useState(false);
+   // {string} base url for endpoints
+   const { baseURL } = useContext(EnvironmentContext);
 
-    // API pull logic for rooms in selected building
-    const pullRoomData = useCallback(async () => {
+   // {list} pulled rooms from the back end database
+   const [pulledRooms, setPulledRooms] = useState([]);
 
-        // endpoint URL
-        const roomListEndpoint = `${baseURL}:5000/api/data/building/rooms`;
+   // {string} type of alert to be shown
+   const [alertType, setAlertType] = useState('');
 
-        // tries to pull room data
-        try {
+   // {boolean} if alert should be shown
+   const [showAlert, setShowAlert] = useState(false);
 
-            const response = await axios({
-                method: 'get',
-                url: roomListEndpoint,
-                params: {
-                    building_name: selectedBuilding
-                }
+   // {string} message to be displayed in alert
+   const [alertMessage, setAlertMessage] = useState('');
+
+   // {int} recursive timeout variable
+   const [queryInterval, setQueryInterval] = useState(null);
+
+
+   /** 
+   * Function: handlePullRooms
+   * 
+   * Uses the PullRooms utility function to query the backend database and pull list of rooms
+   */
+   const handlePullRooms = useCallback(async () => {
+
+      const result = await PullRooms(baseURL, selectedBuilding);
+
+      // if error
+      if (result instanceof Error) {
+
+         setAlertType('room-pull-failure');
+
+         setAlertMessage(result.message)
+
+         setShowAlert(true);
+
+      } else {
+
+         let resultData = result.data.data;
+
+         // sorts rooms in order
+         let localRoomList = resultData.sort(function (a, b) {
+            return a._id.localeCompare(b._id, undefined, {
+               numeric: true,
+               sensitivity: 'base'
             });
+         });
 
-            // successfully connected to endpoint and pulled rooms in building
-            if (response.status === 200) {
+         // sets state to list of rooms
+         setPulledRooms(localRoomList);
 
-                let responseData = response.data.data;
+         // five second refresh on successful data pull
+         let timeoutID = setTimeout(handlePullRooms, 5000);
 
-                // sorts rooms in order
-                let localRoomList = responseData.sort(function (a, b) {
-                    return a._id.localeCompare(b._id, undefined, {
-                        numeric: true,
-                        sensitivity: 'base'
-                    });
-                });
+         setQueryInterval(timeoutID);
 
-                // sets state to list of rooms
-                setPulledRooms(localRoomList);
+      }
+   }, [baseURL, selectedBuilding]);
 
-                // five second refresh on successful data pull
-                setTimeout(pullRoomData, 5000);
-            }
-        }
 
-        // failed to pull room
-        catch (error) {
+   /** 
+   * Function: useEffect
+   * 
+   * Calls handlePullRooms if the selectedBuilding is not empty
+   */
+   useEffect(() => {
 
-            // display alert
-            setShowAlert(true);
+      selectedBuilding !== '' && handlePullRooms();
 
-            // display error to console for debugging
-            console.error('Error', error.response);
-        }
-    }, [baseURL, selectedBuilding]);
+   }, [selectedBuilding, handlePullRooms])
 
-    // updates room list on selected building change
-    useEffect(() => {
 
-        // pull rooms from API
-        pullRoomData();
+   /** 
+   * Function: useEffect
+   * 
+   * On authStatus change(user sign out), clears recursive data pull
+   */
+   useEffect(() => {
 
-    }, [selectedBuilding, pullRoomData])
+      clearTimeout(queryInterval);
 
-    // returns side selection component and its children
-    return (
-        <div className="room-list-container">
-            <BuildingInfo building={selectedBuilding} />
-            <RoomList building={selectedBuilding} rooms={pulledRooms} />
+   }, [authStatus])
 
-            {showAlert === true ?
-                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
-                    description={`Failed to pull data from endpoint: List of rooms within ${selectedBuilding}`} />
-                :
-                null}
-        </div>
-    )
+
+   /** 
+   * Return: SideSelection JSX
+   * 
+   * Returns the layout for display in the browser
+   */
+   return (
+      <div className="room-list-container">
+         <BuildingInfo selectedBuilding={selectedBuilding} />
+         <RoomList selectedBuilding={selectedBuilding} pulledRooms={pulledRooms} />
+
+         {alertType === 'room-pull-failure' ?
+            <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
+               description={alertMessage} />
+            :
+            null}
+      </div>
+   )
 }
 
 export default SideSelection;

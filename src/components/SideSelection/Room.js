@@ -7,105 +7,171 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 
 // contexts
 import { DataContext } from '../../contexts/DataContext';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 
-// component for room information
+
+/** 
+* Component: Room
+* 
+* Holds information for each room for display in RoomList
+*
+* @param {props} props
+*/
 const Room = (props) => {
 
-    // consume props
-    const { room, count, capacity } = props;
+   const {
 
-    // consume contexts
-    const { userAdminPermissions, userViewRawData } = useContext(AuthContext);
-    const { selectedBuilding, selectedCharts, setSelectedCharts } = useContext(DataContext);
+      // {string} name of room
+      room,
 
-    // state for room usage
-    const [roomUsage, setRoomUsage] = useState(0);
+      // {int} current count of room
+      count,
 
-    // state for usage color
-    const [usageColor, setUsageColor] = useState('low-usage');
+      // {int} capacity of room
+      capacity
 
-    // calculates usage from given data
-    const getUsage = (count, capacity) => {
+   } = props;
 
-        let usage = Math.trunc((count / capacity) * 100)
+   const {
 
-        return usage;
-    }
+      // {boolean} if user has admin privileges
+      userAdminPermissions,
 
-    // constructs room data for packaging
-    const createRoom = useCallback(() => {
+      // {boolean} if user has raw data viewing privileges
+      userViewRawData
 
-        // calculates usage
-        let localUsage = getUsage(count, capacity);
+   } = useContext(AuthenticationContext);
 
-        if (localUsage <= 75) {
+   const {
 
-            // set to green text
-            setUsageColor('low-usage');
-        }
+      // {string} building selected by the user
+      selectedBuilding,
 
-        else if (localUsage > 75) {
+      // {list} list of selected chart objects
+      selectedCharts,
 
-            // set to red text
-            setUsageColor('high-usage');
-        }
+      // {function} set the list of selected chart objects
+      setSelectedCharts
 
-        // sets usage
-        setRoomUsage(localUsage);
+   } = useContext(DataContext);
 
-    }, [capacity, count]);
+   // {int} calculated room usage
+   const [roomUsage, setRoomUsage] = useState(0);
 
-    // manages list of selected rooms for chart creation
-    const selectRoom = () => {
+   // {string} styling color for the calculated room usage
+   const [usageColor, setUsageColor] = useState('low-usage');
 
-        // public viewer limit
-        let MAX_SELECTED_ROOMS = 1;
 
-        // admin viewer limit
-        if (userAdminPermissions === true) {
-            MAX_SELECTED_ROOMS = 4;
-        }
+   /** 
+   * Function: findRoomUsage
+   * 
+   * Calculates the usage of the room
+   * 
+   * @param {int} count
+   * @param {int} capacity
+   */
+   const findRoomUsage = (count, capacity) => {
 
-        // construct building/room object and add to list
-        if (selectedCharts.length < MAX_SELECTED_ROOMS) {
-            setSelectedCharts([...selectedCharts, { chartID: selectedCharts.length, building: selectedBuilding, room: room, capacity: capacity }]);
-        }
-    };
+      let usage = Math.trunc((count / capacity) * 100)
 
-    // updates on data change (count)
-    useEffect(() => {
+      return usage;
+   }
 
-        createRoom();
 
-    }, [count, createRoom]);
+   /** 
+   * Function: setRoomUsageStyling
+   * 
+   * Designates the styling for the usage section of the room component
+   */
+   const setRoomUsageStyling = useCallback(() => {
 
-    return (
-        <li key={room} onClick={() => selectRoom(room)}>
-            <div className="list-option">
-                <div className="room">
-                    <p>
-                        {room}
-                    </p>
-                </div>
+      // calculates usage
+      let localUsage = findRoomUsage(count, capacity);
 
-                {userViewRawData === true ?
+      if (localUsage <= 75) {
 
-                    // display raw count
-                    <div className={`usage ${usageColor}`}>
-                        {count} / {capacity}
-                    </div>
-                    :
+         // set to green text
+         setUsageColor('low-usage');
+      }
 
-                    // display percentage 
-                    <div className={`usage ${usageColor}`}>
-                        {roomUsage}%
-                    </div>
-                }
+      else if (localUsage > 75) {
 
+         // set to red text
+         setUsageColor('high-usage');
+      }
+
+      // sets usage
+      setRoomUsage(localUsage);
+
+   }, [capacity, count]);
+
+
+   /** 
+   * Function: handleRoomSelect
+   * 
+   * Checks user permissions before allowing new rooms to be selected, then sets the selected rooms information into context
+   */
+   const handleRoomSelect = () => {
+
+      // public viewer limit
+      let MAX_SELECTED_ROOMS = 1;
+
+      // admin viewer limit
+      if (userAdminPermissions) {
+         MAX_SELECTED_ROOMS = 4;
+      }
+
+      // construct building/room object and add to list
+      if (selectedCharts.length < MAX_SELECTED_ROOMS) {
+         setSelectedCharts([...selectedCharts, { chartID: selectedCharts.length, building: selectedBuilding, room: room, capacity: capacity }]);
+      }
+   };
+
+
+   /** 
+   * Function: useEffect
+   * 
+   * Calls setRoomUsageStyling on new data being passed down (room, count, etc.)
+   */
+   useEffect(() => {
+
+      setRoomUsageStyling();
+
+   }, [count, setRoomUsageStyling]);
+
+
+   /** 
+   * Return: Room JSX
+   * 
+   * Returns the layout for display in the browser
+   */
+   return (
+      <li key={room} onClick={() => handleRoomSelect(room)}>
+         <div className="list-option">
+            <div className="room">
+               <p>
+                  {room}
+               </p>
             </div>
-        </li>
-    )
+
+            {/* check if user can view raw data */}
+            {userViewRawData ?
+
+               // if yes, display raw count
+               <div className={`usage ${usageColor}`}>
+                  {count} / {capacity}
+               </div>
+               :
+
+               // if no, display percentage 
+               <div className={`usage ${usageColor}`}>
+                  {roomUsage}%
+                    </div>
+            }
+
+         </div>
+      </li>
+   )
 }
 
 export default Room;

@@ -4,31 +4,62 @@ import './RoomList.css';
 
 // page imports
 import React, { useState, useEffect, useCallback } from 'react';
+
+// components
 import Room from './Room';
 
+
+/** 
+* Component: RoomList
+* 
+* Maps all pulled rooms to room components and displays them within the list
+*
+* @param {props} props
+*/
 const RoomList = (props) => {
 
-   // consume props
-   const { building, rooms } = props;
+   const {
 
-   // state for search value
+      // {string} building selected by the user
+      selectedBuilding,
+
+      // {list} pulled rooms from the back end database
+      pulledRooms
+
+   } = props;
+
+   // {string} text pulled from search
    const [search, setSearch] = useState('');
 
-   // state for filtered room list
+   // {list} filtered rooms based on filtered search text
    const [filteredRoomList, setFilteredRoomList] = useState([]);
 
-   // pulls search text for processing
-   const searchHandler = (e) => {
-      if (e.target.id === "roomSearch") {
-         setSearch(e.target.value);
+
+   /** 
+    * Function: handleRoomSearch
+    * 
+    * Takes user search input and sets to state
+    * 
+    * @param {event} event
+    */
+   const handleRoomSearch = (event) => {
+      if (event.target.id === "roomSearch") {
+         setSearch(event.target.value);
       }
    }
 
-   // filters out rooms based on search text
-   const roomFilter = useCallback((filter) => {
+
+   /** 
+   * Function: handleRoomFilter
+   * 
+   * Filters displayed rooms based on the state of the search bar
+   * 
+   * @param {string} filter
+   */
+   const handleRoomFilter = useCallback((filter) => {
 
       // filters room list
-      let filteredRooms = rooms.filter(function (item) {
+      let filteredRooms = pulledRooms.filter(function (item) {
          return item['_id'].toLowerCase().indexOf(filter.toLowerCase()) !== -1;
       })
 
@@ -45,29 +76,41 @@ const RoomList = (props) => {
       // sets the state
       setFilteredRoomList(filtered);
 
-   }, [rooms]);
+   }, [pulledRooms]);
 
 
-   // on building change, resets filter to empty
+   /** 
+   * Function: useEffect
+   * 
+   * Sets search back to empty on selectedBuilding change
+   */
    useEffect(() => {
 
       setSearch('');
 
-   }, [building])
+   }, [selectedBuilding])
 
 
-   // filters rooms on room list or search query change
+   /** 
+   * Function: useEffect
+   * 
+   * Refilters rooms based on changing user text search input
+   */
    useEffect(() => {
 
-      roomFilter(search);
+      handleRoomFilter(search);
 
-   }, [rooms, search, roomFilter])
+   }, [pulledRooms, search, handleRoomFilter])
 
 
-   // returns filtered rooms
+   /** 
+    * Return: RoomList JSX
+    * 
+    * Returns the layout for display in the browser
+    */
    return (
       <div>
-         <input type="text" id="roomSearch" onChange={searchHandler} placeholder="Search for a room" value={search} />
+         <input type="text" id="roomSearch" onChange={handleRoomSearch} placeholder="Room search" value={search} />
          <div className="room-list-component">
             <ul>
                {filteredRoomList}

@@ -1,3 +1,4 @@
+
 .clean-navbar-component {
    display: flex;
    width: 100vw;
@@ -20,7 +21,7 @@
 .clean-right-side-div {
    display: flex;
    align-items: center;
-   margin: 0 0 0 auto;
+   margin: 3px 0 0 auto;
 }
 
 .clean-sign-out-div {
@@ -40,8 +41,12 @@
       padding: 0 0 0 0;
    }
 
+   .clean-right-side-div {
+      margin: 0 10px 0 auto;
+   }
+
    .clean-sign-out-div {
-      margin: 0 0 0 5px;
+      margin: 0 0 0 0px;
       font-size: 1.15em;
    }
 }

@@ -4,147 +4,155 @@ import './ChangePassword.css';
 
 // page imports
 import React, { useContext, useState } from 'react';
-import axios from 'axios';
 
 // components
 import AlertNotification from '../Notification/AlertNotification';
 
 // contexts
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthenticationContext } from '../../contexts/AuthenticationContext';
+import { EnvironmentContext } from '../../contexts/EnvironmentContext'
 
-// component for password change after login
+// functions
+import ChangeUserPassword from '../../utilities/Settings/ChangeUserPassword'
+
+
+/** 
+* Component: ChangePassword
+* 
+* Component for changing currently logged in user's password
+*/
 const ChangePassword = () => {
 
-    // consume data from AuthContext
-    const { userToken, baseURL } = useContext(AuthContext);
+   // {string} base url for the endpoints
+   const { baseURL } = useContext(EnvironmentContext);
 
-    // local variable for user password during text input
-    const [localCurrentPassword, setLocalCurrentPassword] = useState('');
+   // {string} token assigned to the currently logged in user
+   const { userToken } = useContext(AuthenticationContext);
 
-    // local variable for user password during text input
-    const [localNewPassword, setLocalNewPassword] = useState('');
+   // {string} text pulled from current user password input
+   const [localCurrentPassword, setLocalCurrentPassword] = useState('');
 
-    // local variable for user password during text input
-    const [localNewPasswordConf, setLocalNewPasswordConf] = useState('');
+   // {string} text pulled from new user password input
+   const [localNewPassword, setLocalNewPassword] = useState('');
 
-    // state for alert
-    const [showAlert, setShowAlert] = useState('');
+   // {string} text pulled from new user password confirmation input
+   const [localNewPasswordConf, setLocalNewPasswordConf] = useState('');
 
-    // state for alert type
-    const [alertType, setAlertType] = useState('');
+   // {boolean} if alert should be shown
+   const [showAlert, setShowAlert] = useState(false);
 
-    // places password form input into local temp variables
-    const handleInputChange = (e) => {
+   // {string} type of alert to be shown
+   const [alertType, setAlertType] = useState('');
 
-        if (e.target.id === "current-password") {
-            setLocalCurrentPassword(e.target.value);
-        }
+   // {string} message to be shown in alert
+   const [alertMessage, setAlertMessage] = useState('');
 
-        else if (e.target.id === "new-password") {
-            setLocalNewPassword(e.target.value);
-        }
 
-        else if (e.target.id === "new-password-conf") {
-            setLocalNewPasswordConf(e.target.value);
-        }
-    }
+   /** 
+   * Function: handleInputChange
+   * 
+   * Pulls user input from text forms and stores them in state
+   * 
+   * @param {event} event
+   */
+   const handleInputChange = (event) => {
 
-    // send new password to backend for update
-    const changePassword = async (e) => {
+      if (event.target.id === "current-password") {
+         setLocalCurrentPassword(event.target.value);
+      }
 
-        // prevent page refresh after submit
-        e.preventDefault();
+      else if (event.target.id === "new-password") {
+         setLocalNewPassword(event.target.value);
+      }
 
-        // endpoint URL
-        const userPasswordUpdateEndpoint = `${baseURL}:5000/api/auth/users/update/password`;
+      else if (event.target.id === "new-password-conf") {
+         setLocalNewPasswordConf(event.target.value);
+      }
+   }
 
-        // check if passwords match
-        if (localNewPassword === localNewPasswordConf) {
 
-            // tries to submit new password
-            try {
-                const response = await axios({
-                    method: 'post',
-                    url: userPasswordUpdateEndpoint,
-                    headers: {
-                        Authorization: `Bearer ${userToken}`
-                    },
-                    data: {
-                        password: localCurrentPassword,
-                        new_password: localNewPassword
-                    }
-                });
+   /** 
+  * Function: handleChangePassword
+  * 
+  * Uses ChangeUserPassword utility function to send request to the back end database and 
+  *    update the currently logged in user information.  The user will be displayed a notification on success or failure.
+  * 
+  * @param {event} event
+  */
+   const handleChangePassword = async (event) => {
 
-                // successfully connected to endpoint and created role
-                if (response.status === 200) {
+      // prevent page refresh after submit
+      event.preventDefault();
 
-                    // set alert type
-                    setAlertType('success');
+      // check if new passwords match
+      if (localNewPassword === localNewPasswordConf) {
 
-                    // show alert
-                    setShowAlert(true);
-                }
-            }
+         const result = await ChangeUserPassword(baseURL, userToken, localCurrentPassword, localNewPassword);
 
-            // failed to create new role
-            catch (error) {
+         // if error is returned
+         if (result instanceof Error) {
 
-                // set alert type
-                setAlertType('failure');
+            setAlertType('change-password-failure');
 
-                // show alert
-                setShowAlert(true);
+            setAlertMessage(result.message);
 
-                // display error in console for debugging
-                console.error('Error', error.response);
-            }
+         } else {
 
-        }
+            setAlertType('change-password-success');
 
-        // passwords don't match
-        else {
+            setAlertMessage(`Password update successful.`);
 
-            // set alert type
-            setAlertType('not-matching');
+         }
 
-            // show alert
-            setShowAlert(true);
-        }
-    }
+      } else {
 
-    // returns password reset component
-    return (
-        <div className="change-password-component">
-            <p>Change Password</p>
-            <form onSubmit={changePassword}>
-                <input type="password" id="current-password" placeholder="current password"
-                    pattern="^(?![a-z]*$)(?![A-Z]*$)(?!\d*$)(?!\p{P}*$)(?![^a-zA-Z\d\p{P}]*$).{6,}$" onChange={handleInputChange} required />
-                <input type="password" id="new-password" placeholder="new password"
-                    pattern="^(?![a-z]*$)(?![A-Z]*$)(?!\d*$)(?!\p{P}*$)(?![^a-zA-Z\d\p{P}]*$).{6,}$" onChange={handleInputChange} required />
-                <input type="password" id="new-password-conf" placeholder="confirm new password"
-                    pattern="^(?![a-z]*$)(?![A-Z]*$)(?!\d*$)(?!\p{P}*$)(?![^a-zA-Z\d\p{P}]*$).{6,}$" onChange={handleInputChange} required />
-                <input type="submit" value="Submit change" />
-            </form>
+         setAlertType('new-passwords-not-matching');
 
-            {showAlert === true && alertType === 'success' ?
-                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Role Creation Status`}
-                    description={`Password update successful.`} />
-                :
-                null}
+         setAlertMessage(`New passwords must match.`);
 
-            {showAlert === true && alertType === 'failure' ?
-                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Role Creation Status'}
-                    description={`Password update failed.`} />
-                :
-                null}
+      }
 
-            {showAlert === true && alertType === 'not-matching' ?
-                <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Role Creation Status'}
-                    description={`New passwords must match.`} />
-                :
-                null}
-        </div>
-    )
+      setShowAlert(true);
+   }
+
+
+   /** 
+   * Return: ChangePassword JSX
+   * 
+   * Returns the layout for display in the browser
+   */
+   return (
+      <div className="change-password-component">
+         <p>Change Password</p>
+         <form onSubmit={handleChangePassword}>
+            <input type="password" id="current-password" placeholder="current password"
+               pattern="^(?![a-z]*$)(?![A-Z]*$)(?!\d*$)(?!\p{P}*$)(?![^a-zA-Z\d\p{P}]*$).{6,}$" onChange={handleInputChange} required />
+            <input type="password" id="new-password" placeholder="new password"
+               pattern="^(?![a-z]*$)(?![A-Z]*$)(?!\d*$)(?!\p{P}*$)(?![^a-zA-Z\d\p{P}]*$).{6,}$" onChange={handleInputChange} required />
+            <input type="password" id="new-password-conf" placeholder="confirm new password"
+               pattern="^(?![a-z]*$)(?![A-Z]*$)(?!\d*$)(?!\p{P}*$)(?![^a-zA-Z\d\p{P}]*$).{6,}$" onChange={handleInputChange} required />
+            <input type="submit" value="Submit change" />
+         </form>
+
+         {alertType === 'change-password-success' ?
+            <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Password Change Status`}
+               description={alertMessage} />
+            :
+            null}
+
+         {alertType === 'change-password-failure' ?
+            <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Password Change Status`}
+               description={alertMessage} />
+            :
+            null}
+
+         {alertType === 'new-passwords-not-matching' ?
+            <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`Password Change Status`}
+               description={alertMessage} />
+            :
+            null}
+      </div>
+   )
 }
 
 export default ChangePassword;

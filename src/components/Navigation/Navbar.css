@@ -20,7 +20,7 @@
 .right-side-div {
    display: flex;
    align-items: center;
-   margin: 0 0 0 auto;
+   margin: 3px 0 0 auto;
 }
 
 .admin-icon-div {
@@ -56,18 +56,23 @@
       padding: 0 0 0 0;
    }
 
-   .admin-icon-div {
-      margin-top: 5px;
-      margin-left: 15px;
+   .right-side-div {
+      margin: 0 0 0 0;
    }
 
-   .settings-icon-div {
+   .admin-icon-div {
       margin-top: 5px;
       margin-left: 10px;
    }
 
+   .settings-icon-div {
+      margin-top: 5px;
+      margin-right: 0px;
+      margin-left: 10px;
+   }
+
    .sign-out-div {
-      margin: 0 0 0 5px;
+      margin: 0 0 0 0;
       font-size: 1.15em;
    }
 }
