@@ -1,8 +1,8 @@
 version: "3.7"
 
 services:
-  pci-frontend_dev:
-    container_name: pci-frontend_dev
+  pci-frontend-dev:
+    container_name: pci-frontend-dev
     restart: unless-stopped
     build:
       context: .
@@ -16,3 +16,10 @@ services:
       - CHOKIDAR_USEPOLLING=true
     ports:
       - 3001:3000
+    networks:
+      - frontend_dev
+
+networks:
+  frontend_dev:
+    name: frontend_dev
+    driver: bridge
