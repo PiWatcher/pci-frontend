@@ -110,7 +110,7 @@ const RoomList = (props) => {
     */
    return (
       <div>
-         <input type="text" id="roomSearch" onChange={handleRoomSearch} placeholder="Search for a room" value={search} />
+         <input type="text" id="roomSearch" onChange={handleRoomSearch} placeholder="Room search" value={search} />
          <div className="room-list-component">
             <ul>
                {filteredRoomList}

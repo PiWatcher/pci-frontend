@@ -9,7 +9,7 @@ services:
       context: .
       dockerfile: Dockerfile.prod
       args:
-        - REACT_APP_BASE_URL=
+        - REACT_APP_BASE_URL=http://localhost
     ports:
       - "80:80"
     networks:

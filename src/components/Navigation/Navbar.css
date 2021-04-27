@@ -20,7 +20,7 @@
 .right-side-div {
    display: flex;
    align-items: center;
-   margin: 0 0 0 auto;
+   margin: 3px 0 0 auto;
 }
 
 .admin-icon-div {

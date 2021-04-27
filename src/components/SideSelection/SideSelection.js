@@ -43,6 +43,9 @@ const SideSelection = () => {
    // {boolean} if alert should be shown
    const [showAlert, setShowAlert] = useState(false);
 
+   // {string} message to be displayed in alert
+   const [alertMessage, setAlertMessage] = useState('');
+
    // {int} recursive timeout variable
    const [queryInterval, setQueryInterval] = useState(null);
 
@@ -60,6 +63,8 @@ const SideSelection = () => {
       if (result instanceof Error) {
 
          setAlertType('room-pull-failure');
+
+         setAlertMessage(result.message)
 
          setShowAlert(true);
 
@@ -123,7 +128,7 @@ const SideSelection = () => {
 
          {alertType === 'room-pull-failure' ?
             <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
-               description={`Failed to pull data from endpoint: List of rooms within ${selectedBuilding}`} />
+               description={alertMessage} />
             :
             null}
       </div>
