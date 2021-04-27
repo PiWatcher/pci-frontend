@@ -20,7 +20,13 @@ import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 */
 const PageRouter = () => {
 
-   const { userAdminPermissions, authStatus } = useContext(AuthenticationContext);
+   const {
+      // {boolean} if user has admin privileges
+      userAdminPermissions,
+
+      // {boolean} if user has successfully been authenticated
+      authStatus
+   } = useContext(AuthenticationContext);
 
 
    /** 
@@ -30,7 +36,7 @@ const PageRouter = () => {
    */
    useEffect(() => {
 
-      if (authStatus === true) {
+      if (authStatus) {
          return (
             <Route exact path="/auth">
                <Redirect to="/dashboard" />
@@ -60,26 +66,26 @@ const PageRouter = () => {
 
                   {/* auth to dashboard */}
                   <Route exact path="/auth" component={Auth}>
-                     {authStatus === true ?
+                     {authStatus ?
                         <Redirect to="/dashboard" component={Dashboard} /> :
                         null
                      }
                   </Route>
 
                   {/* dashboard to auth */}
-                  {authStatus === true ?
+                  {authStatus ?
                      <Route exact path="/dashboard" component={Dashboard} /> :
                      <Redirect to="/auth" component={Auth} />
                   }
 
                   {/* settings to auth */}
-                  {authStatus === true ?
+                  {authStatus ?
                      <Route exact path="/settings" component={UserSettings} /> :
                      <Redirect to="/auth" component={Auth} />
                   }
 
                   {/* admin settings */}
-                  {authStatus === true && userAdminPermissions === true ?
+                  {authStatus && userAdminPermissions ?
                      <Route exact path="/admin" component={AdminSettings} /> :
                      <Redirect to="/dashboard" component={Dashboard} />
                   }

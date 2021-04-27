@@ -17,20 +17,35 @@ import { Dropdown } from 'semantic-ui-react';
 * Component: Searchbar
 * 
 * Searchbar component for searching and selecting buildings
+*
+* @param {props} props
 */
 const Searchbar = (props) => {
 
-   const { pulledBuildings } = props;
+   const {
 
-   const { selectedBuilding, setSelectedBuilding } = useContext(DataContext);
+      // {list} pulled buildings from back end database
+      pulledBuildings } = props;
+
+   const {
+
+      // {string} building selected by the user
+      selectedBuilding,
+
+      // {function} set the selected building
+      setSelectedBuilding
+
+   } = useContext(DataContext);
 
 
    /** 
    * Function: handleSelectChange
    * 
    * Pulls selection text from dropdown and sets it to state
+   * 
+   * @param {event} event
    */
-   const handleSelectChange = (e, { value }) => {
+   const handleSelectChange = (event, { value }) => {
       setSelectedBuilding(value);
    }
 
@@ -48,13 +63,14 @@ const Searchbar = (props) => {
             fluid
             search
             selection
-            options={pulledBuildings.map(item => {
-               return {
-                  key: item,
-                  text: item,
-                  value: item
-               }
-            })}
+            options={
+               pulledBuildings.map(item => {
+                  return {
+                     key: item,
+                     text: item,
+                     value: item
+                  }
+               })}
             selectOnBlur={false}
          />
       </div>

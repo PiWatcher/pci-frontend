@@ -29,26 +29,59 @@ import { EnvironmentContext } from '../../contexts/EnvironmentContext'
 * Component: User
 * 
 * Holds information for each user for display in UserList
+*
+* @param {props} props
 */
 const User = (props) => {
 
-   const { name, email, role, roles, pullUsers } = props;
+   const {
 
+      // {string} name of user
+      name,
+
+      // {string} email of user
+      email,
+
+      // {object} information about user's current role
+      role,
+
+      // {list} pulled roles from the back end database
+      roles,
+
+      // {function} pull users from the back end database
+      pullUsers
+
+   } = props;
+
+   // {string} base url for the endpoints
    const { baseURL } = useContext(EnvironmentContext);
 
-   const { userToken, userName } = useContext(AuthenticationContext);
+   const {
 
+      // {string} token assigned to the currently logged in user
+      userToken,
+
+      // {string} name of the currently logged in user 
+      userName
+
+   } = useContext(AuthenticationContext);
+
+   // {string} role for the this user component
    const [userRole, setUserRole] = useState(role);
 
-   // Material UI menu state
+   // {boolean} Material UI menu state
    const [anchorEl, setAnchorEl] = useState(null);
 
+   // {boolean} if dialog alert should be shown
    const [showDialogAlert, setShowDialogAlert] = useState(false);
 
+   // {boolean} if alert should be shown
    const [showAlert, setShowAlert] = useState(false);
 
+   // {string} type of alert to be shown
    const [alertType, setAlertType] = useState('');
 
+   // {string} message to be shown in alert
    const [alertMessage, setAlertMessage] = useState('');
 
 
@@ -77,6 +110,8 @@ const User = (props) => {
    * 
    * Uses UpdateUserRole utility function to update the chosen account's role in the back end database
    *  and sets appropriate alert based on the response
+   * 
+   * @param {string} newRole
    */
    const handleUserRoleUpdate = async (newRole) => {
 
@@ -104,9 +139,11 @@ const User = (props) => {
    * Function: handleMenuClick
    * 
    * Opens material UI menu 
+   * 
+   * @param {event} event
    */
-   const handleMenuClick = (e) => {
-      setAnchorEl(e.currentTarget);
+   const handleMenuClick = (event) => {
+      setAnchorEl(event.currentTarget);
    };
 
 
@@ -114,10 +151,12 @@ const User = (props) => {
    * Function: handleMenuClose
    * 
    * Calls handleUserRoleUpdate function if a role is selected from the menu
+   * 
+   * @param {event} event
    */
-   const handleMenuClose = (e) => {
+   const handleMenuClose = (event) => {
 
-      let newRole = e.currentTarget.textContent;
+      let newRole = event.currentTarget.textContent;
 
       // checks if role has been selected
       if (newRole !== '') {

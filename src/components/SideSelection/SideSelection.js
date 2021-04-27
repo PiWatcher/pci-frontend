@@ -25,19 +25,25 @@ import PullRooms from '../../utilities/Dashboard/PullRooms'
 */
 const SideSelection = () => {
 
+   // {boolean} if current user has been authenticated
    const { authStatus } = useContext(AuthenticationContext);
 
+   // {string} building selected by the user
    const { selectedBuilding } = useContext(DataContext);
 
+   // {string} base url for endpoints
    const { baseURL } = useContext(EnvironmentContext);
 
+   // {list} pulled rooms from the back end database
    const [pulledRooms, setPulledRooms] = useState([]);
 
+   // {string} type of alert to be shown
    const [alertType, setAlertType] = useState('');
 
-   const [showAlert, setShowAlert] = useState('');
+   // {boolean} if alert should be shown
+   const [showAlert, setShowAlert] = useState(false);
 
-   // state for recursive timeout variable
+   // {int} recursive timeout variable
    const [queryInterval, setQueryInterval] = useState(null);
 
 

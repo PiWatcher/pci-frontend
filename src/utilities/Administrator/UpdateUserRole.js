@@ -6,6 +6,11 @@ import axios from 'axios'
 * Utility Function: UpdateUserRole
 * 
 * Updates the designated user's role in the database
+*
+* @param {string} baseURL
+* @param {string} userToken
+* @param {string} email
+* @param {string} role
 */
 const UpdateUserRole = async (baseURL, userToken, email, role) => {
 

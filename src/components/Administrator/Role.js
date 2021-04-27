@@ -28,22 +28,45 @@ import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 * Component: Role
 * 
 * Holds information for each role for display in RoleList
+*
+* @param {props} props
 */
 const Role = (props) => {
 
-   const { name, isAdmin, canViewRaw, pullRoles } = props;
+   const {
 
+      // {string} name of role
+      name,
+
+      // {boolean} if role has admin permissions
+      isAdmin,
+
+      // {boolean} if role has raw data viewing permissions
+      canViewRaw,
+
+      // {function} to pull roles from the backend database
+      pullRoles
+
+   } = props;
+
+   // {string} base url for the endpoints
    const { baseURL } = useContext(EnvironmentContext);
 
+   // {string} token assigned to currently logged in user
    const { userToken } = useContext(AuthenticationContext);
 
+   // {boolean} if dialog alert should be shown
    const [showDialogAlert, setShowDialogAlert] = useState(false);
 
+   // {boolean} if alert should be shown
    const [showAlert, setShowAlert] = useState(false);
 
+   // {string} type of alert to be shown
    const [alertType, setAlertType] = useState('');
 
+   // {string} message to be displayed in alert
    const [alertMessage, setAlertMessage] = useState('');
+
 
    // Material UI theme
    const roleTheme = createMuiTheme({
@@ -76,7 +99,6 @@ const Role = (props) => {
    */
    const handleDeleteRole = async () => {
 
-      // close confirmation dialog
       setShowDialogAlert(false);
 
       const result = await DeleteRole(baseURL, userToken, name);
@@ -95,7 +117,6 @@ const Role = (props) => {
          setAlertMessage(result.data.message)
       }
 
-      // show alert
       setShowAlert(true);
    };
 

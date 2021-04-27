@@ -9,10 +9,18 @@ import React from 'react';
   * Component: BuildingInfo
   * 
   * Component for displaying the building information within SideSelection
+  * 
+  * @param {props} props
   */
 const BuildingInfo = (props) => {
 
-   const { selectedBuilding } = props;
+   const {
+
+      // {string} building selected by the user
+      selectedBuilding
+
+   } = props;
+
 
    /** 
     * Return: BuildingInfo JSX

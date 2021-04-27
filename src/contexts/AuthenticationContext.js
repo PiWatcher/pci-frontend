@@ -19,27 +19,30 @@ export const AuthenticationContext = createContext();
 * Context: AuthenticationContextProvider
 * 
 * Context that handles the storage and sharing of user authentication data
+*
+* @param {props} props
 */
 const AuthenticationContextProvider = (props) => {
 
+   // {string} base url for endpoints
    const { baseURL } = useContext(EnvironmentContext);
 
-   // current authentication status
+   // {boolean} current user authentication status
    const [authStatus, setAuthStatus] = useState(false);
 
-   //  current user role
+   // {string} current user role
    const [userRoleName, setUserRoleName] = useState('');
 
-   //  current user admin permissions
+   // {boolean} current user admin permissions
    const [userAdminPermissions, setUserAdminPermissions] = useState(false);
 
-   //  current user raw data viewing permissions
+   // {boolean} current user raw data viewing permissions
    const [userViewRawData, setUserViewRawData] = useState(false);
 
-   // current user name
+   // {string} current user name
    const [userName, setUserName] = useState('');
 
-   // user token returned from the backend
+   // {string} user token returned from the backend
    const [userToken, setUserToken] = useState('');
 
    // cookie functionality
@@ -51,6 +54,9 @@ const AuthenticationContextProvider = (props) => {
    * 
    * Uses UserSignIn utility function to send request to the back end database and 
    *    verify the user's login information.
+   * 
+   * @param {string} email
+   * @param {string} password
    */
    const handleUserSignIn = async (email, password) => {
 
@@ -90,6 +96,8 @@ const AuthenticationContextProvider = (props) => {
    * 
    * Uses TokenSignIn utility function to send request to the back end database and 
    *    authenticate the supplied user token.  If successful, the matching user is signed in.
+   * 
+   * @param {string} cookieToken
    */
    const handleTokenSignIn = useCallback(async (cookieToken) => {
 
@@ -123,6 +131,10 @@ const AuthenticationContextProvider = (props) => {
    * 
    * Uses UserSignUp utility function to send a request to the back end database and 
    *    create user account.
+   * 
+   * @param {string} name
+   * @param {string} email
+   * @param {string} password
    */
    const handleUserSignUp = async (name, email, password) => {
 

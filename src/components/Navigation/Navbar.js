@@ -24,14 +24,36 @@ import { DataContext } from '../../contexts/DataContext';
 * Component: Navbar
 * 
 * Navigation bar component that does include the searchbar and settings buttons
+*
+* @param {props} props
 */
 const Navbar = (props) => {
 
-   const { pulledBuildings } = props;
+   const {
 
-   const { userAdminPermissions, handleUserSignOut } = useContext(AuthenticationContext);
+      // {list} pulled buildings from the back end database
+      pulledBuildings } = props;
 
-   const { setSelectedBuilding, setSelectedCharts } = useContext(DataContext);
+   const {
+
+      // {boolean} if user has admin privileges
+      userAdminPermissions,
+
+      // {function} signs out the user from the application
+      handleUserSignOut
+
+   } = useContext(AuthenticationContext);
+
+   const {
+
+      // {function} sets the selected building
+      setSelectedBuilding,
+
+      // {function} sets the list of selected chart objects
+      setSelectedCharts
+
+   } = useContext(DataContext);
+
 
    // Material UI Theme
    const navLinkTheme = createMuiTheme({

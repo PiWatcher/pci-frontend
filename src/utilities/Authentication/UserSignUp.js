@@ -6,6 +6,11 @@ import axios from 'axios'
 * Utility Function: UserSignUp
 * 
 * Signs up the user with their account information
+*
+* @param {string} baseURL
+* @param {string} name
+* @param {string} email
+* @param {string} password
 */
 const UserSignUp = async (baseURL, name, email, password) => {
 

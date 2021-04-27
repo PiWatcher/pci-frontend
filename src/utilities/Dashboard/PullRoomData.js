@@ -6,6 +6,11 @@ import axios from 'axios'
 * Utility Function: PullRoomData
 * 
 * Pulls the associated data of the designated building's room from the database
+*
+* @param {string} baseURL
+* @param {string} building
+* @param {string} room
+* @param {string} currentQuery
 */
 const PullRoomData = async (baseURL, building, room, currentQuery) => {
 

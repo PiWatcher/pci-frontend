@@ -29,49 +29,90 @@ import PullRoomData from '../../utilities/Dashboard/PullRoomData';
 
 
 /** 
-    * Component: TimeSeries
-    * 
-    * Component that handles data formatting and display in the plotly time series
-    */
+* Component: TimeSeries
+* 
+* Component that handles data formatting and display in the plotly time series
+*
+* @param {props} props
+*/
 const TimeSeries = (props) => {
 
-   const { building, room, capacity, chartID } = props;
+   const {
 
+      // {string} building for the query
+      building,
+
+      // {string} room for the query
+      room,
+
+      // {int} capacity of the room
+      capacity,
+
+      // {int} id for the chart for future removal
+      chartID
+
+   } = props;
+
+   // {string} base url for the endpoints
    const { baseURL } = useContext(EnvironmentContext);
 
-   const { selectedCharts, setSelectedCharts } = useContext(DataContext);
+   const {
 
-   const { userAdminPermissions, userViewRawData, authStatus } = useContext(AuthenticationContext);
+      // {list} chart objects that are mapped in grid layout
+      selectedCharts,
 
+      // {list} set the list of chart objects
+      setSelectedCharts
+
+   } = useContext(DataContext);
+
+   const {
+
+      // {boolean} if user has admin permissions
+      userAdminPermissions,
+
+      // {boolean} if user can view raw data
+      userViewRawData,
+
+      // {boolean} if user is currently authenticated
+      authStatus
+
+   } = useContext(AuthenticationContext);
+
+   // {boolean} if alert should be shown
    const [showAlert, setShowAlert] = useState(false);
 
+   // {string} type of alert to be shown
    const [alertType, setAlertType] = useState('');
 
+   // {string} message to shown in the alert
    const [alertMessage, setAlertMessage] = useState('');
 
+   // {string} current query sent to the back end database
    const [currentQuery, setCurrentQuery] = useState('live');
 
+   // {boolean} if a query is in progress
    const [loading, setLoading] = useState(false);
 
-   // state for holding CSV data
+   // {list} data after being processed for CSV download
    const [csvData, setCSVData] = useState([]);
 
-   // state for pulled counts
+   // {list} pulled counts for display
    const [graphCountData, setGraphCountData] = useState([]);
 
-   // state for pulled timestamps
+   // {list} pulled timestamps for display
    const [graphTimestampData, setGraphTimestampData] = useState([]);
 
-   // state for recursive timeout variable
+   // {int} recursive timeout variable
    const [queryInterval, setQueryInterval] = useState(null);
 
-   // settings for auto resize of chart to fit container
+   // {object} settings for auto resize of chart to fit container
    const { width, height, ref } = useResizeDetector({
       refreshMode: 'debounce',
       refreshRate: 10
    });
 
-   // plotly layout settings based on user permissions
+   // {object} plotly layout settings based on user permissions
    let layout = {
       title: `${building} ${room}`,
       xaxis: { visible: false, fixedrange: true },
@@ -85,7 +126,7 @@ const TimeSeries = (props) => {
    };
 
 
-   // set data for plotly display
+   // {object} data for display by plotly
    const data = [{
       type: "scatter",
       mode: "lines",
@@ -120,6 +161,8 @@ const TimeSeries = (props) => {
     * Function: formatTimestamp
     * 
     * Converts isoDate in the response to a time string for use in the x-axis
+    * 
+    * @param {int} isoDate
     */
    const formatTimestamp = useCallback((isoDate) => {
 
@@ -143,6 +186,8 @@ const TimeSeries = (props) => {
    * Function: addZeroToTimestamp
    * 
    * Adds extra zero if number is a single digit
+   * 
+   * @param {int} time
    */
    const addZeroToTimestamp = (time) => {
       if (time < 10) {
@@ -160,6 +205,8 @@ const TimeSeries = (props) => {
    * If can view raw data, will display the raw counts
    * 
    * If cannot view raw data, will convert to percentages
+   * 
+   * @param {list} resultData
    */
    const unpackDataForDisplay = useCallback((resultData) => {
 
@@ -173,7 +220,7 @@ const TimeSeries = (props) => {
       let counts = _.map(resultData, resultData => resultData.count);
 
       // if can view raw data, set directly to state
-      if (userViewRawData === true) {
+      if (userViewRawData) {
 
          setGraphCountData(counts);
 

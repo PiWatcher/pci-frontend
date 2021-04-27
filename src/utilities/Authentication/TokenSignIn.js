@@ -6,6 +6,9 @@ import axios from 'axios'
 * Utility Function: TokenSignIn
 * 
 * Signs in the user with their token
+*
+* @param {string} baseURL
+* @param {string} cookieToken
 */
 const TokenSignIn = async (baseURL, cookieToken) => {
 

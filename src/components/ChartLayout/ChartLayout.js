@@ -22,14 +22,20 @@ import { DataContext } from '../../contexts/DataContext';
 */
 const ChartLayout = () => {
 
-   const { selectedCharts } = useContext(DataContext);
+   const {
 
+      // {list} chart objects to be mapped in the grid layout
+      selectedCharts
+
+   } = useContext(DataContext);
+
+   // {list} created TimeSeries components to be displayed
    const [charts, setCharts] = useState([])
 
-   // provides width of current window to resize gird accordingly
+   // {int} provides width of current window to resize grid accordingly
    const ResponsiveGridLayout = WidthProvider(Responsive);
 
-   // initial layout for grid
+   // {object} initial layout for grid
    const [gridLayout] = useState([
       {
          i: '0', isBounded: true, isDraggable: true, isResizable: true, resizeHandles: ['se'],
@@ -59,9 +65,11 @@ const ChartLayout = () => {
 
       const localCharts = selectedCharts.map((chart, index) => {
 
-         return (<div className="time-series" data-grid={gridLayout[index]} key={index}>
-            <TimeSeries chartID={chart.chartID} building={chart.building} room={chart.room} capacity={chart.capacity} />
-         </div>)
+         return (
+            <div className="time-series" data-grid={gridLayout[index]} key={index}>
+               <TimeSeries chartID={chart.chartID} building={chart.building} room={chart.room} capacity={chart.capacity} />
+            </div>
+         )
 
       });
 

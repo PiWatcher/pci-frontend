@@ -16,10 +16,30 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 * Component: ConfirmNotification
 * 
 * Notification component to display alerts with dialog
+*
+* @param {props} props
 */
 const ConfirmNotification = (props) => {
 
-   const { showAlert, setShowAlert, onConfirm, title, description } = props;
+   const {
+
+      // {boolean} if to display the alert
+      showAlert,
+
+      // {function} set if to display the alert
+      setShowAlert,
+
+      // {function} action to do after confirmation of the alert 
+      onConfirm,
+
+      // {string} title shown in the alert
+      title,
+
+      // {string} description shown in the alert
+      description
+
+   } = props;
+
 
    // Material UI theme
    const confirmTheme = createMuiTheme({
@@ -74,10 +94,10 @@ const ConfirmNotification = (props) => {
                <DialogActions>
                   <Button onClick={() => setShowAlert(false)}>
                      Cancel
-                            </Button>
+                  </Button>
                   <Button onClick={() => onConfirm()} autoFocus>
                      Confirm
-                            </Button>
+                  </Button>
                </DialogActions>
             </Dialog>
          </MuiThemeProvider >

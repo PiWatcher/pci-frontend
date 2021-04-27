@@ -6,6 +6,8 @@ import axios from 'axios'
 * Utility Function: PullBuildings
 * 
 * Pulls all buildings within the database
+*
+* @param {string} baseURL
 */
 const PullBuildings = async (baseURL) => {
 

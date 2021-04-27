@@ -6,6 +6,10 @@ import axios from 'axios'
 * Utility Function: DeleteUser
 * 
 * Deletes the designated user in the database
+*
+* @param {string} baseURL
+* @param {string} userToken
+* @param {string} email
 */
 const DeleteUser = async (baseURL, userToken, email) => {
 

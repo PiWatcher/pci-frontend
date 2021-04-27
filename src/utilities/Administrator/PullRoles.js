@@ -6,6 +6,9 @@ import axios from 'axios'
 * Utility Function: PullRoles
 * 
 * Pulls roles from the database
+*
+* @param {string} baseURL
+* @param {string} userToken
 */
 const PullRoles = async (baseURL, userToken) => {
 

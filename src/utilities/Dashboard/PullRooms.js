@@ -6,6 +6,9 @@ import axios from 'axios'
 * Utility Function: PullRooms
 * 
 * Pulls all rooms within the designated building from the database
+*
+* @param {string} baseURL
+* @param {string} selectedBuilding
 */
 const PullRooms = async (baseURL, selectedBuilding) => {
 

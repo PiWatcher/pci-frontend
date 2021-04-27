@@ -22,22 +22,38 @@ import { AuthenticationContext } from '../../contexts/AuthenticationContext';
   */
 const Auth = () => {
 
-   const { handleUserSignIn, handleUserSignUp } = useContext(AuthenticationContext);
+   const {
 
+      // {function} authenticates the user's login information
+      handleUserSignIn,
+
+      // {function} creates the user's account in the back end database
+      handleUserSignUp
+
+   } = useContext(AuthenticationContext);
+
+   // {string} user's name pulled from the text input
    const [localUserName, setLocalUserName] = useState('');
 
+   // {string} user's email pulled from the text input
    const [localEmail, setLocalEmail] = useState('');
 
+   // {string} user's password pulled from the text input
    const [localPassword, setLocalPassword] = useState('');
 
+   // {string} selected authentication type within the auth page
    const [localSelectedAuth, setLocalSelectedAuth] = useState("Sign In");
 
+   // {boolean} if user has successfully signed up or not
    const [signUpStatus, setSignUpStatus] = useState(false);
 
+   // {boolean} if alert should be shown
    const [showAlert, setShowAlert] = useState(false);
 
+   // {string} type of alert to be shown
    const [alertType, setAlertType] = useState('');
 
+   // {string} message to displayed in the alert
    const [alertMessage, setAlertMessage] = useState('');
 
 
@@ -45,18 +61,20 @@ const Auth = () => {
    * Function: handleFormInputChange
    * 
    *  Sets user text input to state
+   * 
+   * @param {event} event
    */
-   const handleFormInputChange = (e) => {
-      if (e.target.id === "name") {
-         setLocalUserName(e.target.value);
+   const handleFormInputChange = (event) => {
+      if (event.target.id === "name") {
+         setLocalUserName(event.target.value);
       }
 
-      else if (e.target.id === "email") {
-         setLocalEmail(e.target.value.toLowerCase());
+      else if (event.target.id === "email") {
+         setLocalEmail(event.target.value.toLowerCase());
       }
 
-      else if (e.target.id === "password") {
-         setLocalPassword(e.target.value);
+      else if (event.target.id === "password") {
+         setLocalPassword(event.target.value);
       }
    };
 
@@ -69,11 +87,13 @@ const Auth = () => {
    * 
    *  If sign up, uses handleUserSignUp from auth context to create the user account in the backend database.  
    *     The user is displayed a notification on success or failure.
+   * 
+   * @param {event} event
    */
-   const handleFormSubmit = async (e) => {
+   const handleFormSubmit = async (event) => {
 
       // prevent page refresh after submit
-      e.preventDefault();
+      event.preventDefault();
 
       // authenticates account 
       if (localSelectedAuth === "Sign In") {
@@ -96,6 +116,7 @@ const Auth = () => {
 
          const result = await handleUserSignUp(localUserName, localEmail, localPassword);
 
+         // if error is returned
          if (result instanceof Error) {
 
             setAlertType('sign-up-failure')
@@ -225,7 +246,7 @@ const Auth = () => {
 
                            <div className="sign-up-success">
                               Sign up success!
-                                </div>
+                           </div>
                      }
                   </div>
             }

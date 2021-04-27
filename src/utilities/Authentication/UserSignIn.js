@@ -6,6 +6,10 @@ import axios from 'axios'
 * Utility Function: UserSignIn
 * 
 * Signs in the user with their account information
+*
+* @param {string} baseURL
+* @param {string} email
+* @param {string} password
 */
 const UserSignIn = async (baseURL, email, password) => {
 

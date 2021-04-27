@@ -6,6 +6,11 @@ import axios from 'axios'
 * Utility Function: ChangeUserPassword
 * 
 * Updates the password of the designated account
+*
+* @param {string} baseURL
+* @param {string} userToken
+* @param {string} password
+* @param {string} new_password
 */
 const ChangeUserPassword = async (baseURL, userToken, password, new_password) => {
 

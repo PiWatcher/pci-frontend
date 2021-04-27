@@ -6,6 +6,9 @@ import axios from 'axios'
 * Utility Function: PullUsers
 * 
 * Pulls users from the database
+*
+* @param {string} baseURL
+* @param {string} userToken
 */
 const PullUsers = async (baseURL, userToken) => {
 

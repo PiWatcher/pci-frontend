@@ -6,6 +6,10 @@ import axios from 'axios'
 * Utility Function: DeleteRole
 * 
 * Deletes role in the database
+*
+* @param {string} baseURL
+* @param {string} userToken
+* @param {string} role_name
 */
 const DeleteRole = async (baseURL, userToken, role_name) => {
 

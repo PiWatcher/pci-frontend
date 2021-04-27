@@ -21,9 +21,22 @@ import { Link } from 'react-router-dom';
 */
 const CleanNavbar = () => {
 
-   const { handleUserSignOut } = useContext(AuthenticationContext);
+   const {
 
-   const { setSelectedBuilding, setSelectedCharts } = useContext(DataContext);
+      // {function} signs out the user from the application
+      handleUserSignOut
+
+   } = useContext(AuthenticationContext);
+
+   const {
+
+      // {function} sets the selected building
+      setSelectedBuilding,
+
+      // {function} sets the list of selected chart objects
+      setSelectedCharts
+
+   } = useContext(DataContext);
 
 
    /** 

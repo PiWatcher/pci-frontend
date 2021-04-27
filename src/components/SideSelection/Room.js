@@ -14,19 +14,51 @@ import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 * Component: Room
 * 
 * Holds information for each room for display in RoomList
+*
+* @param {props} props
 */
 const Room = (props) => {
 
-   const { room, count, capacity } = props;
+   const {
 
-   const { userAdminPermissions, userViewRawData } = useContext(AuthenticationContext);
+      // {string} name of room
+      room,
 
-   const { selectedBuilding, selectedCharts, setSelectedCharts } = useContext(DataContext);
+      // {int} current count of room
+      count,
 
-   // state for calculated room usage
+      // {int} capacity of room
+      capacity
+
+   } = props;
+
+   const {
+
+      // {boolean} if user has admin privileges
+      userAdminPermissions,
+
+      // {boolean} if user has raw data viewing privileges
+      userViewRawData
+
+   } = useContext(AuthenticationContext);
+
+   const {
+
+      // {string} building selected by the user
+      selectedBuilding,
+
+      // {list} list of selected chart objects
+      selectedCharts,
+
+      // {function} set the list of selected chart objects
+      setSelectedCharts
+
+   } = useContext(DataContext);
+
+   // {int} calculated room usage
    const [roomUsage, setRoomUsage] = useState(0);
 
-   // state for usage color
+   // {string} styling color for the calculated room usage
    const [usageColor, setUsageColor] = useState('low-usage');
 
 
@@ -34,6 +66,9 @@ const Room = (props) => {
    * Function: findRoomUsage
    * 
    * Calculates the usage of the room
+   * 
+   * @param {int} count
+   * @param {int} capacity
    */
    const findRoomUsage = (count, capacity) => {
 

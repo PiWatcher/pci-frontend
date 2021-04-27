@@ -13,10 +13,20 @@ import Role from './Role';
 * Component: RoleList
 * 
 * Maps all pulled roles to role components and displays them within the list
+*
+* @param {props} props
 */
 const RoleList = (props) => {
 
-   const { roles, pullRoles } = props;
+   const {
+
+      // {list} pulled roles from the back end database
+      roles,
+
+      // {function} to pull roles from the back end database
+      pullRoles
+
+   } = props;
 
    const [search, setSearch] = useState('');
 
@@ -27,10 +37,12 @@ const RoleList = (props) => {
    * Function: handleRoleSearch
    * 
    * Takes user search input and sets to state
+   * 
+   * @param {event} event
    */
-   const handleRoleSearch = (e) => {
-      if (e.target.id === "roleSearch") {
-         setSearch(e.target.value);
+   const handleRoleSearch = (event) => {
+      if (event.target.id === "roleSearch") {
+         setSearch(event.target.value);
       }
    }
 

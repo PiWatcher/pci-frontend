@@ -23,23 +23,28 @@ import ChangeUserPassword from '../../utilities/Settings/ChangeUserPassword'
 */
 const ChangePassword = () => {
 
+   // {string} base url for the endpoints
    const { baseURL } = useContext(EnvironmentContext);
 
+   // {string} token assigned to the currently logged in user
    const { userToken } = useContext(AuthenticationContext);
 
-   // local variable for current user password during text input
+   // {string} text pulled from current user password input
    const [localCurrentPassword, setLocalCurrentPassword] = useState('');
 
-   // local variable for new user password during text input
+   // {string} text pulled from new user password input
    const [localNewPassword, setLocalNewPassword] = useState('');
 
-   // local variable for confirming new user password during text input
+   // {string} text pulled from new user password confirmation input
    const [localNewPasswordConf, setLocalNewPasswordConf] = useState('');
 
-   const [showAlert, setShowAlert] = useState('');
+   // {boolean} if alert should be shown
+   const [showAlert, setShowAlert] = useState(false);
 
+   // {string} type of alert to be shown
    const [alertType, setAlertType] = useState('');
 
+   // {string} message to be shown in alert
    const [alertMessage, setAlertMessage] = useState('');
 
 
@@ -47,19 +52,21 @@ const ChangePassword = () => {
    * Function: handleInputChange
    * 
    * Pulls user input from text forms and stores them in state
+   * 
+   * @param {event} event
    */
-   const handleInputChange = (e) => {
+   const handleInputChange = (event) => {
 
-      if (e.target.id === "current-password") {
-         setLocalCurrentPassword(e.target.value);
+      if (event.target.id === "current-password") {
+         setLocalCurrentPassword(event.target.value);
       }
 
-      else if (e.target.id === "new-password") {
-         setLocalNewPassword(e.target.value);
+      else if (event.target.id === "new-password") {
+         setLocalNewPassword(event.target.value);
       }
 
-      else if (e.target.id === "new-password-conf") {
-         setLocalNewPasswordConf(e.target.value);
+      else if (event.target.id === "new-password-conf") {
+         setLocalNewPasswordConf(event.target.value);
       }
    }
 
@@ -69,11 +76,13 @@ const ChangePassword = () => {
   * 
   * Uses ChangeUserPassword utility function to send request to the back end database and 
   *    update the currently logged in user information.  The user will be displayed a notification on success or failure.
+  * 
+  * @param {event} event
   */
-   const handleChangePassword = async (e) => {
+   const handleChangePassword = async (event) => {
 
       // prevent page refresh after submit
-      e.preventDefault();
+      event.preventDefault();
 
       // check if new passwords match
       if (localNewPassword === localNewPasswordConf) {
@@ -94,6 +103,7 @@ const ChangePassword = () => {
             setAlertMessage(`Password update successful.`);
 
          }
+
       } else {
 
          setAlertType('new-passwords-not-matching');

@@ -16,10 +16,27 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 * Component: AlertNotification
 * 
 * Notification component to display alerts without dialog
+*
+* @param {props} props
 */
 const AlertNotification = (props) => {
 
-   const { showAlert, setShowAlert, title, description } = props;
+   const {
+
+      // {boolean} if to display the alert
+      showAlert,
+
+      // {function} set if to display the alert
+      setShowAlert,
+
+      // {string} title shown in the alert
+      title,
+
+      // {string} description shown in the alert
+      description
+
+   } = props;
+
 
    // Material UI theme
    const alertTheme = createMuiTheme({
@@ -74,7 +91,7 @@ const AlertNotification = (props) => {
                <DialogActions>
                   <Button onClick={() => setShowAlert(false)}>
                      Close
-                        </Button>
+                  </Button>
                </DialogActions>
             </Dialog>
          </MuiThemeProvider >

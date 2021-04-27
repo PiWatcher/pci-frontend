@@ -10,10 +10,12 @@ export const EnvironmentContext = createContext();
 * Context: EnvironmentContextProvider
 * 
 * Context that handles the storage and sharing of environment variables set by Docker
+*
+* @param {props} props
 */
 const EnvironmentContextProvider = (props) => {
 
-   // base URL shared within utility functions
+   // {string} base url shared within utility functions (assigned within docker-compose)
    const baseURL = process.env.REACT_APP_BASE_URL;
 
 

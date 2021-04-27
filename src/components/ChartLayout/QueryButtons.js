@@ -18,14 +18,35 @@ import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 * Component: QueryButtons
 * 
 * A singular component of a row of Material UI buttons which are used to direct data pull in the time series
+*
+* @param {props} props
 */
 const QueryButtons = (props) => {
 
-   const { currentQuery, setCurrentQuery, handleQueryChange, loading } = props;
+   const {
 
+      // {string} current data query being sent to the back end database
+      currentQuery,
+
+      // {function} sets the current query to be sent to the back end database
+      setCurrentQuery,
+
+      // {function} clears the recursive timeout of the parent chart on query change
+      handleQueryChange,
+
+      // {boolean} if a query is currently in progress
+      loading
+
+   } = props;
+
+   // {boolean} if the user has admin privileges
    const { userAdminPermissions } = useContext(AuthenticationContext);
 
+   // {boolean} if an alert is to be shown
    const [showAlert, setShowAlert] = useState(false);
+
+   // {string} message to be shown in alert
+   const [alertMessage, setAlertMessage] = useState('');
 
    // Material UI theme
    const queryButtonTheme = createMuiTheme({
@@ -50,6 +71,8 @@ const QueryButtons = (props) => {
    * Function: checkQueryInProgress
    *
    * Adjust back end database query based on button selection
+   * 
+   * @param {string} newQuery
    */
    const checkQueryInProgress = (newQuery) => {
 
@@ -62,6 +85,9 @@ const QueryButtons = (props) => {
 
          setCurrentQuery(newQuery);
       } else {
+
+         setAlertMessage(`Please wait for the current query to complete.`);
+
          setShowAlert(true);
       }
    }
@@ -76,7 +102,7 @@ const QueryButtons = (props) => {
       <div>
 
          {/* if admin, display all options */}
-         {userAdminPermissions === true ?
+         {userAdminPermissions ?
 
             <div className="set-buttons">
                <MuiThemeProvider theme={queryButtonTheme}>
@@ -128,7 +154,7 @@ const QueryButtons = (props) => {
 
          {loading ?
             <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Query In Progress'}
-               description={`Please wait for the current query to complete.`} />
+               description={alertMessage} />
             :
             null}
 

@@ -25,25 +25,40 @@ import { EnvironmentContext } from '../../contexts/EnvironmentContext'
 * Component: RoleCreation
 * 
 * Takes user input and sends a role creation request to the back end on submit
+* 
+* @param {props} props
 */
 const RoleCreation = (props) => {
 
-   const { pullRoles } = props;
+   const {
 
+      // {function} pull roles from the backend database
+      pullRoles
+
+   } = props;
+
+   // {string} base url for the endpoints
    const { baseURL } = useContext(EnvironmentContext);
 
+   // {string} token assigned to the currently logged in user
    const { userToken } = useContext(AuthenticationContext);
 
+   // {string} role name pulled from the text field
    const [newRoleName, setNewRoleName] = useState('');
 
+   // {boolean object} role permissions pulled from the check boxes
    const [newRolePermissions, setNewRolePermissions] = useState({ isAdmin: false, canViewRaw: false });
 
+   // destructured role permissions from the state
    const { isAdmin, canViewRaw } = newRolePermissions;
 
-   const [showAlert, setShowAlert] = useState('');
+   // {boolean} if alert should be shown
+   const [showAlert, setShowAlert] = useState(false);
 
+   // {string} type of alert to be shown
    const [alertType, setAlertType] = useState('');
 
+   // {string} message to be displayed in alert
    const [alertMessage, setAlertMessage] = useState('');
 
 
@@ -70,10 +85,12 @@ const RoleCreation = (props) => {
    * Function: handleFormTextInput
    * 
    *  Pulls new role name from text input and sets it to state
+   * 
+   * @param {event} event
    */
-   const handleFormTextInput = (e) => {
-      if (e.target.id === "roleNameForm") {
-         setNewRoleName(e.target.value);
+   const handleFormTextInput = (event) => {
+      if (event.target.id === "roleNameForm") {
+         setNewRoleName(event.target.value);
       }
    }
 
@@ -82,9 +99,11 @@ const RoleCreation = (props) => {
    * Function: handleCheckBox
    * 
    *  Takes boolean from checked box and sets it to state
+   * 
+   * @param {event} event
    */
-   const handleCheckBox = (e) => {
-      setNewRolePermissions({ ...newRolePermissions, [e.target.name]: e.target.checked });
+   const handleCheckBox = (event) => {
+      setNewRolePermissions({ ...newRolePermissions, [event.target.name]: event.target.checked });
    }
 
 
@@ -93,10 +112,12 @@ const RoleCreation = (props) => {
    * 
    *  Uses CreateRole utility function to create a new role and its matching permissions 
    *   within the back end database
+   * 
+   * @param {event} event
    */
-   const handleCreateRole = async (e) => {
+   const handleCreateRole = async (event) => {
 
-      e.preventDefault();
+      event.preventDefault();
 
       if (newRoleName !== '') {
          const result = await CreateRole(baseURL, userToken, newRoleName.toLowerCase(), isAdmin, canViewRaw);

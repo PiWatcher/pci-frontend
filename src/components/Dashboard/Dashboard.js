@@ -26,20 +26,30 @@ import PullBuildings from '../../utilities/Dashboard/PullBuildings'
 */
 const Dashboard = () => {
 
-   const { selectedBuilding } = useContext(DataContext);
+   const {
 
-   const { baseURL } = useContext(EnvironmentContext);
+      // {string} current building selected by the user
+      selectedBuilding
 
-   // creates state: list of buildings pulled from endpoint
+   } = useContext(DataContext);
+
+   const {
+
+      // {string} base URL for the endpoints
+      baseURL
+
+   } = useContext(EnvironmentContext);
+
+   // {list} buildings pulled from endpoint
    const [pulledBuildings, setPulledBuildings] = useState([]);
 
-   // creates state: list of buildings pulled from endpoint
+   // {string} type alert to be shown
    const [alertType, setAlertType] = useState('');
 
-   // creates state: list of buildings pulled from endpoint
-   const [showAlert, setShowAlert] = useState('');
+   // {boolean} if alert should be shown
+   const [showAlert, setShowAlert] = useState(false);
 
-   // creates state: list of buildings pulled from endpoint
+   // {string} message to be shown in the alert
    const [alertMessage, setAlertMessage] = useState('');
 
 
@@ -52,6 +62,7 @@ const Dashboard = () => {
 
       const result = await PullBuildings(baseURL);
 
+      // is error is returned
       if (result instanceof Error) {
 
          setAlertType('building-pull-failure')
@@ -113,7 +124,7 @@ const Dashboard = () => {
          </div >
 
          {alertType === 'building-pull-failure' ?
-            <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Data Pull Failure'}
+            <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={'Building Pull Failure'}
                description={alertMessage} />
             :
             null}

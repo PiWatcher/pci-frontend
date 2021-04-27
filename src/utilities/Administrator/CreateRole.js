@@ -6,6 +6,12 @@ import axios from 'axios'
 * Utility Function: CreateRole
 * 
 * Creates role in the database
+*
+* @param {string} baseURL
+* @param {string} userToken
+* @param {string} role_name
+* @param {boolean} is_admin
+* @param {boolean} can_view_raw
 */
 const CreateRole = async (baseURL, userToken, role_name, is_admin, can_view_raw) => {
 

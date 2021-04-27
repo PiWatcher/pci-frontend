@@ -13,15 +13,25 @@ import Room from './Room';
 * Component: RoomList
 * 
 * Maps all pulled rooms to room components and displays them within the list
+*
+* @param {props} props
 */
 const RoomList = (props) => {
 
-   const { selectedBuilding, pulledRooms } = props;
+   const {
 
-   // state for search value
+      // {string} building selected by the user
+      selectedBuilding,
+
+      // {list} pulled rooms from the back end database
+      pulledRooms
+
+   } = props;
+
+   // {string} text pulled from search
    const [search, setSearch] = useState('');
 
-   // state for filtered room list
+   // {list} filtered rooms based on filtered search text
    const [filteredRoomList, setFilteredRoomList] = useState([]);
 
 
@@ -29,10 +39,12 @@ const RoomList = (props) => {
     * Function: handleRoomSearch
     * 
     * Takes user search input and sets to state
+    * 
+    * @param {event} event
     */
-   const handleRoomSearch = (e) => {
-      if (e.target.id === "roomSearch") {
-         setSearch(e.target.value);
+   const handleRoomSearch = (event) => {
+      if (event.target.id === "roomSearch") {
+         setSearch(event.target.value);
       }
    }
 
@@ -41,6 +53,8 @@ const RoomList = (props) => {
    * Function: handleRoomFilter
    * 
    * Filters displayed rooms based on the state of the search bar
+   * 
+   * @param {string} filter
    */
    const handleRoomFilter = useCallback((filter) => {
 

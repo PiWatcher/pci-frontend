@@ -10,13 +10,15 @@ export const DataContext = createContext();
 * Context: DataContextProvider
 * 
 * Context that handles the storage and sharing of user selected building/room data
+*
+* @param {props} props
 */
 const DataContextProvider = (props) => {
 
-   // selected building in state
+   // {string} building selected by the user
    const [selectedBuilding, setSelectedBuilding] = useState('');
 
-   // list of selected building/room objects for use in ChartLayout
+   // {list} user selected building/room objects for use in ChartLayout
    const [selectedCharts, setSelectedCharts] = useState([]);
 
 

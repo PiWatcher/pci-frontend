@@ -28,18 +28,25 @@ import PullRoles from '../../utilities/Administrator/PullRoles';
 */
 const AdminSettings = () => {
 
+   // {string} base url for the endpoints
    const { baseURL } = useContext(EnvironmentContext);
 
+   // {string} token assigned to currently logged in user
    const { userToken } = useContext(AuthenticationContext);
 
+   // {list} users returned from the database
    const [pulledUsers, setPulledUsers] = useState([]);
 
+   // {list} roles returned from the database
    const [pulledRoles, setPulledRoles] = useState([]);
 
+   // {string} type of alert to be shown
    const [alertType, setAlertType] = useState('');
 
+   // {boolean} if alert should be shown
    const [showAlert, setShowAlert] = useState(false);
 
+   // {string} message to be displayed in alert
    const [alertMessage, setAlertMessage] = useState('');
 
 

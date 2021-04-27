@@ -13,13 +13,28 @@ import User from './User';
 * Component: UserList
 * 
 * Maps all pulled users to user components and displays them within the list
+*
+* @param {props} props
 */
 const UserList = (props) => {
 
-   const { users, roles, pullUsers } = props;
+   const {
 
+      // {list} users pulled from back end database
+      users,
+
+      // {list} roles pulled from the backend database
+      roles,
+
+      // {function} pulls users from the backend database
+      pullUsers
+
+   } = props;
+
+   // {string} text pulled from user search
    const [search, setSearch] = useState('');
 
+   // {list} users filtered using the pulled search text
    const [filteredUserList, setFilteredUserList] = useState([]);
 
 
@@ -27,10 +42,12 @@ const UserList = (props) => {
    * Function: handleUserSearch
    * 
    * Takes user search input and sets to state
+   * 
+   * @params {event} event
    */
-   const handleUserSearch = (e) => {
-      if (e.target.id === "userSearch") {
-         setSearch(e.target.value);
+   const handleUserSearch = (event) => {
+      if (event.target.id === "userSearch") {
+         setSearch(event.target.value);
       }
    }
 
