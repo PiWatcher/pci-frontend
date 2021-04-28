@@ -99,6 +99,8 @@ const SideSelection = () => {
    */
    useEffect(() => {
 
+      clearTimeout(queryInterval);
+
       selectedBuilding !== '' && handlePullRooms();
 
    }, [selectedBuilding, handlePullRooms])
