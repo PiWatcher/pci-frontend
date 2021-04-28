@@ -1,17 +1,34 @@
-import logo from './logo.svg';
+
+// styling
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Hello World!
-        </p>
-      </header>
-    </div>
-  );
+// page imports
+import React from 'react';
+
+// contexts
+import EnvironmentContextProvider from './contexts/EnvironmentContext';
+import AuthenticationContextProvider from './contexts/AuthenticationContext';
+import DataContextProvider from './contexts/DataContext';
+
+// components
+import PageRouter from './components/Authentication/PageRouter';
+
+
+const App = () => {
+
+   return (
+      <div className="App">
+         <EnvironmentContextProvider>
+            <AuthenticationContextProvider>
+               <DataContextProvider>
+
+                  <PageRouter />
+
+               </DataContextProvider>
+            </AuthenticationContextProvider>
+         </EnvironmentContextProvider>
+      </div>
+   );
 }
 
 export default App;

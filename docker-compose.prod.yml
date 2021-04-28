@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  pci-frontend-prod:
+    container_name: pci-frontend-prod
+    image: piwatcher/pci-frontend:1.0.0
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+      args:
+        - REACT_APP_BASE_URL=http://localhost
+    ports:
+      - "80:80"
+    networks:
+      - frontend_prod
+
+networks:
+  frontend_prod:
+    name: frontend_prod
+    driver: bridge

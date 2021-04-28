@@ -1,0 +1,25 @@
+version: "3.7"
+
+services:
+  pci-frontend-dev:
+    container_name: pci-frontend-dev
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_BASE_URL=http://localhost
+    volumes:
+      - ".:/app"
+      - "/app/node_modules"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - 3001:3000
+    networks:
+      - frontend_dev
+
+networks:
+  frontend_dev:
+    name: frontend_dev
+    driver: bridge

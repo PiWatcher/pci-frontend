@@ -1,0 +1,78 @@
+
+.navbar-component {
+   display: flex;
+   width: 100vw;
+   height: 80px;
+   background-color: #003466;
+   align-items: center;
+}
+
+.logo-div {
+   display: flex;
+   margin-left: 10px;
+}
+
+.logo-div img {
+   width: 115px;
+   padding: 5px;
+}
+
+.right-side-div {
+   display: flex;
+   align-items: center;
+   margin: 3px 0 0 auto;
+}
+
+.admin-icon-div {
+   margin: 0 0 0 15px;
+}
+
+.admin-icon-div img {
+   width: 35px;
+}
+
+.settings-icon-div {
+   margin: 0 0 0 15px;
+}
+
+.settings-icon-div img {
+   width: 35px;
+}
+
+.sign-out-div {
+   margin: -5px 25px 0 15px;
+   color: white;
+   font-size: 1.4em;
+}
+
+.sign-out-div:hover {
+   color: gray;
+   cursor: pointer;
+}
+
+@media screen and (max-width: 750px) {
+   .logo-div img {
+      width: 80px;
+      padding: 0 0 0 0;
+   }
+
+   .right-side-div {
+      margin: 0 0 0 0;
+   }
+
+   .admin-icon-div {
+      margin-top: 5px;
+      margin-left: 10px;
+   }
+
+   .settings-icon-div {
+      margin-top: 5px;
+      margin-right: 0px;
+      margin-left: 10px;
+   }
+
+   .sign-out-div {
+      margin: 0 0 0 0;
+      font-size: 1.15em;
+   }
+}

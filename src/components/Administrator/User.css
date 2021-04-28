@@ -1,0 +1,50 @@
+
+.user-list-option {
+   display: inline-flex;
+   justify-content: center;
+   align-items: center;
+   height: 100%;
+   width: 100%;
+   border-bottom: 2px solid rgba(236, 236, 236, 1);
+   padding: 10px;
+}
+
+.user-info {
+   border-right: 2px solid rgba(236, 236, 236, 1);
+   width: 100%;
+   height: 100%;
+   justify-content: center;
+   font-family: 'Open Sans', sans-serif;
+}
+
+.user-name {
+   font-size: 1.3em;
+}
+
+.user-email {
+   font-size: 1.1em;
+   color: gray;
+}
+
+.user-role {
+   font-size: 1.25em;
+   display: flex;
+   width: 50%;
+   height: 40px;
+   justify-content: center;
+   align-items: center;
+   border-right: 2px solid rgba(236, 236, 236, 1);
+}
+
+.user-delete {
+   display: flex;
+   width: 35%;
+   height: 40px;
+   justify-content: center;
+   align-items: center;
+}
+
+
+.alert-dialog-title {
+   color: #003466;
+}

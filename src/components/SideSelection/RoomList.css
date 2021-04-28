@@ -1,0 +1,28 @@
+
+.room-list-component {
+   margin: 10px 0 0 0;
+   overflow: auto;
+   height: 775px;
+}
+
+.room-list-component ul {
+   list-style-type: none;
+   padding-left: 0;
+}
+
+input[type="text"] {
+   width: 90%;
+   padding: 12px 20px;
+   margin: 10px 0 0 0;
+   display: inline-block;
+   border: 1px solid #ccc;
+   border-radius: 5px;
+   font-family: "Open Sans", sans-serif;
+   font-size: 16px;
+}
+
+@media screen and (max-width: 700px) {
+   .room-list-component {
+      height: 380px;
+   }
+}
