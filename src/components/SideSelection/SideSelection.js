@@ -7,7 +7,6 @@ import React, { useContext, useEffect, useState, useCallback } from 'react';
 // contexts
 import { EnvironmentContext } from '../../contexts/EnvironmentContext';
 import { DataContext } from '../../contexts/DataContext';
-import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 
 // components
 import RoomList from './RoomList';
@@ -24,9 +23,6 @@ import PullRooms from '../../utilities/Dashboard/PullRooms'
 * Home layout for SideSelection and its child components
 */
 const SideSelection = () => {
-
-   // {boolean} if current user has been authenticated
-   const { authStatus } = useContext(AuthenticationContext);
 
    // {string} building selected by the user
    const { selectedBuilding } = useContext(DataContext);
@@ -45,9 +41,6 @@ const SideSelection = () => {
 
    // {string} message to be displayed in alert
    const [alertMessage, setAlertMessage] = useState('');
-
-   // {int} recursive timeout variable
-   const [queryInterval, setQueryInterval] = useState(null);
 
 
    /** 
@@ -83,11 +76,6 @@ const SideSelection = () => {
          // sets state to list of rooms
          setPulledRooms(localRoomList);
 
-         // five second refresh on successful data pull
-         let timeoutID = setTimeout(handlePullRooms, 5000);
-
-         setQueryInterval(timeoutID);
-
       }
    }, [baseURL, selectedBuilding]);
 
@@ -95,27 +83,20 @@ const SideSelection = () => {
    /** 
    * Function: useEffect
    * 
-   * Calls handlePullRooms if the selectedBuilding is not empty
+   * Calls handlePullRooms if the selectedBuilding is not empty on five second interval
    */
    useEffect(() => {
 
-      clearTimeout(queryInterval);
+      if (selectedBuilding !== '') {
 
-      selectedBuilding !== '' && handlePullRooms();
+         handlePullRooms();
+
+         let intervalID = setInterval(() => { handlePullRooms() }, 5000);
+
+         return () => clearInterval(intervalID);
+      }
 
    }, [selectedBuilding, handlePullRooms])
-
-
-   /** 
-   * Function: useEffect
-   * 
-   * On authStatus change(user sign out), clears recursive data pull
-   */
-   useEffect(() => {
-
-      clearTimeout(queryInterval);
-
-   }, [authStatus])
 
 
    /** 

@@ -72,10 +72,7 @@ const TimeSeries = (props) => {
       userAdminPermissions,
 
       // {boolean} if user can view raw data
-      userViewRawData,
-
-      // {boolean} if user is currently authenticated
-      authStatus
+      userViewRawData
 
    } = useContext(AuthenticationContext);
 
@@ -102,9 +99,6 @@ const TimeSeries = (props) => {
 
    // {list} pulled timestamps for display
    const [graphTimestampData, setGraphTimestampData] = useState([]);
-
-   // {int} recursive timeout variable
-   const [queryInterval, setQueryInterval] = useState(null);
 
    // {object} settings for auto resize of chart to fit container
    const { width, height, ref } = useResizeDetector({
@@ -268,13 +262,6 @@ const TimeSeries = (props) => {
 
          unpackDataForDisplay(resultData);
 
-         // if live(hour) query, repeat data pull after five seconds
-         if (currentQuery === 'live') {
-
-            let timeoutID = setTimeout(handlePullRoomData, 5000);
-
-            setQueryInterval(timeoutID);
-         }
       }
    }, [baseURL, building, room, currentQuery, unpackDataForDisplay]);
 
@@ -285,9 +272,6 @@ const TimeSeries = (props) => {
    * Removes chart from selectedCharts list
    */
    const removeChart = () => {
-
-      // stops recursive data pulls
-      clearTimeout(queryInterval);
 
       let array = [...selectedCharts];
 
@@ -326,18 +310,6 @@ const TimeSeries = (props) => {
 
 
    /** 
-   * Function: handleQueryChange
-   * 
-   * Clears handleRoomDataPull recursion
-   */
-   const handleQueryChange = () => {
-
-      clearTimeout(queryInterval);
-
-   };
-
-
-   /** 
    * Function: useEffect
    * 
    * On room of query change, will re render the charts in the grid layout
@@ -346,22 +318,17 @@ const TimeSeries = (props) => {
 
       setLoading(true);
 
-      // pull data once
       handlePullRoomData();
 
+      // if query is hour(live) begin new data pull every five seconds
+      if (currentQuery === 'live') {
+
+         let intervalID = setInterval(() => { handlePullRoomData() }, 5000);
+
+         return () => clearInterval(intervalID);
+      }
+
    }, [room, currentQuery, handlePullRoomData]);
-
-
-   /** 
-   * Function: useEffect
-   * 
-   * On authStatus change(user sign out), clears recursive data pull
-   */
-   useEffect(() => {
-
-      clearTimeout(queryInterval);
-
-   }, [authStatus]);
 
 
    /** 
@@ -421,7 +388,7 @@ const TimeSeries = (props) => {
             </div>
          }
 
-         <QueryButtons currentQuery={currentQuery} setCurrentQuery={setCurrentQuery} handleQueryChange={handleQueryChange} loading={loading} />
+         <QueryButtons currentQuery={currentQuery} setCurrentQuery={setCurrentQuery} loading={loading} />
 
          {alertType === 'room-data-pull-failure' ?
             <AlertNotification showAlert={showAlert} setShowAlert={setShowAlert} title={`${building} - ${room}: Data Pull Failure`}

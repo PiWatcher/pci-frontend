@@ -31,9 +31,6 @@ const QueryButtons = (props) => {
       // {function} sets the current query to be sent to the back end database
       setCurrentQuery,
 
-      // {function} clears the recursive timeout of the parent chart on query change
-      handleQueryChange,
-
       // {boolean} if a query is currently in progress
       loading
 
@@ -80,8 +77,6 @@ const QueryButtons = (props) => {
       if (!loading) {
 
          setShowAlert(false);
-
-         handleQueryChange();
 
          setCurrentQuery(newQuery);
       } else {
