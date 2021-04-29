@@ -125,12 +125,10 @@ const ChangePassword = () => {
       <div className="change-password-component">
          <p>Change Password</p>
          <form onSubmit={handleChangePassword}>
-            <input type="password" id="current-password" placeholder="current password"
-               pattern="^(?![a-z]*$)(?![A-Z]*$)(?!\d*$)(?!\p{P}*$)(?![^a-zA-Z\d\p{P}]*$).{6,}$" onChange={handleInputChange} required />
+            <input type="password" id="current-password" placeholder="current password" onChange={handleInputChange} required />
             <input type="password" id="new-password" placeholder="new password"
                pattern="^(?![a-z]*$)(?![A-Z]*$)(?!\d*$)(?!\p{P}*$)(?![^a-zA-Z\d\p{P}]*$).{6,}$" onChange={handleInputChange} required />
-            <input type="password" id="new-password-conf" placeholder="confirm new password"
-               pattern="^(?![a-z]*$)(?![A-Z]*$)(?!\d*$)(?!\p{P}*$)(?![^a-zA-Z\d\p{P}]*$).{6,}$" onChange={handleInputChange} required />
+            <input type="password" id="new-password-conf" placeholder="confirm new password" onChange={handleInputChange} required />
             <input type="submit" value="Submit change" />
          </form>
 
